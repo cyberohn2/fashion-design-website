@@ -25,6 +25,7 @@ const Header = () => {
     <header className="bg-foreground/70 px-4 py-2 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
       <nav className="container mx-auto flex items-center justify-between ">
         <Image
+          className="w-auto h-auto"
           src="/logo.webp"
           alt="george-wears-logo"
           width={50}
