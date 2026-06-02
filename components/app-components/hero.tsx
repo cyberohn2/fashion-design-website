@@ -7,7 +7,7 @@ import { Spotlight } from "../ui/spotlight";
 
 const Hero = () => {
   return (
-    <section className="py-24 pt-34 md:pt-24 relative h-screen flex items-center justify-center isolate">
+    <section className="py-24 pt-34 md:pt-24 relative h-screen flex items-center justify-center isolate border-b">
       <Spotlight
         className="-top-40 left-0 md:-top-20 md:left-60"
         fill="black"
