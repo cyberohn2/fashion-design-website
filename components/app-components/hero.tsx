@@ -1,11 +1,26 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "../ui/button"
+import { cn } from "@/lib/utils";
+import { Spotlight } from "../ui/spotlight";
 
 
 const Hero = () => {
   return (
-    <section className="py-24 pt-34 md:pt-24 relative h-screen flex items-center justify-center">
+    <section className="py-24 pt-34 md:pt-24 relative h-screen flex items-center justify-center isolate">
+      <Spotlight
+        className="-top-40 left-0 md:-top-20 md:left-60"
+        fill="black"
+      />
+      <div
+        className={cn(
+          "absolute inset-0 -z-50 opacity-60",
+          "bg-size-[40px_40px]",
+          "bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
+          "dark:bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
+        )}
+      />
+
       <div className="grid grid-rows-2 gap-8 md:gap-0 md:grid-cols-2 md:grid-rows-1 container mx-auto px-4">
         <div className="pt-60 md:pt-20 md:row-start-auto text-center md:text-left flex flex-col align-center">
           <h1 className="lg:text-7xl md:text-5xl text-4xl lg:leading-24 md:leading-14 font-bold">
