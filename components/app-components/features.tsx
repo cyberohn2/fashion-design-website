@@ -9,7 +9,7 @@ const Features = () => {
           New Designs
         </h2>
         <div className="grid grid-rows-2 gap-8 md:gap-0 md:grid-cols-2 md:grid-rows-1 mt-10">
-          <div className="max-w-125 md:h-125 h-80"></div>
+          <div className="parallax-to max-w-125 md:h-125 h-80"></div>
           <div className="flex flex-col justify-center items-start">
             <p className="leading-10 mb-6">
               Check out some our current and trendy ready-made designs, <br />{" "}
