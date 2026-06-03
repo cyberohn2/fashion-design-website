@@ -14,27 +14,27 @@ const Categories = () => {
         {
             title: "Female Native",
             description: "Explore our latest collection of women's clothing and accessories.",
-            imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            imageUrl: "/three-men.webp"
         },
         {
             title: "Male Native",
             description: "Discover the newest trends in men's fashion.",
-            imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            imageUrl: "/three-men.webp"
         },
         {
             title: "Corporate Male",
             description: "Find the perfect corporate attire for men.",
-            imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            imageUrl: "/three-men.webp"
         },
         {
             title: "Corporate Female",
             description: "Find the perfect corporate attire for women.",
-            imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            imageUrl: "/three-men.webp"
         },
         {
             title: "Street Wears",
             description: "Explore our latest collection of streetwear clothing and accessories.",
-            imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            imageUrl: "/three-men.webp"
         }
     ];
 

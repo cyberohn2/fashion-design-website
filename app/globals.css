@@ -131,6 +131,7 @@
 
 @theme inline {
   --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
+  --font-lamoric-rowen: var(--font-lamoric-rowen), sans-serif;
 }
 
 @keyframes spotlight {
