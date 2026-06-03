@@ -71,11 +71,13 @@ const Socials = () => {
   };
 
   return (
-    <section className="pb-8 border-y bg-black ">
+    <section className="pb-8 border-y bg-black text-white!">
       
       <div className="flex items-center justify-center">
         <TextHoverEffect text="GEORGE WEARS" />
       </div>
+
+      <h2 className="text-center text-2xl">Reach Us</h2>
       <TooltipProvider>
         <Dock direction="middle">
           {Object.entries(DATA.contact.social).map(([name, social]) => (
