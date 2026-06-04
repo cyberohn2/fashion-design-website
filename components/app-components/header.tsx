@@ -32,11 +32,14 @@ const Header = () => {
           height={50}
         />
         <ul className="hidden md:flex items-center gap-4 text-white">
-          <Link href="/about-us">
-            <li>About Us</li>
+          <Link href="/catalog">
+            <li className="flex items-center gap-1">
+              <ShoppingCart size={16} />
+              <span className="hidden md:block">Catalog</span>{" "}
+            </li>
           </Link>
-          <Link href="/products">
-            <li>Products</li>
+          <Link href="/contact-us">
+            <li>Contact Us</li>
           </Link>
           <Link href="/services">
             <li>Services</li>
@@ -66,9 +69,6 @@ const Header = () => {
               />
             </Label>
           </form>
-          <Button>
-            <span className="hidden md:block">Catalog</span> <ShoppingCart />
-          </Button>
           <Button
             variant={"ghost"}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -85,19 +85,19 @@ const Header = () => {
       >
         <nav className="container mx-auto px-4 space-y-10 flex flex-col items-center">
           <ul className="flex flex-col items-center gap-4 text-white">
-            <Link onClick={() => setIsMenuOpen(false)} href="/about-us">
-              <li>About Us</li>
+            <Link onClick={() => setIsMenuOpen(false)} href="/catalog">
+              <li className="flex items-center gap-1">
+                <span className="hidden md:block">Catalog</span>{" "}
+                <ShoppingCart size={8} />
+              </li>
             </Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/products">
-              <li>Products</li>
+            <Link onClick={() => setIsMenuOpen(false)} href="/contact-us">
+              <li>Contact Us</li>
             </Link>
             <Link onClick={() => setIsMenuOpen(false)} href="/services">
               <li>Services</li>
             </Link>
           </ul>
-          <Button className="mx-auto" onClick={() => setIsMenuOpen(false)}>
-            <span>Catalog</span> <ShoppingCart />
-          </Button>
         </nav>
       </div>
     </header>

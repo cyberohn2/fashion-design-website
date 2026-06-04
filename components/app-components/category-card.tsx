@@ -30,19 +30,10 @@ export function CategoryCard({title, description, imageUrl}: {title: string, des
         <div className="flex justify-between items-center mt-20">
           <CardItem
             translateZ={20}
-            as="a"
-            href="https://twitter.com/mannupaaji"
-            target="__blank"
-            className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
-          >
-            Create Custom Order
-          </CardItem>
-          <CardItem
-            translateZ={20}
             as="button"
             className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
           >
-            Buy Now
+            Explore
           </CardItem>
         </div>
       </CardBody>
