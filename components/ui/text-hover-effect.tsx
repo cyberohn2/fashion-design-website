@@ -63,7 +63,7 @@ export const TextHoverEffect = ({
           gradientUnits="userSpaceOnUse"
           r="20%"
           initial={{ cx: "50%", cy: "50%" }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           whileInView={maskPosition}
           // transition={{ duration: duration ?? 0, ease: "easeOut" }}
 
@@ -111,7 +111,7 @@ export const TextHoverEffect = ({
           strokeDashoffset: 0,
           strokeDasharray: 1000,
         }}
-        viewport={{ once: true }}
+        viewport={{ once: false }}
         transition={{
           duration: 8,
           ease: "easeInOut",

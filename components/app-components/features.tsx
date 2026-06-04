@@ -1,5 +1,7 @@
+"use client"
 import Link from "next/link";
 import { Button } from "../ui/button"
+import { motion } from "framer-motion"
 
 const Features = () => {
   return (
@@ -10,7 +12,13 @@ const Features = () => {
         </h2>
         <div className="grid grid-rows-2 gap-8 md:gap-0 md:grid-cols-2 md:grid-rows-1 mt-10">
           <div className="parallax-to max-w-125 md:h-125 h-80"></div>
-          <div className="flex flex-col justify-center items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col justify-center items-start"
+          >
             <p className="leading-10 mb-6">
               Check out some our current and trendy ready-made designs, <br />{" "}
               crafted to boost your confidence, elegance, and individuality.
@@ -18,7 +26,7 @@ const Features = () => {
             <Button className="bg-black py-6 rounded-sm mr-4">
               <Link href={"/browse"}>Browse Catalog</Link>
             </Button>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

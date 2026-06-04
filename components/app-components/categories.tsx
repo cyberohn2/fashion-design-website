@@ -1,13 +1,13 @@
+"use client"
 import { CategoryCard } from "./category-card";
 import {
   Carousel,
-  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
+import { motion } from "framer-motion"
 
 const Categories = () => {
     const sampleCategories = [
@@ -47,16 +47,23 @@ const Categories = () => {
         <Carousel className="mt-8">
           <CarouselContent className="isolate">
             {sampleCategories.map((category, index) => (
-              <CarouselItem
-                className="bg-transparent md:basis-1/2 lg:basis-1/3 py-0 "
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.2 * index }}
                 key={index}
               >
-                <CategoryCard
-                  title={category.title}
-                  description={category.description}
-                  imageUrl={category.imageUrl}
-                />
-              </CarouselItem>
+                <CarouselItem
+                  className="bg-transparent md:basis-1/2 lg:basis-1/3 py-0 "
+                >
+                  <CategoryCard
+                    title={category.title}
+                    description={category.description}
+                    imageUrl={category.imageUrl}
+                  />
+                </CarouselItem>
+              </motion.div>
             ))}
           </CarouselContent>
           <div className="flex justify-center mt-6 gap-4">

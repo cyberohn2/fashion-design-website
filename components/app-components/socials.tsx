@@ -71,7 +71,7 @@ const Socials = () => {
   };
 
   return (
-    <section className="pb-8 border-y bg-black text-white!">
+    <section className="pb-8 border-y text-white!">
       
       <div className="flex items-center justify-center">
         <TextHoverEffect text="GEORGE WEARS" />
@@ -88,11 +88,11 @@ const Socials = () => {
                     href={social.url}
                     aria-label={social.name}
                     className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
+                      buttonVariants({size: "icon" }),
                       "size-12 rounded-full",
                     )}
                   >
-                    <social.icon className="size-4" />
+                    <social.icon className="size-8" />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>
