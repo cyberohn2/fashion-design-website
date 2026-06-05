@@ -24,13 +24,15 @@ const Header = () => {
   return (
     <header className="bg-foreground/70 px-4 py-2 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
       <nav className="container mx-auto flex items-center justify-between ">
-        <Image
-          className="w-auto h-auto"
-          src="/logo.webp"
-          alt="george-wears-logo"
-          width={50}
-          height={50}
-        />
+        <Link href={"/"}>
+          <Image
+            className="w-auto h-auto"
+            src="/logo.webp"
+            alt="george-wears-logo"
+            width={50}
+            height={50}
+          />
+        </Link>
         <ul className="hidden md:flex items-center gap-4 text-white">
           <Link href="/catalog">
             <li className="flex items-center gap-1">
@@ -41,7 +43,7 @@ const Header = () => {
           <Link href="/contact-us">
             <li>Contact Us</li>
           </Link>
-          <Link href="/services">
+          <Link href="#services">
             <li>Services</li>
           </Link>
         </ul>
@@ -94,7 +96,7 @@ const Header = () => {
             <Link onClick={() => setIsMenuOpen(false)} href="/contact-us">
               <li>Contact Us</li>
             </Link>
-            <Link onClick={() => setIsMenuOpen(false)} href="/services">
+            <Link onClick={() => setIsMenuOpen(false)} href="#services">
               <li>Services</li>
             </Link>
           </ul>

@@ -32,8 +32,8 @@ const Hero = () => {
         },
         position: "absolute",
         top: isMobile ? "110%" : "130%",
-        left: 20,
-        scale: !isMobile ? 0.8 : 1,
+        left: 50,
+        scale: !isMobile ? 0.9 : 1,
         duration: 5,
         ease: "power1.out",
       });
@@ -118,7 +118,7 @@ const Hero = () => {
         </div>
         <div className="md:pt-20 lg:pt-4 max-w-125 min-h-125">
           <Image
-            className="lg:w-auto md:w-[50%] w-[50%] aspect-auto hero-image opacity-0 absolute md:-top-10 mx-auto right-28 md:right-auto"
+            className="md:w-[30%] w-[50%] aspect-auto hero-image opacity-0 absolute mx-auto right-28 md:right-auto md:left-2/3"
             width={500}
             height={500}
             src={"/three-men.webp"}

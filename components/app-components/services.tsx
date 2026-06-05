@@ -3,23 +3,28 @@ import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 
 export function Services() {
   return (
-    <section className="py-14 md:pt-24 border-t">
-      <BentoGrid className="max-w-4xl mx-auto md:auto-rows-[20rem]">
-        {items.map((item, i) => (
-          <BentoGridItem
-            key={i}
-            title={item.title}
-            description={item.description}
-            header={item.header}
-            className={item.className}
-          />
-        ))}
-      </BentoGrid>
+    <section id="services" className="py-14 md:pt-24 border-t">
+      <div className="mx-auto container">
+        <h2 className="lg:text-5xl md:text-4xl text-2xl lg:leading-18 md:leading-10 font-bold mb-10">
+          What we offer
+        </h2>
+        <BentoGrid className="md:auto-rows-[20rem]">
+          {items.map((item, i) => (
+            <BentoGridItem
+              key={i}
+              title={item.title}
+              description={item.description}
+              header={item.header}
+              className={item.className}
+            />
+          ))}
+        </BentoGrid>
+      </div>
     </section>
   );
 }
 const Skeleton = ({image}:{image?: string}) => (
-  <div className="flex flex-1 w-full h-full min-h-24 rounded-xl  dark:bg-dot-white/[0.2] bg-dot-black/[0.2] mask-[radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/20 bg-neutral-100 dark:bg-black bg-top bg-cover" style={{ backgroundImage: image ? `url(${image})` : undefined }}></div>
+  <div className="flex flex-1 w-full h-full min-h-24 rounded-xl  dark:bg-dot-white/[0.2] bg-dot-black/[0.2]   border border-transparent dark:border-white/20 bg-foreground dark:bg-black bg-top bg-contain bg-no-repeat" style={{ backgroundImage: image ? `url(${image})` : undefined }}></div>
 );
 const items = [
   {
@@ -52,6 +57,6 @@ const items = [
     description:
       "Understand the impact of effective communication in our lives.",
     header: <Skeleton image="/boutique-ready.webp" />,
-    className: "md:col-span-2",
+    className: "md:col-span-3",
   },
 ];
