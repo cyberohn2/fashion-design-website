@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/input-group";
 import { useRef, useState } from "react";
 import { Label } from "../ui/label";
+import { useRouter } from "next/navigation";
 
 
 const Header = () => {
+  const router = useRouter()
   const [searchVisible, setSearchVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -43,7 +45,7 @@ const Header = () => {
           <Link href="/contact-us">
             <li>Contact Us</li>
           </Link>
-          <Link href="#services">
+          <Link href={"/#services"}>
             <li>Services</li>
           </Link>
         </ul>

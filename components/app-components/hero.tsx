@@ -17,7 +17,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 const Hero = () => {
   gsap.registerPlugin(ScrollTrigger);
-  const  isMobile  = useIsMobile()
+  const isMobile  = typeof window !== "undefined" && useIsMobile()
 
   useEffect(() =>{
     const parallaxAnimation = () => {
@@ -109,7 +109,7 @@ const Hero = () => {
           </p>
           <div>
             <Button className="bg-black py-6 rounded-sm mr-4">
-              <Link href="/browse">Browse Catalog</Link>
+              <Link href="/catalog">Browse Catalog</Link>
             </Button>
             <Button className="py-6 bg-transparent text-black rounded-sm border border-black">
               <Link href="/new-order">Custom Order</Link>

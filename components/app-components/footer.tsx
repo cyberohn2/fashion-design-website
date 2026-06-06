@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -21,9 +22,9 @@ const Footer = () => {
         <div>
           <p className="mb-5 text-[#999999]">Website</p>
           <ul className="space-y-3">
-            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">Services</li>
-            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">Pricing</li>
-            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">About</li>
+            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit"><Link href={"/login"}>Login</Link></li>
+            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit"><Link href={"/signup"}>Sign Up</Link></li>
+            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit"><Link href={"/catalog"}>Catalog</Link></li>
           </ul>
         </div>
 
@@ -31,12 +32,9 @@ const Footer = () => {
           <p className="mb-5 text-[#999999]">Contact</p>
           <ul className="space-y-3">
             <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">
-              Get a quote
+              <Link href={"/contact-us"}>Contact form</Link>
             </li>
-            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">
-              Contact form
-            </li>
-            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">Email us</li>
+            <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit"><Link href="mailto:georgedezzy@gmail.com">Email us</Link></li>
           </ul>
         </div>
 
