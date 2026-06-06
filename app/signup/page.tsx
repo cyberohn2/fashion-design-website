@@ -12,9 +12,6 @@ function page() {
 
 export default page
 
-// update hero cta link
-// add login or sign up link to footer 
-// update login and sign up page fn
 // create custom order form 
 // design product page
 // implement product card to custom order form workflow

@@ -6,7 +6,7 @@ import { requireAuth } from "@/lib/auth/require-auth";
 export async function getAddresses() {
   const user = await requireAuth();
 
-  return prisma.user_Addresses.findMany({
+  return await prisma.user_Addresses.findMany({
     where: {
       userId: user.id,
     },

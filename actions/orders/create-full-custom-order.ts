@@ -6,7 +6,7 @@ import { requireAuth } from "@/lib/auth/require-auth";
 
 import { generateOrderNumber } from "@/lib/orders/generate-order-number";
 
-type CreateFullCustomOrderData = {
+export type CreateFullCustomOrderData = {
   ideaImageUrl: string;
 
   deliveryMethod: "PICKUP" | "LOCAL_DELIVERY" | "SHIPPING";
