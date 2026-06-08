@@ -7,15 +7,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Edit, Eye, SearchSlash } from "lucide-react";
 import { getAddresses } from "@/actions/addresses/get-addresses";
@@ -94,7 +85,7 @@ export default function ManageAddresses() {
                 </EmptyMedia>
                 <EmptyTitle>Nothing here!</EmptyTitle>
                 <EmptyDescription>
-                  You don't have any orders yet.
+                  You don't have any address yet.
                   <Link href={"/addresses/new"}>Create New Address</Link>
                 </EmptyDescription>
               </EmptyHeader>

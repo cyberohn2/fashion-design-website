@@ -12,6 +12,6 @@ function page() {
 
 export default page
 
-// create custom order form 
+// update custom order form to support semi custom orders
 // design product page
 // implement product card to custom order form workflow

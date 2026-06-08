@@ -3,10 +3,10 @@
 import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth/require-auth";
 
-type CreateMeasurementData = {
+export type CreateMeasurementData = {
   profileName: string;
 
-  gender: "MALE" | "FEMALE" | "UNISEX";
+  gender: string;
 
   chest: number;
   waist: number;

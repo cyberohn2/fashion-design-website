@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth/require-auth";
 
-type CreateAddressData = {
+export type CreateAddressData = {
   fullName: string;
   phone: string;
 

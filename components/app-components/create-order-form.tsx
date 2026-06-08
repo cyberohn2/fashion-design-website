@@ -22,8 +22,10 @@ import {
 import ImageUploader from "../ui/image-uploader";
 import { FieldDescription } from "../ui/field";
 import Link from "next/link";
-import { type address } from "@/app/addresses/manage-address";
+import { type address } from "@/components/app-components/manage-address";
 import { getAddresses } from "@/actions/addresses/get-addresses";
+import { measurement } from "./manage-measurements";
+import { getMeasurements } from "@/actions/measurements/get-measurements";
 
 const CreateOrderForm = () => {
     const [formData, setFormData] = useState<CreateFullCustomOrderData>({
@@ -34,11 +36,13 @@ const CreateOrderForm = () => {
         customizationNotes: "",
         customerBudget: undefined,
     });
-
     const [addresses, setAddresses] = useState<address[]>();
+    const [measurements, setMeasurements] = useState<measurement[]>();
+
 
     useEffect(() => {
         getAddresses().then((val) => (setAddresses(val)));
+        getMeasurements().then(val => setMeasurements(val))
     }, [])
 
     const [formError, setFormError] = useState<string | undefined>(undefined);
@@ -145,38 +149,36 @@ const CreateOrderForm = () => {
       )}
 
       {/* Measurement Section */}
-      {formData.deliveryMethod === "LOCAL_DELIVERY" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Measurements</CardTitle>
-            <CardDescription>Input Measurements</CardDescription>
-          </CardHeader>
-          <CardContent className="grid md:grid-cols-3 gap-1">
-            <div>
-              <Label htmlFor="type">Select Measurements *</Label>
-              <Select
-                required
-                value={formData.measurementProfileId}
-                onValueChange={(value) =>
-                  handleSelectChange("measurementProfileId", value)
-                }
-              >
-                <SelectTrigger id="type" className="mt-2">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {addresses?.map((address) => (
-                    <SelectItem value={address.id}>
-                      {address.address}
-                    </SelectItem>
-                  ))}
-                  <Link href={"/measurements/new"}>Add New Address</Link>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <Card>
+        <CardHeader>
+          <CardTitle>Measurements</CardTitle>
+          <CardDescription>Input Measurements</CardDescription>
+        </CardHeader>
+        <CardContent className="grid md:grid-cols-3 gap-1">
+          <div>
+            <Label htmlFor="type">Select Measurements *</Label>
+            <Select
+              required
+              value={formData.measurementProfileId}
+              onValueChange={(value) =>
+                handleSelectChange("measurementProfileId", value)
+              }
+            >
+              <SelectTrigger id="type" className="mt-2">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {measurements?.map((measurement) => (
+                  <SelectItem value={measurement.id}>
+                    {measurement.profile_name}
+                  </SelectItem>
+                ))}
+                <Link href={"/measurements/new"}>Add New Measurement</Link>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Customization Notes Section */}
       <Card>
