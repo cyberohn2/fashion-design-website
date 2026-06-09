@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -8,7 +9,6 @@ import {
 } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Edit, Eye, SearchSlash } from "lucide-react";
-import { getMeasurements } from "@/actions/measurements/get-measurements";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -39,9 +39,7 @@ export type measurement = {
   notes: string | null;
 };
 
-export default function ManageMeasurements() {
-  let measurements: measurement[] = [];
-  getMeasurements().then((val) => (measurements = val));
+export default function ManageMeasurements({measurements}: {measurements: measurement[]}) {
   const router = useRouter();
 
   return (

@@ -71,11 +71,78 @@ const MeasurementForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateFormData = (): string | null => {
+    for (const [key, value] of Object.entries(formData)) {
+      if (value === "" || value === 0) {
+        return `Field ${key} is required.`;
+      }
+    }
+    return null;
+  };
+
+  const validateNumberFields = (): string | null => {
+    const numberFields = [
+      "chest",
+      "waist",
+      "hips",
+      "shoulder",
+      "sleeve_length",
+      "arm",
+      "sleeve_hem",
+      "top_length",
+      "thigh",
+      "trouser_length",
+      "ankle",
+      "waist_to_knee",
+      "knee_to_ankle",
+      "round_knee",
+      "neck",
+      "inseam",
+      "height"
+    ];
+
+    for (const field of numberFields) {
+      const value = Number(formData[field as keyof CreateMeasurementData]);
+      if (typeof value === "number" && value <= 0) {
+        return `Field ${field} must be a positive number.`;
+      }
+    }
+    return null;
+  };
+
+  const convertNumberFields = () => {
+    Object.entries(formData).forEach(([key, value]) => {
+      if (
+        key !== "profile_name" &&
+        key !== "gender" &&
+        key !== "notes"
+      ) {
+        setFormData((prev) => ({ ...prev, [key]: Number(value) as number }));
+      }
+    });
+  };
+
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormError("")
+    convertNumberFields();
+
+    const error = validateFormData();
+    if (error) {
+      setFormError(error);
+      setIsSubmitting(false);
+      return;
+    }
+
+
+    const numberError = validateNumberFields();
+    if (numberError) {
+      setFormError(numberError);
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
         if (params.id) {
@@ -89,15 +156,23 @@ const MeasurementForm = () => {
           if (req.ok) {
             setIsSubmitting(false);
             router.push("/measurements/manage");
+          }else{
+            const errorData = await req.json();
+            setFormError(errorData.error || "Failed to update measurement");
+            setIsSubmitting(false);
           }
         }else{
           const req = await fetch("/api/measurements/create-measurement", {
             method: "POST",
-            body: JSON.stringify(formData),
+            body: JSON.stringify({formData}),
           });
           if (req.ok) {
             setIsSubmitting(false);
             router.push("/measurements/manage");
+          }else{
+            const errorData = await req.json();
+            setFormError(errorData.error || "Failed to create measurement");
+            setIsSubmitting(false);
           }
         }
     } catch (error) {
@@ -177,9 +252,11 @@ const MeasurementForm = () => {
         </CardHeader>
         <CardContent className="grid md:grid-cols-2 gap-1">
           {Object.entries(formData).map(
-            ([key, value]) =>
-              (key !== "profile_name" || "gender" || "notes") && (
-                <div className="">
+            ([key, value]) =>{
+              if(key == "profile_name" || key == "gender" || key == "notes"){
+                return null;
+              } else {
+                return (<div className="">
                   <Label htmlFor={key}>{key} *</Label>
                   <Input
                     id={key}
@@ -191,8 +268,8 @@ const MeasurementForm = () => {
                     className="mt-2"
                     required
                   />
-                </div>
-              ),
+                </div>)
+            }},
           )}
         </CardContent>
       </Card>
@@ -233,7 +310,7 @@ const MeasurementForm = () => {
           className="bg-primary text-primary-foreground hover:bg-primary/90"
           size="lg"
         >
-          {isSubmitting ? "Submitting..." : "Create Address"}
+          {isSubmitting ? "Submitting..." : "Create Measurement"}
         </Button>
       </div>
     </form>

@@ -97,7 +97,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
           <CardFooter className="w-full my-2 px-0">
             <Link
               className="block  w-full"
-              href={`/app/products/${product?.id}`}
+              href={`/create-order/${product?.slug}`}
             >
               <Button variant={"outline"} className="w-full cursor-pointer">
                 Custom Order
@@ -105,7 +105,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
             </Link>
             <Link
               className="block  w-full"
-              href={`/app/products/${product?.id}`}
+              href={`/create-order/${product?.slug}`}
             >
               <Button className="w-full cursor-pointer">
                 Buy Now

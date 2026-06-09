@@ -3,6 +3,7 @@ import { createSemiCustomOrder } from "@/actions/orders/create-semi-custom-order
 
 export async function POST(request: Request) {
   const { data } = await request.json();
+  console.log("Received data for new semi-custom order:", data);
   if (!data) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }

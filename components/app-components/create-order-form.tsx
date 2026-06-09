@@ -24,9 +24,8 @@ import Link from "next/link";
 import { type address } from "@/components/app-components/manage-address";
 import { measurement } from "./manage-measurements";
 import { useParams, useRouter } from "next/navigation";
-import { uploadDressImage } from "@/lib/supabase/storage";
-import { createSemiCustomOrder } from "@/actions/orders/create-semi-custom-order";
 import Image from "next/image";
+import { uploadImage } from "@/lib/supabase/upload-image";
 
 const CreateOrderForm = () => {
   const [formData, setFormData] = useState<(CreateFullCustomOrderData & {selectedDressId?: string, materialChoice?: string, customMaterialNotes?: string})>({
@@ -63,16 +62,20 @@ const CreateOrderForm = () => {
     };
 
     const fetchAddresses = async () => {
-      const req = await fetch(`/api/dresses`);
+      const req = await fetch(`/api/address/get-address`);
       if(req.ok){
         req.json().then( data => setAddresses(data))
       }
     }
 
     const fetchMeasurements = async () => {
-      const req = await fetch(`/api/measurements`);
-      if(req.ok){
-        req.json().then( data => setMeasurements(data))
+      const req = await fetch(`/api/measurements/get-measurement`);
+      if (req.ok) {
+        req.json().then((data) => setMeasurements(data));
+        setIsLoading(false);
+      } else {
+        const errorData = await req.json();
+        setFormError(errorData.error || "Failed to get measurement data");
         setIsLoading(false);
       }
     }
@@ -100,7 +103,7 @@ const CreateOrderForm = () => {
 
   const handleImagesChange = async (files: File[]) => {
     if (files.length > 0) {
-      const imageUrl = await uploadDressImage(files[0]);
+      const imageUrl = await uploadImage(files[0]);
       setFormData((prev) => ({ ...prev, ideaImageUrl: imageUrl }));
     }
   };
@@ -111,28 +114,39 @@ const CreateOrderForm = () => {
     setFormError("");
 
     try {
-      if (params.slug) {
+      if (params.slug && formData.selectedDressId) {
+        const formDataToSubmit = {
+          ...formData,
+          selectedDressId: formData.selectedDressId,
+        }
+        console.log("Submitting form data for new semi-custom order:", formDataToSubmit);
         const req = await fetch(`/api/custom-orders/semi-custom`, {
           method: "POST",
-          body: JSON.stringify({
-            ...formData,
-            selectedDressId: formData.selectedDressId as string,
-          }),
+          body: JSON.stringify({data: formDataToSubmit}),
         });
-        if (req.ok) {
+        if (req.ok) { 
           // move on to payment
           setIsSubmitting(false);
           router.push("/catalog");
+        } else {
+          const errorData = await req.json();
+          console.log(errorData.error)
+          setFormError(errorData.error || "Failed to create order");
+          setIsSubmitting(false);
         }
       }else{
         const req = await fetch(`/api/custom-orders`, {
           method: "POST",
-          body: JSON.stringify(formData),
+          body: JSON.stringify({data: formData}),
         });
         if (req.ok) {
           // move on to payment
           setIsSubmitting(false);
           router.push("/catalog");
+        } else {
+          const errorData = await req.json();
+          setFormError(errorData.error || "Failed to create order");
+          setIsSubmitting(false);
         }
       }
     } catch (error) {
