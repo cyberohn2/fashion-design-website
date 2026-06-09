@@ -13,3 +13,6 @@ function page() {
 export default page
 
 // design product page
+// load catalog from home page with category search
+// ui clean up
+// admin dashboard

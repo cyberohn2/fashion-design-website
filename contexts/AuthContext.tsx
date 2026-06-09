@@ -26,12 +26,12 @@ const AuthReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "LOGIN":{
       const userInfo = { user: action.payload.user}
-      localStorage.setItem('current_user', JSON.stringify(userInfo))
+      typeof window !== "undefined" && localStorage.setItem('current_user', JSON.stringify(userInfo))
       return userInfo;
     }
 
     case "LOGOUT":
-      localStorage.removeItem('current_user');
+      typeof window !== "undefined" && localStorage.removeItem('current_user');
       return { user: null };
     default:
       return state;
@@ -41,7 +41,7 @@ const AuthReducer = (state: AuthState, action: AuthAction): AuthState => {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const currentUser = localStorage.getItem("current_user") ;
+  const currentUser = typeof window === "undefined" ? null : localStorage.getItem("current_user") ;
   const [userState, userDispatch] = useReducer(AuthReducer, currentUser ? JSON.parse(currentUser) : { user: null } );
 
   return (

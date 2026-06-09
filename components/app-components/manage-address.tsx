@@ -45,13 +45,12 @@ export default function ManageAddresses({addresses}: {addresses: address[]}) {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter text-primary">
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
             Saved Addresses
           </h1>
         </div>
-        <Separator />
       </div>
-      <div className="space-y-3 mt-4">
+      <div className="space-y-3 p-4 mt-8 min-h-screen">
         {addresses?.length !== 0 ? (
           addresses?.map((address) => (
             <div
@@ -72,9 +71,7 @@ export default function ManageAddresses({addresses}: {addresses: address[]}) {
                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                   <Edit className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" >
-                  Set as default
-                </Button>
+                <Button variant="ghost">Set as default</Button>
               </div>
             </div>
           ))

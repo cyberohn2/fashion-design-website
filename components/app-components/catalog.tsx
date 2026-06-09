@@ -31,30 +31,30 @@ import {
 import { SearchSlash } from "lucide-react";
 import { useMemo, useState } from "react";
 
-const Catalog = ({ products }: { products: ProductType[] }) => {
+const Catalog = ({ products }: { products: ProductType[] | undefined }) => {
     
     const [sortBy, setSortBy] = useState<string>("relevant");
 
     const sortedProducts = useMemo(() => {
       if (sortBy === "relevant") return products;
 
-      const sorted = [...products];
+      const sorted = products && [...products];
 
       switch (sortBy) {
         case "trending":
-          return sorted.sort((a, b) => b.reviews.length - a.reviews.length);
+          return sorted?.sort((a, b) => b.reviews.length - a.reviews.length);
 
         case "latest":
-          return sorted.sort(
+          return sorted?.sort(
             (a, b) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
 
         case "price-low":
-          return sorted.sort((a, b) => a.base_price - b.base_price);
+          return sorted?.sort((a, b) => a.base_price - b.base_price);
 
         case "price-high":
-          return sorted.sort((a, b) => b.base_price - a.base_price);
+          return sorted?.sort((a, b) => b.base_price - a.base_price);
 
         default:
           return products;
@@ -63,8 +63,11 @@ const Catalog = ({ products }: { products: ProductType[] }) => {
 
 
   return (
-    <div>
-      <div>
+    <section className="">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
+          Catalog
+        </h1>
         <Select value={sortBy} onValueChange={setSortBy}>
           <SelectTrigger className="">
             <SelectValue placeholder="Sort By" />
@@ -82,11 +85,11 @@ const Catalog = ({ products }: { products: ProductType[] }) => {
         </Select>
       </div>
       <div
-        className={`${sortedProducts.length > 0 && "grid"} gap-4 md:grid-cols-2 lg:grid-cols-4 p-4 border-y mt-8`}
+        className={`${ sortedProducts && sortedProducts?.length > 0 && "grid"} gap-4 md:grid-cols-2 lg:grid-cols-4 p-4 mt-8 min-h-screen`}
       >
-        {sortedProducts.length < 0 ? (
+        {sortedProducts && sortedProducts?.length < 0 ? (
           <ItemSkeletonGrid />
-        ) : sortedProducts.length === 0 ? (
+        ) : sortedProducts?.length === 0 ? (
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant="icon">
@@ -97,12 +100,12 @@ const Catalog = ({ products }: { products: ProductType[] }) => {
             </EmptyHeader>
           </Empty>
         ) : (
-          sortedProducts.map((product) => (
+          sortedProducts?.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))
         )}
       </div>
-      <Pagination className="py-5">
+      <Pagination className="py-5 mt-auto">
         <PaginationContent>
           <PaginationItem>
             <PaginationLink href="#">1</PaginationLink>
@@ -123,7 +126,7 @@ const Catalog = ({ products }: { products: ProductType[] }) => {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </div>
+    </section>
   );
 }
 

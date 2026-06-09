@@ -43,25 +43,16 @@ export default function ManageMeasurements({measurements}: {measurements: measur
   const router = useRouter();
 
   return (
-    <div className="px-4 py-6 container mx-auto">
+    <div className="px-4 container mx-auto">
       <div>
-        <div className="mb-6">
-          <Button
-            onClick={() => router.back()}
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter text-primary">
+        <div className="mb-4">
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
             Saved measurements
           </h1>
         </div>
-        <Separator />
       </div>
       <div>
-        <div className="space-y-3">
+        <div className="space-y-3 mt-8 min-h-screen">
           {measurements?.length !== 0 ? (
             measurements?.map((measurement) => (
               <div
