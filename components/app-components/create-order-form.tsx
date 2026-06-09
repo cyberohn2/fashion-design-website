@@ -36,6 +36,7 @@ const CreateOrderForm = () => {
     customizationNotes: "",
     customerBudget: undefined,
   });
+  const [ideaImageFile, setIdeaImageFile] = useState<File | null>(null);
 
   const [loading, setIsLoading] = useState<boolean>(true)
 
@@ -103,8 +104,7 @@ const CreateOrderForm = () => {
 
   const handleImagesChange = async (files: File[]) => {
     if (files.length > 0) {
-      const imageUrl = await uploadImage(files[0]);
-      setFormData((prev) => ({ ...prev, ideaImageUrl: imageUrl }));
+      setIdeaImageFile(files[0]);
     }
   };
 
@@ -114,6 +114,13 @@ const CreateOrderForm = () => {
     setFormError("");
 
     try {
+      // upload image to supabase and get url
+      if(ideaImageFile){
+        const imageUrl = await uploadImage(ideaImageFile);
+        setFormData((prev) => ({ ...prev, ideaImageUrl: imageUrl }));
+      }
+
+
       if (params.slug && formData.selectedDressId) {
         const formDataToSubmit = {
           ...formData,
@@ -174,7 +181,7 @@ const CreateOrderForm = () => {
         <p className="mt-1 text-sm text-muted-foreground">Upload image</p>
         <div className="mt-4">
           {formData.ideaImageUrl !== "" ? (
-            <Image src={formData.ideaImageUrl} alt="image" />
+            <Image width={200} height={200} src={formData.ideaImageUrl} alt="image" />
           ) : (
             <ImageUploader maxFiles={1} onImagesChange={handleImagesChange} />
           )}
