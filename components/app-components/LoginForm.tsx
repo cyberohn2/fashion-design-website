@@ -14,9 +14,11 @@ import Link from "next/link"
 import Image from "next/image"
 import { loginUser } from "@/actions/auth/login"
 import { useRouter } from "next/navigation"
+import { useAuthContext } from "@/contexts/AuthContext"
 
 export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   const router = useRouter()
+  const {userDispatch} = useAuthContext()
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -42,7 +44,8 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div
 
     try {
       const loggedIn = await loginUser(formData);
-      if (loggedIn) {
+      if (loggedIn.success) {
+        userDispatch({ type: "LOGIN", payload: { user: loggedIn.user } });
         router.push("/catalog")
       }else{
         setError("An error occured!")

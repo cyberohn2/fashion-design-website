@@ -1,5 +1,6 @@
 "use server";
 
+import { getCurrentUser } from "@/lib/auth/get-current-user";
 import { createClient } from "@/lib/supabase/server";
 
 type LoginData = {
@@ -18,8 +19,10 @@ export async function loginUser(data: LoginData) {
   if (error) {
     throw new Error(error.message);
   }
+  const user = await getCurrentUser();
 
   return {
     success: true,
+    user: user
   };
 }

@@ -28,7 +28,7 @@ export async function registerUser(data: RegisterData) {
   }
 
   // 2. Create profile in Prisma DB
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       id: authData.user.id,
       full_name: data.fullName,
@@ -40,5 +40,6 @@ export async function registerUser(data: RegisterData) {
 
   return {
     success: true,
+    user: user
   };
 }

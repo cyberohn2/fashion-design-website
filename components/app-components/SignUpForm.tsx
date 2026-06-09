@@ -14,11 +14,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { registerUser } from "@/actions/auth/register"
 import { useRouter } from "next/navigation"
+import { useAuthContext } from "@/contexts/AuthContext"
 
 
 
 export function SignupForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   const router = useRouter()
+  const {userDispatch} = useAuthContext()
   const [formData, setformData] = useState({
     fullName: '',
     phone: '',
@@ -50,10 +52,11 @@ export function SignupForm({ className, ...props }: ComponentPropsWithoutRef<'di
 
     try {
       const loggedIn = await registerUser(formData);
-      if (loggedIn) {
-        router.push("/catalog")
-      }else{
-        setError("An error occured!")
+      if (loggedIn.success) {
+        userDispatch({ type: "LOGIN", payload: { user: loggedIn.user } });
+        router.push("/catalog");
+      } else {
+        setError("An error occured!");
       }
     } catch (err) {
       setError(

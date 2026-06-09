@@ -16,6 +16,24 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
 
+export type Reviews = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  dressId: string;
+  userId: string;
+  rating: number;
+  comment: string;
+};
+
+export type ProductImages = {
+  id: string;
+  url: string;
+  createdAt: Date;
+  updatedAt: Date;
+  dressId: string;
+};
+
 export type ProductType = {
   id: string;
   title: string;
@@ -28,30 +46,49 @@ export type ProductType = {
     | "CORPORATE_FEMALE"
     | "CASUAL"
     | "STREET_WEAR";
-    gender: string
-    base_price: string
-    stock: number;
-    thumbnail: string
-    images: string[]
-    reviews: any
+  gender: string;
+  base_price: number;
+  stock: number;
+  thumbnail: string | null;
+  images: ProductImages[];
+  reviews: Reviews[];
+  createdAt: Date;
 };
 
 const ProductCard = ({ product }: { product: ProductType }) => {
+  const averageRating = useMemo(() => {
+    if (!product.reviews.length) return 0;
+
+    const total = product.reviews.reduce(
+      (sum, review) => sum + review.rating,
+      0
+    );
+
+    return total / product.reviews.length;
+  }, [product.reviews]);
+
   const stars = useMemo(() => {
-    // determine full/half/empty for 5-star display
-    const full = Math.floor(product?.reviews?.rating);
-    const remainder = product?.reviews?.rating - full;
+    const full = Math.floor(averageRating);
+    const remainder = averageRating - full;
+
     const hasHalf = remainder >= 0.25 && remainder < 0.75;
     const roundUp = remainder >= 0.75;
+
     const result = [];
 
-    for (let i = 0; i < full; i++) result.push("full");
+    for (let i = 0; i < full; i++) {
+      result.push("full");
+    }
+
     if (hasHalf) result.push("half");
     if (roundUp) result.push("full");
-    while (result.length < 5) result.push("empty");
+
+    while (result.length < 5) {
+      result.push("empty");
+    }
 
     return result;
-  }, [product?.reviews?.rating]);
+  }, [averageRating]);
 
   const gradId = useMemo(
     () => `half-grad-${Math.random().toString(36).slice(2, 8)}`,
@@ -69,14 +106,18 @@ const ProductCard = ({ product }: { product: ProductType }) => {
         <div>
           <img
             className="w-full max-h-42.5 aspect-square object-cover object-top rounded-sm rounded-b-xl "
-            src={product?.thumbnail}
+            src={
+              product?.thumbnail ? product.thumbnail : product?.images[0]?.url
+            }
             alt={product?.title}
           />
         </div>
         <div className="p-0 px-2 grow flex flex-col justify-between">
           <div>
             <CardTitle className="font-semibold text-sm h-10">
-              <Link href={`/app/products/${product?.id}`}>{product?.title}</Link>
+              <Link href={`/app/products/${product?.id}`}>
+                {product?.title}
+              </Link>
             </CardTitle>
           </div>
           <CardContent className="p-0 mt-2 mb-2 flex items-center justify-between">
@@ -89,9 +130,13 @@ const ProductCard = ({ product }: { product: ProductType }) => {
                   </span>
                 ))}
               </div>
-              <span className="text-sm text-gray-600">
-                ({product?.reviews?.rating?.toFixed(1)})
-              </span>
+              {product.reviews.length > 0 ? (
+                <span className="text-sm text-gray-600">
+                  {averageRating.toFixed(1)} ({product.reviews.length})
+                </span>
+              ) : (
+                <span className="text-sm text-gray-500">No reviews</span>
+              )}
             </div>
           </CardContent>
           <CardFooter className="w-full my-2 px-0">
@@ -107,9 +152,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
               className="block  w-full"
               href={`/create-order/${product?.slug}`}
             >
-              <Button className="w-full cursor-pointer">
-                Buy Now
-              </Button>
+              <Button className="w-full cursor-pointer">Buy Now</Button>
             </Link>
           </CardFooter>
         </div>

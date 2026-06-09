@@ -3,17 +3,25 @@
 import prisma from "@/lib/prisma";
 
 export async function getDresses() {
-  return prisma.dresses.findMany({
-    where: {
-      isPublished: true,
-    },
+  try{
+    return prisma.dresses.findMany({
+      where: {
+        isPublished: true,
+      },
 
-    include: {
-      images: true,
-    },
+      include: {
+        images: true,
+        reviews: true,
+      },
 
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+  catch(error){
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(message);    
+  }
+  
 }

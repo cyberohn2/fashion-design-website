@@ -12,10 +12,13 @@ import {
 import { useRef, useState } from "react";
 import { Label } from "../ui/label";
 import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/contexts/AuthContext";
+import UserMenu from "./UserMenu";
 
 
 const Header = () => {
-  const router = useRouter()
+  const { userState } = useAuthContext();
+  console.log("User in header:", userState.user);
   const [searchVisible, setSearchVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -80,6 +83,7 @@ const Header = () => {
           >
             {isMenuOpen ? <XIcon color="white" /> : <MenuIcon color="white" />}
           </Button>
+          {userState.user && <UserMenu />}
         </div>
       </nav>
 

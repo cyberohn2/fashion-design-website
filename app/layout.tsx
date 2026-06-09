@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/app-components/header";
 import Footer from "@/components/app-components/footer";
+import { AuthContextProvider } from "@/contexts/AuthContext";
 
 const lamoricRowen = localFont({
   variable: "--font-lamoric-rowen",
@@ -67,13 +68,16 @@ export default function RootLayout({
         ZTNature.variable,
       )}
     >
+      <AuthContextProvider>
       <Header />
       <body
         className={`min-h-full flex flex-col ${(lamoricRowen.className, ZTNature.className)}`}
       >
         {children}
+
       </body>
       <Footer />
+      </AuthContextProvider>▬
     </html>
   );
 }
