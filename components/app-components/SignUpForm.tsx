@@ -56,7 +56,9 @@ export function SignupForm({ className, ...props }: ComponentPropsWithoutRef<'di
         setError("An error occured!")
       }
     } catch (err) {
-      setError("An error occured!");
+      setError(
+        `An error occured!: ${err instanceof Error ? err.message : String(err)}`,
+      );
       console.error("Login error:", err);
     }
 

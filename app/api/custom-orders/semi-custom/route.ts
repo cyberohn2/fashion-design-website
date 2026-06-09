@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createFullCustomOrder } from "@/actions/orders/create-full-custom-order";
+import { createSemiCustomOrder } from "@/actions/orders/create-semi-custom-order";
 
 export async function POST(request: Request) {
   const { data } = await request.json();
@@ -8,14 +8,14 @@ export async function POST(request: Request) {
   }
 
   try {
-    const newOrder = await createFullCustomOrder(data);
-    if (!newOrder) {
+    const newSemiOrder = await createSemiCustomOrder(data);
+    if (!newSemiOrder) {
       return NextResponse.json(
         { error: "Error creating order" },
         { status: 404 },
       );
     }
-    return NextResponse.json(newOrder, { status: 201 });
+    return NextResponse.json(newSemiOrder, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("Error creating order:", message);

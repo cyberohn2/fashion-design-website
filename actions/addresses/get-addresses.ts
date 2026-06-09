@@ -13,7 +13,7 @@ export async function getAddresses() {
 
     orderBy: [
       {
-        isDefault: "desc",
+        is_default: "desc",
       },
       {
         createdAt: "desc",

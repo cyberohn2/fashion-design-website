@@ -1,5 +1,5 @@
 "use client"
-import { createAddress, type CreateAddressData } from "@/actions/addresses/create-address"
+import { type CreateAddressData } from "@/actions/addresses/create-address"
 import { type SubmitEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,37 +13,48 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "../ui/checkbox";
 import { useParams, useRouter } from "next/navigation";
-import { getAddress } from "@/actions/addresses/get-address";
-import { updateAddress } from "@/actions/addresses/update-address";
 
 const AddressForm = () => {
     const [formData, setFormData] = useState<CreateAddressData>({
-        fullName: "",
+        full_name: "",
         phone: "",
         country: "",
         state: "",
         city: "",
         address: "",
         postalCode: "",
-        isDefault: false,
+        is_default: false,
     });
 
+    // fetch address data if user is updating an address data
     const params = useParams();
     useEffect(() => {
-        if (params.id) {
-        getAddress(params.id as string).then((val) =>
-          setFormData({
-            fullName: val.full_name,
-            phone: val.phone,
-            country: val.country,
-            state: val.state,
-            city: val.city,
-            address: val.address,
-            postalCode: val.postal_code as string | undefined,
-            isDefault: val.is_default as boolean | undefined,
-          }),
-        );
+      if (params.id) {
+        const fetchAddress = async () => {
+          try {
+            const req = await fetch(`/api/get-address/${params.id}`);
+            if (req.ok) {
+              req.json().then((data) =>
+                setFormData({
+                  full_name: data.full_name,
+                  phone: data.phone,
+                  country: data.country,
+                  state: data.state,
+                  city: data.city,
+                  address: data.address,
+                  postalCode: data.postal_code as string | undefined,
+                  is_default: data.is_default as boolean | undefined,
+                }),
+              );
+            }
+          } catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            setFormError(`Error getting address details: ${message}`)
+          }
         }
+
+        fetchAddress();
+      }
     }, [params.id]);
 
 
@@ -65,17 +76,29 @@ const AddressForm = () => {
     setIsSubmitting(true);
 
     try {
-        let newAddress;
-        if (params.id) {
-            newAddress = await updateAddress({...formData, addressId: params.id as string})
-        } else {
-            newAddress = await createAddress(formData);    
-        } 
-        
-        if (newAddress) {
-            setIsSubmitting(false)
-            router.push("/addresses/manage")
-        }
+      // update address if params.id is present else create a new one
+      if (params.id) {
+          const req = await fetch("/api/address/update-address", {
+            method: "POST",
+            body: JSON.stringify({
+              ...formData,
+              addressId: params.id as string,
+            }),
+          })
+          if(req.ok) {
+            setIsSubmitting(false);
+            router.push("/addresses/manage");
+          }
+      } else {
+        const req = await fetch("/api/address/create-address", {
+          method: "POST",
+          body: JSON.stringify({formData})
+        })
+        if (req.ok) {
+          setIsSubmitting(false);
+          router.push("/addresses/manage");
+        }   
+      } 
     } catch (error) {
         const message =
             error instanceof Error ? error.message : String(error);
@@ -97,12 +120,12 @@ const AddressForm = () => {
         </CardHeader>
         <CardContent className="grid md:grid-cols-2 gap-1">
           <div className="">
-            <Label htmlFor="fullName">Full Name *</Label>
+            <Label htmlFor="full_name">Full Name *</Label>
             <Input
-              id="fullName"
-              name="fullName"
+              id="full_name"
+              name="full_name"
               type="text"
-              value={formData.fullName}
+              value={formData.full_name}
               onChange={handleInputChange}
               placeholder="John Doe Appleseed"
               className="mt-2"
@@ -210,17 +233,17 @@ const AddressForm = () => {
 
           <div className="flex gap-2 items-center mb-2">
             <Checkbox
-              id="isDefault"
-              name="isDefault"
-              checked={formData.isDefault}
+              id="is_default"
+              name="is_default"
+              checked={formData.is_default}
               onCheckedChange={(checked) =>
                 setFormData((prev) => ({
                   ...prev,
-                  isDefault: checked ? true : false,
+                  is_default: checked ? true : false,
                 }))
               }
             />
-            <Label htmlFor="isDefault">Set as default Address</Label>
+            <Label htmlFor="is_default">Set as default Address</Label>
           </div>
         </CardContent>
       </Card>

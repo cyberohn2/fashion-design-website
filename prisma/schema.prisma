@@ -13,7 +13,7 @@ datasource db {
 }
 
 model User {
-  id          String   @id @db.Uuid
+  id        String   @id @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   full_name String
@@ -40,7 +40,7 @@ model User_Addresses {
   id          String      @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  userId      String 
+  userId      String  @db.Uuid
   full_name   String
   phone       String  
   country     String  @default("Nigeria")
@@ -59,7 +59,7 @@ model User_Measurements {
   id          String      @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  userId      String
+  userId      String  @db.Uuid
   profile_name String
   gender      String
   chest       Float
@@ -141,7 +141,7 @@ model   Orders {
   id          String      @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  userId      String
+  userId      String  @db.Uuid
   order_number String   @unique
   order_type   OrderType
   status      OrderStatus
@@ -208,7 +208,7 @@ enum DeliveryMethod {
 model OrderStatusHistory {
   id              String         @id @default(uuid()) @db.Uuid
 
-  orderId         String         @db.Uuid
+  orderId         String         
   order           Orders          @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   oldStatus       OrderStatus?
@@ -275,7 +275,7 @@ model Reviews {
   id          String      @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  userId      String
+  userId      String  @db.Uuid
   dressId     String
   rating      Int
   comment     String

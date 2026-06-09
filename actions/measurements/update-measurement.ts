@@ -6,22 +6,22 @@ import { requireAuth } from "@/lib/auth/require-auth";
 type UpdateMeasurementData = {
   measurementId: string;
 
-  profileName?: string;
+  profile_name?: string;
 
   chest: number;
   waist: number;
   hips: number;
   shoulder: number;
-  sleeveLength: number;
+  sleeve_length: number;
   arm?: number;
-  sleeveHem?: number;
-  topLength?: number;
+  sleeve_hem?: number;
+  top_length?: number;
   thigh: number;
-  trouserLength: number;
+  trouser_length: number;
   ankle: number;
-  waistToKnee: number;
-  kneeToAnkle: number;
-  roundKnee: number;
+  waist_to_knee: number;
+  knee_to_ankle: number;
+  round_knee: number;
   neck: number;
   inseam?: number;
   height?: number;
@@ -49,22 +49,22 @@ export async function updateMeasurement(data: UpdateMeasurementData) {
     },
 
     data: {
-      profileName: data.profileName,
+      profile_name: data.profile_name,
 
       chest: data.chest,
       waist: data.waist,
       hips: data.hips,
       shoulder: data.shoulder,
-      sleeveLength: data.sleeveLength,
+      sleeveLength: data.sleeve_length,
       arm: data.arm,
-      sleeveHem: data.sleeveHem,
-      topLength: data.topLength,
+      sleeveHem: data.sleeve_hem,
+      topLength: data.top_length,
       thigh: data.thigh,
-      trouserLength: data.trouserLength,
+      trouserLength: data.trouser_length,
       ankle: data.ankle,
-      waistToKnee: data.waistToKnee,
-      kneeToAnkle: data.kneeToAnkle,
-      roundKnee: data.roundKnee,
+      waistToKnee: data.waist_to_knee,
+      kneeToAnkle: data.knee_to_ankle,
+      roundKnee: data.round_knee,
       neck: data.neck,
       inseam: data.inseam,
       height: data.height,

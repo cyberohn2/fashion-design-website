@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth/require-auth";
 
 export type CreateAddressData = {
-  fullName: string;
+  full_name: string;
   phone: string;
 
   country: string;
@@ -15,22 +15,22 @@ export type CreateAddressData = {
 
   postalCode?: string;
 
-  isDefault?: boolean;
+  is_default?: boolean;
 };
 
 export async function createAddress(data: CreateAddressData) {
   const user = await requireAuth();
 
   // Remove previous default address
-  if (data.isDefault) {
+  if (data.is_default) {
     await prisma.user_Addresses.updateMany({
       where: {
         userId: user.id,
-        isDefault: true,
+        is_default: true,
       },
 
       data: {
-        isDefault: false,
+        is_default: false,
       },
     });
   }
@@ -39,7 +39,7 @@ export async function createAddress(data: CreateAddressData) {
     data: {
       userId: user.id,
 
-      full_name: data.fullName,
+      full_name: data.full_name,
       phone: data.phone,
 
       country: data.country,
@@ -50,7 +50,7 @@ export async function createAddress(data: CreateAddressData) {
 
       postal_code: data.postalCode,
 
-      isDefault: data.isDefault ?? false,
+      is_default: data.is_default ?? false,
     },
   });
 

@@ -1,5 +1,5 @@
 "use client"
-import { type CreateFullCustomOrderData } from "@/actions/orders/create-full-custom-order";
+import { createFullCustomOrder, type CreateFullCustomOrderData } from "@/actions/orders/create-full-custom-order";
 import { type SubmitEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,33 +20,73 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ImageUploader from "../ui/image-uploader";
-import { FieldDescription } from "../ui/field";
 import Link from "next/link";
 import { type address } from "@/components/app-components/manage-address";
-import { getAddresses } from "@/actions/addresses/get-addresses";
 import { measurement } from "./manage-measurements";
-import { getMeasurements } from "@/actions/measurements/get-measurements";
+import { useParams, useRouter } from "next/navigation";
+import { uploadDressImage } from "@/lib/supabase/storage";
+import { createSemiCustomOrder } from "@/actions/orders/create-semi-custom-order";
+import Image from "next/image";
 
 const CreateOrderForm = () => {
-    const [formData, setFormData] = useState<CreateFullCustomOrderData>({
-        ideaImageUrl: "",
-        deliveryMethod: "PICKUP",
-        deliveryAddressId: undefined,
-        measurementProfileId: undefined,
-        customizationNotes: "",
-        customerBudget: undefined,
-    });
-    const [addresses, setAddresses] = useState<address[]>();
-    const [measurements, setMeasurements] = useState<measurement[]>();
+  const [formData, setFormData] = useState<(CreateFullCustomOrderData & {selectedDressId?: string, materialChoice?: string, customMaterialNotes?: string})>({
+    ideaImageUrl: "",
+    deliveryMethod: "PICKUP",
+    deliveryAddressId: undefined,
+    measurementProfileId: undefined,
+    customizationNotes: "",
+    customerBudget: undefined,
+  });
 
+  const [loading, setIsLoading] = useState<boolean>(true)
 
-    useEffect(() => {
-        getAddresses().then((val) => (setAddresses(val)));
-        getMeasurements().then(val => setMeasurements(val))
-    }, [])
+  const [addresses, setAddresses] = useState<address[]>();
+  const [measurements, setMeasurements] = useState<measurement[]>();
 
-    const [formError, setFormError] = useState<string | undefined>(undefined);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter()
+  const params = useParams();
+  // fetch selected dress details if user
+  useEffect(()=>{
+    const fetchDress = async () => {
+      const req = await fetch(`/api/dresses/${params.slug}`);
+      if (req.ok) {
+        req
+          .json()
+          .then((val) =>
+            setFormData((prev) => ({
+              ...prev,
+              selectedDressId: val?.id,
+              ideaImageUrl: val?.thumbnail,
+            })),
+          );
+      }
+    };
+
+    const fetchAddresses = async () => {
+      const req = await fetch(`/api/dresses`);
+      if(req.ok){
+        req.json().then( data => setAddresses(data))
+      }
+    }
+
+    const fetchMeasurements = async () => {
+      const req = await fetch(`/api/measurements`);
+      if(req.ok){
+        req.json().then( data => setMeasurements(data))
+        setIsLoading(false);
+      }
+    }
+
+    if(params.slug){
+      fetchDress()
+    }
+
+    fetchAddresses()
+    fetchMeasurements()
+  }, [params.slug])
+
+  const [formError, setFormError] = useState<string | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -54,23 +94,61 @@ const CreateOrderForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-    const handleSelectChange = (name: string, value: string) => {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const handleImagesChange = (files: File[]) => {
-        if (files.length > 0) {
-            const imageUrl = URL.createObjectURL(files[0]);
-            setFormData((prev) => ({ ...prev, ideaImageUrl: imageUrl }));
-        }
-    };
+  const handleImagesChange = async (files: File[]) => {
+    if (files.length > 0) {
+      const imageUrl = await uploadDressImage(files[0]);
+      setFormData((prev) => ({ ...prev, ideaImageUrl: imageUrl }));
+    }
+  };
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setFormError("");
+
+    try {
+      if (params.slug) {
+        const req = await fetch(`/api/custom-orders/semi-custom`, {
+          method: "POST",
+          body: JSON.stringify({
+            ...formData,
+            selectedDressId: formData.selectedDressId as string,
+          }),
+        });
+        if (req.ok) {
+          // move on to payment
+          setIsSubmitting(false);
+          router.push("/catalog");
+        }
+      }else{
+        const req = await fetch(`/api/custom-orders`, {
+          method: "POST",
+          body: JSON.stringify(formData),
+        });
+        if (req.ok) {
+          // move on to payment
+          setIsSubmitting(false);
+          router.push("/catalog");
+        }
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setFormError(
+        `Error creating order:${message}`,
+      );
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 ">
+    <form
+      aria-disabled={loading}
+      onSubmit={handleSubmit}
+      className="space-y-6 "
+    >
       <p className="font-semibold text-red-500">
         {formError && `An error occured: ${formError}`}
       </p>
@@ -81,7 +159,11 @@ const CreateOrderForm = () => {
         </Label>
         <p className="mt-1 text-sm text-muted-foreground">Upload image</p>
         <div className="mt-4">
-          <ImageUploader maxFiles={1} onImagesChange={handleImagesChange} />
+          {formData.ideaImageUrl !== "" ? (
+            <Image src={formData.ideaImageUrl} alt="image" />
+          ) : (
+            <ImageUploader maxFiles={1} onImagesChange={handleImagesChange} />
+          )}
         </div>
       </section>
 
@@ -95,6 +177,7 @@ const CreateOrderForm = () => {
           <div>
             <Label htmlFor="type">Delivery Method *</Label>
             <Select
+              disabled={loading}
               required
               value={formData.deliveryMethod}
               onValueChange={(value) =>
@@ -125,6 +208,7 @@ const CreateOrderForm = () => {
             <div>
               <Label htmlFor="type">Address *</Label>
               <Select
+                disabled={loading}
                 required
                 value={formData.deliveryAddressId}
                 onValueChange={(value) =>
@@ -158,6 +242,7 @@ const CreateOrderForm = () => {
           <div>
             <Label htmlFor="type">Select Measurements *</Label>
             <Select
+              disabled={loading}
               required
               value={formData.measurementProfileId}
               onValueChange={(value) =>
@@ -192,6 +277,7 @@ const CreateOrderForm = () => {
         <CardContent>
           <Label htmlFor="customizationNotes">Customization Notes</Label>
           <Textarea
+            disabled={loading}
             id="customizationNotes"
             name="customizationNotes"
             value={formData.customizationNotes}
@@ -214,6 +300,7 @@ const CreateOrderForm = () => {
           <div className="">
             <Label htmlFor="stateFee">Budget</Label>
             <Input
+              disabled={loading}
               id="customerBudget"
               name="customerBudget"
               type="text"

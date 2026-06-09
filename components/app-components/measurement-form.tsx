@@ -11,70 +11,58 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useParams, useRouter } from "next/navigation";
-import { createMeasurement, type CreateMeasurementData } from "@/actions/measurements/create-measurement";
-import { getMeasurement } from "@/actions/measurements/get-measurement";
+import { type CreateMeasurementData } from "@/actions/measurements/create-measurement";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { updateMeasurement } from "@/actions/measurements/update-measurement";
 
 const MeasurementForm = () => {
-    const [formData, setFormData] = useState<CreateMeasurementData>({
-      profileName: "",
-      gender: "MALE",
-      chest: 0,
-      waist: 0,
-      hips: 0,
-      shoulder: 0,
-      sleeveLength: 0,
-      arm: 0,
-      sleeveHem: 0,
-      topLength: 0,
-      thigh: 0,
-      trouserLength: 0,
-      ankle: 0,
-      waistToKnee: 0,
-      kneeToAnkle: 0,
-      roundKnee: 0,
-      neck: 0,
-      inseam: 0,
-      height: 0,
-      notes: "",
-    });
+  const [formData, setFormData] = useState<CreateMeasurementData>({
+    profile_name: "",
+    gender: "MALE",
+    chest: 0,
+    waist: 0,
+    hips: 0,
+    shoulder: 0,
+    sleeve_length: 0,
+    arm: 0,
+    sleeve_hem: 0,
+    top_length: 0,
+    thigh: 0,
+    trouser_length: 0,
+    ankle: 0,
+    waist_to_knee: 0,
+    knee_to_ankle: 0,
+    round_knee: 0,
+    neck: 0,
+    inseam: 0,
+    height: 0,
+    notes: "",
+  });
 
-    const params = useParams();
-    useEffect(() => {
-        if (params.id) {
-        getMeasurement(params.id as string).then((data) =>
-          setFormData({
-            profileName: data.profile_name,
-            gender: data.gender,
-            chest: data.chest,
-            waist: data.waist,
-            hips: data.hips,
-            shoulder: data.shoulder,
-            sleeveLength: data.sleeve_length,
-            arm: data.arm as number | undefined,
-            sleeveHem: data.sleeve_hem as number | undefined,
-            topLength: data.top_length as number | undefined,
-            thigh: data.thigh,
-            trouserLength: data.trouser_length,
-            ankle: data.ankle,
-            waistToKnee: data.waist_to_knee,
-            kneeToAnkle: data.knee_to_ankle,
-            roundKnee: data.round_knee,
-            neck: data.neck,
-            inseam: data.inseam as number | undefined,
-            height: data.height as number | undefined,
-            notes: data.notes as string | undefined,
-          }),
-        );
+  const params = useParams();
+  useEffect(() => {
+    const fetchMeasurement = async () => {
+      try {
+        const req = await fetch(`/api/measurements/${params.id}`)
+        if (req.ok) {
+          req.json().then((data) => 
+            setFormData(data)
+          )
         }
-    }, [params.id]);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        setFormError(`Error getting measurement details: ${message}`);
+      }
+    }
+    if (params.id) {
+      fetchMeasurement()
+    }
+  }, [params.id]);
 
 
-    const router = useRouter()
+  const router = useRouter()
 
-    const [formError, setFormError] = useState<string | undefined>(undefined);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -87,20 +75,30 @@ const MeasurementForm = () => {
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFormError("")
 
     try {
-        let newMeasurement;
         if (params.id) {
-            newMeasurement = await updateMeasurement({
-            ...formData,
-            measurementId: params.id as string,
-            });
+          const req = await fetch("/api/measurements/update-measurement", {
+            method: "POST",
+            body: JSON.stringify({
+              ...formData,
+              measurementId: params.id as string,
+            }),
+          });
+          if (req.ok) {
+            setIsSubmitting(false);
+            router.push("/measurements/manage");
+          }
         }else{
-            newMeasurement = await createMeasurement(formData)
-        }
-        if (newMeasurement) {
-          setIsSubmitting(false);
-          router.push("/measurements/manage");
+          const req = await fetch("/api/measurements/create-measurement", {
+            method: "POST",
+            body: JSON.stringify(formData),
+          });
+          if (req.ok) {
+            setIsSubmitting(false);
+            router.push("/measurements/manage");
+          }
         }
     } catch (error) {
         const message =
@@ -129,12 +127,12 @@ const MeasurementForm = () => {
         </CardHeader>
         <CardContent className="grid md:grid-cols-2 gap-1">
           <div className="">
-            <Label htmlFor="profileName">Profile Name *</Label>
+            <Label htmlFor="profile_name">Profile Name *</Label>
             <Input
-              id="profileName"
-              name="profileName"
+              id="profile_name"
+              name="profile_name"
               type="text"
-              value={formData.profileName}
+              value={formData.profile_name}
               onChange={handleInputChange}
               placeholder="e.g. senator measurement"
               className="mt-2"
@@ -180,7 +178,7 @@ const MeasurementForm = () => {
         <CardContent className="grid md:grid-cols-2 gap-1">
           {Object.entries(formData).map(
             ([key, value]) =>
-              (key !== "profileName" || "gender" || "notes") && (
+              (key !== "profile_name" || "gender" || "notes") && (
                 <div className="">
                   <Label htmlFor={key}>{key} *</Label>
                   <Input

@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth/require-auth";
 
 export type CreateMeasurementData = {
-  profileName: string;
+  profile_name: string;
 
   gender: string;
 
@@ -12,16 +12,16 @@ export type CreateMeasurementData = {
   waist: number;
   hips: number;
   shoulder: number;
-  sleeveLength: number;
+  sleeve_length: number;
   arm?: number;
-  sleeveHem?: number;
-  topLength?: number;
+  sleeve_hem?: number;
+  top_length?: number;
   thigh: number;
-  trouserLength: number;
+  trouser_length: number;
   ankle: number;
-  waistToKnee: number;
-  kneeToAnkle: number;
-  roundKnee: number;
+  waist_to_knee: number;
+  knee_to_ankle: number;
+  round_knee: number;
   neck: number;
   inseam?: number;
   height?: number;
@@ -36,7 +36,7 @@ export async function createMeasurement(data: CreateMeasurementData) {
     data: {
       userId: user.id,
 
-      profile_name: data.profileName,
+      profile_name: data.profile_name,
 
       gender: data.gender,
 
@@ -44,16 +44,16 @@ export async function createMeasurement(data: CreateMeasurementData) {
       waist: data.waist,
       hips: data.hips,
       shoulder: data.shoulder,
-      sleeve_length: data.sleeveLength,
+      sleeve_length: data.sleeve_length,
       arm: data.arm,
-      sleeve_hem: data.sleeveHem,
-      top_length: data.topLength,
+      sleeve_hem: data.sleeve_hem,
+      top_length: data.top_length,
       thigh: data.thigh,
-      trouser_length: data.trouserLength,
+      trouser_length: data.trouser_length,
       ankle: data.ankle,
-      waist_to_knee: data.waistToKnee,
-      knee_to_ankle: data.kneeToAnkle,
-      round_knee: data.roundKnee,
+      waist_to_knee: data.waist_to_knee,
+      knee_to_ankle: data.knee_to_ankle,
+      round_knee: data.round_knee,
       neck: data.neck,
       inseam: data.inseam,
       height: data.height,
