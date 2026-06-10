@@ -180,8 +180,13 @@ const CreateOrderForm = () => {
         </Label>
         <p className="mt-1 text-sm text-muted-foreground">Upload image</p>
         <div className="mt-4">
-          {formData.ideaImageUrl !== "" ? (
-            <Image width={200} height={200} src={formData.ideaImageUrl} alt="image" />
+          {params.slug? (
+            <Image
+              width={200}
+              height={200}
+              src={formData.ideaImageUrl}
+              alt="image"
+            />
           ) : (
             <ImageUploader maxFiles={1} onImagesChange={handleImagesChange} />
           )}
@@ -329,7 +334,6 @@ const CreateOrderForm = () => {
               onChange={handleInputChange}
               placeholder="0.00"
               className="mt-2"
-              required
             />
           </div>
         </CardContent>

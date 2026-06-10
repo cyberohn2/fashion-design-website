@@ -1,32 +1,26 @@
-"use server";
-
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function getDresses({query}: {
-  query: {
-    searchTerm?: string;
-    category?:
-      | "FEMALE_NATIVE"
-      | "MALE_NATIVE"
-      | "CORPORATE_MALE"
-      | "CORPORATE_FEMALE"
-      | "CASUAL"
-      | "STREET_WEAR";
-  };
-}) {
+export async function POST(request: Request) {
+  const { query } = await request.json();
+
+  if (!query) {
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+
   try {
     return await prisma.dresses.findMany({
       where: {
         OR: [
           {
             title: {
-              contains: query?.searchTerm,
+              contains: query.searchTerm,
               mode: "insensitive",
             },
-            category: query?.category,
+            category: query.category,
           },
         ],
-        isPublished: true,
+        isPublished: true
       },
 
       include: {
@@ -36,6 +30,7 @@ export async function getDresses({query}: {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    throw new Error(message);
+    console.error("Search error:", message);
   }
+
 }

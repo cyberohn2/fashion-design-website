@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 
 export async function getDress(slug: string) {
   try {
-    return prisma.dresses.findUnique({
+    return await prisma.dresses.findUnique({
       where: {
         slug,
       },

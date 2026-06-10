@@ -9,7 +9,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { useRef, useState } from "react";
+import { SubmitEvent, useRef, useState } from "react";
 import { Label } from "../ui/label";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts/AuthContext";
@@ -18,13 +18,19 @@ import UserMenu from "./UserMenu";
 
 const Header = () => {
   const { userState } = useAuthContext();
-  console.log("User in header:", userState.user);
+  const router = useRouter()
   const [searchVisible, setSearchVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("")
 
   const toggleSearch = () => {
     setSearchVisible(!searchVisible);
   };
+
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if(searchTerm !== "") router.push(`/catalog?searchTerm=${searchTerm}`);
+  }
 
   return (
     <header className="bg-foreground/70 px-4 py-2 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
@@ -53,7 +59,7 @@ const Header = () => {
           </Link>
         </ul>
         <div className="flex items-center gap-2">
-          <form className=" flex gap-2">
+          <form onSubmit={handleSubmit} className=" flex gap-2">
             <InputGroup
               onBlur={toggleSearch}
               className={`rounded-full hidden md:flex ${searchVisible && "flex"}`}
@@ -63,6 +69,8 @@ const Header = () => {
                 placeholder="Search..."
                 id="search"
                 name="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
               <InputGroupAddon>
                 <SearchIcon />

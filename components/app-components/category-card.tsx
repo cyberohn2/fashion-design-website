@@ -1,7 +1,9 @@
-
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function CategoryCard({title, description, imageUrl}: {title: string, description: string, imageUrl: string}) {
+  const router = useRouter()
   return (
     <CardContainer className="w-full h-full">
       <CardBody className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/10 dark:bg-black dark:border-white/20 border-black/10 h-full rounded-xl p-6 border  ">
@@ -33,7 +35,7 @@ export function CategoryCard({title, description, imageUrl}: {title: string, des
             as="button"
             className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
           >
-            Explore
+            <Link href={`/catalog?category=${title}`}>Explore</Link>
           </CardItem>
         </div>
       </CardBody>

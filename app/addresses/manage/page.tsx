@@ -6,7 +6,7 @@ const page = async () => {
   try {
     addresses = await getAddresses();
     return (
-      <main className="pt-34 md:pt-24 container mx-auto px-4">
+      <main className="pt-34 md:pt-24 container mx-auto px-4 min-h-screen">
         <ManageAddresses addresses={addresses} />
       </main>
     );

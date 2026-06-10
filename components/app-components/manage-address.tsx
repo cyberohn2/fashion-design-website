@@ -35,21 +35,6 @@ export default function ManageAddresses({addresses}: {addresses: address[]}) {
 
   return (
     <div className="px-4 py-6 container mx-auto">
-      <div>
-        <div className="mb-6">
-          <Button
-            onClick={() => router.back()}
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
-            Saved Addresses
-          </h1>
-        </div>
-      </div>
       <div className="space-y-3 p-4 mt-8 min-h-screen">
         {addresses?.length !== 0 ? (
           addresses?.map((address) => (

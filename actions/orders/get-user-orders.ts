@@ -7,23 +7,27 @@ import { requireAuth } from "@/lib/auth/require-auth";
 export async function getUserOrders() {
   const user = await requireAuth();
 
-  return prisma.orders.findMany({
-    where: {
-      userId: user.id,
-    },
-
-    include: {
-      items: {
-        include: {
-          dress: true,
-        },
+  try {
+    const orders = await prisma.orders.findMany({
+      where: {
+        userId: user.id,
       },
 
-      payment: true,
-    },
+      include: {
+        items: {
+          include: {
+            dress: true,
+          },
+        },
+        payment: true,
+      },
 
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return orders;
+  } catch (error) {
+    
+  }
 }
