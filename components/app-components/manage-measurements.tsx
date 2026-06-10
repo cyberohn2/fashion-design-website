@@ -44,12 +44,11 @@ export default function ManageMeasurements({measurements}: {measurements: measur
 
   return (
     <div className="px-4 container mx-auto">
-      <div>
-        <div className="mb-4">
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
-            Saved measurements
-          </h1>
-        </div>
+      <div className="mb-4 border-b pb-6 flex items-center justify-between">
+        <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
+          Manage Measurements
+        </h1>
+        <Link href={"/measurements/new"}><Button>+ Add New</Button></Link>
       </div>
       <div>
         <div className="space-y-3 mt-8 min-h-screen">
@@ -67,9 +66,11 @@ export default function ManageMeasurements({measurements}: {measurements: measur
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                    <Edit className="w-4 h-4" />
-                  </Button>
+                  <Link href={`/measurements/edit/${measurement.id}`}>
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))

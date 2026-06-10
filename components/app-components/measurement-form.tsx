@@ -42,7 +42,7 @@ const MeasurementForm = () => {
   useEffect(() => {
     const fetchMeasurement = async () => {
       try {
-        const req = await fetch(`/api/measurements/${params.id}`)
+        const req = await fetch(`/api/measurements/get-measurement/${params.id}`)
         if (req.ok) {
           req.json().then((data) => 
             setFormData(data)
@@ -190,129 +190,139 @@ const MeasurementForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 ">
+      <div className="mb-4 border-b pb-6 flex items-center justify-between">
+        <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
+          New Measurement Profile
+        </h1>
+      </div>
       <p className="font-semibold text-red-500">
         {formError && `An error occured: ${formError}`}
       </p>
-
-      {/* Profile name Section */}
       <Card>
-        <CardHeader>
-          <CardTitle>Profile Name</CardTitle>
-          <CardDescription>What's this measurement for ?</CardDescription>
-        </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-1">
-          <div className="">
-            <Label htmlFor="profile_name">Profile Name *</Label>
-            <Input
-              id="profile_name"
-              name="profile_name"
-              type="text"
-              value={formData.profile_name}
-              onChange={handleInputChange}
-              placeholder="e.g. senator measurement"
-              className="mt-2"
-              required
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Gender Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Gender</CardTitle>
-        </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-1">
-          <div>
-            <Label htmlFor="gender">Gender *</Label>
-            <Select
-              required
-              value={formData.gender}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, gender: value }))
-              }
-            >
-              <SelectTrigger id="gender" className="mt-2">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="MALE">Male</SelectItem>
-                <SelectItem value="FEMALE">Female</SelectItem>
-                <SelectItem value="UNISEX">Unisex</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Phone Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Address</CardTitle>
-        </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-1">
-          {Object.entries(formData).map(
-            ([key, value]) =>{
-              if(key == "profile_name" || key == "gender" || key == "notes"){
+        {/* Profile name Section */}
+        <div>
+          <CardHeader>
+            <CardTitle>Profile Name</CardTitle>
+            <CardDescription>What's this measurement for ?</CardDescription>
+          </CardHeader>
+          <CardContent className="grid md:grid-cols-2 gap-1">
+            <div className="">
+              <Label htmlFor="profile_name">Profile Name *</Label>
+              <Input
+                id="profile_name"
+                name="profile_name"
+                type="text"
+                value={formData.profile_name}
+                onChange={handleInputChange}
+                placeholder="e.g. senator measurement"
+                className="mt-2"
+                required
+              />
+            </div>
+          </CardContent>
+        </div>
+        {/* Gender Section */}
+        <div>
+          <CardHeader>
+            <CardTitle>Gender</CardTitle>
+          </CardHeader>
+          <CardContent className="grid md:grid-cols-2 gap-1">
+            <div>
+              <Label htmlFor="gender">Gender *</Label>
+              <Select
+                required
+                value={formData.gender}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, gender: value }))
+                }
+              >
+                <SelectTrigger id="gender" className="mt-2">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="MALE">Male</SelectItem>
+                  <SelectItem value="FEMALE">Female</SelectItem>
+                  <SelectItem value="UNISEX">Unisex</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </div>
+        {/* Phone Section */}
+        <div>
+          <CardHeader>
+            <CardTitle>Address</CardTitle>
+          </CardHeader>
+          <CardContent className="grid md:grid-cols-4 grid-cols-3 gap-1">
+            {Object.entries(formData).map(([key, value]) => {
+              if (
+                key == "profile_name" || 
+                key == "gender" || 
+                key == "notes" ||
+                key == "id" ||
+                key == "createdAt" ||
+                key == "updatedAt" ||
+                key == "userId"
+              ) {
                 return null;
               } else {
-                return (<div className="">
-                  <Label htmlFor={key}>{key} *</Label>
-                  <Input
-                    id={key}
-                    name={key}
-                    type="text"
-                    value={value}
-                    onChange={handleInputChange}
-                    placeholder="0"
-                    className="mt-2"
-                    required
-                  />
-                </div>)
-            }},
-          )}
+                return (
+                  <div className="">
+                    <Label htmlFor={key}>{key} *</Label>
+                    <Input
+                      id={key}
+                      name={key}
+                      type="text"
+                      value={value}
+                      onChange={handleInputChange}
+                      placeholder="0"
+                      className="mt-2"
+                      required
+                    />
+                  </div>
+                );
+              }
+            })}
+          </CardContent>
+        </div>
+        <div>
+          <CardHeader>
+            <CardTitle>Notes</CardTitle>
+            <CardDescription>
+              Add instructions for this measurement
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid md:grid-cols-4 grid-cols-3 gap-1">
+            <div className="">
+              <Label htmlFor="notes">Notes *</Label>
+              <Input
+                id="notes"
+                name="notes"
+                type="text"
+                value={formData.notes}
+                onChange={handleInputChange}
+                placeholder="What should we note about this measurement"
+                className="mt-2"
+                required
+              />
+            </div>
+          </CardContent>
+        </div>
+        <p className="font-semibold text-red-500">
+          {formError && `An error occured: ${formError}`}
+        </p>
+        {/* Submit Button */}
+        <CardContent className="flex gap-4">
+          <Button
+            disabled={isSubmitting}
+            type="submit"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            size="lg"
+          >
+            {isSubmitting ? "Submitting..." : "Create Measurement"}
+          </Button>
         </CardContent>
       </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Notes</CardTitle>
-          <CardDescription>
-            Add instructions for this measurement
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-1">
-          <div className="">
-            <Label htmlFor="notes">Notes *</Label>
-            <Input
-              id="notes"
-              name="notes"
-              type="text"
-              value={formData.notes}
-              onChange={handleInputChange}
-              placeholder="What should we note about this measurement"
-              className="mt-2"
-              required
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <p className="font-semibold text-red-500">
-        {formError && `An error occured: ${formError}`}
-      </p>
-
-      {/* Submit Button */}
-      <div className="flex gap-4">
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          className="bg-primary text-primary-foreground hover:bg-primary/90"
-          size="lg"
-        >
-          {isSubmitting ? "Submitting..." : "Create Measurement"}
-        </Button>
-      </div>
     </form>
   );
 }

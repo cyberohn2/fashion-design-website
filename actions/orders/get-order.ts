@@ -4,12 +4,12 @@ import prisma from "@/lib/prisma";
 
 import { requireAuth } from "@/lib/auth/require-auth";
 
-export async function getOrder(orderId: string) {
+export async function getOrder(orderNumber: string) {
   const user = await requireAuth();
 
   const order = await prisma.orders.findFirst({
     where: {
-      id: orderId,
+      order_number: orderNumber,
       userId: user.id,
     },
 
@@ -22,7 +22,7 @@ export async function getOrder(orderId: string) {
 
       payment: true,
 
-      deliveryAddress: true,
+      delivery_address: true,
 
       statusHistory: {
         orderBy: {

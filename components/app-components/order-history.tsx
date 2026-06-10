@@ -88,7 +88,7 @@ const cancelledOrders = orders?.filter((order) =>
                       <p>On: {order.createdAt.getDate()}</p>
                     </div>
                   </div>
-                  <Link href={`/order/${order.order_number}`}>See Details</Link>
+                  <Link href={`/order-history/${order.order_number}`}>See Details</Link>
                 </Card>
               ))
             ) : (
@@ -131,7 +131,7 @@ const cancelledOrders = orders?.filter((order) =>
                       <p>On: {order.createdAt.getDate()}</p>
                     </div>
                   </div>
-                  <Link href={`/order/${order.order_number}`}>See Details</Link>
+                  <Link href={`/order-history/${order.order_number}`}>See Details</Link>
                 </Card>
               ))
             ) : (
@@ -174,7 +174,7 @@ const cancelledOrders = orders?.filter((order) =>
                       <p>On: {order.createdAt.getDate()}</p>
                     </div>
                   </div>
-                  <Link href={`/order/${order.order_number}`}>See Details</Link>
+                  <Link href={`/order-history/${order.order_number}`}>See Details</Link>
                 </Card>
               ))
             ) : (

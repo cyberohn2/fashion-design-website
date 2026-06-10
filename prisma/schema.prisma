@@ -265,7 +265,7 @@ model Payment {
   Provider    String  @default("PAYSTACK")
   Provider_Reference String @unique
   amount      Float
-  status      PaymentStatus
+  status      PaymentStatus @default(UNPAID)
   order       Orders @relation(fields: [orderId], references: [id])
 
   // @@schema("public")

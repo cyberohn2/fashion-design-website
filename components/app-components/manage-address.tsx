@@ -11,8 +11,7 @@ import {
 import { Edit, Eye, SearchSlash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Separator } from "@/components/ui/separator"
-import { ArrowLeft } from "lucide-react"
+import { useState } from "react";
 
 export type address = {
   id: string;
@@ -31,13 +30,41 @@ export type address = {
 
 export default function ManageAddresses({addresses}: {addresses: address[]}) {
   const router = useRouter()
-  console.log(addresses)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | undefined>()
+
+  const handleDefault = async (index: number) => {
+    setLoading(true)
+    const req = await fetch("/api/address/update-address", {
+      method: "POST",
+      body: JSON.stringify({
+        ...addresses[index],
+        is_default: true,
+        addressId: addresses[index].id as string,
+      }),
+    });
+    if (req.ok) {
+      setLoading(false);
+      router.refresh();
+    } else {
+      const errorData = await req.json();
+      setError(errorData.error || "Failed to update address");
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="px-4 py-6 container mx-auto">
+      <div className="mb-4 border-b pb-6 flex items-center justify-between">
+        <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
+          Manage Address
+        </h1>
+        <Link href={"/addresses/new"}><Button>+ Add New</Button></Link>
+      </div>
       <div className="space-y-3 p-4 mt-8 min-h-screen">
+        {error && <p>{error}</p>}
         {addresses?.length !== 0 ? (
-          addresses?.map((address) => (
+          addresses?.map((address, index) => (
             <div
               key={address.id}
               className="flex items-center justify-between gap-4 p-3 rounded-lg border border-border hover:bg-accent transition-colors"
@@ -53,10 +80,12 @@ export default function ManageAddresses({addresses}: {addresses: address[]}) {
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost">Set as default</Button>
+                <Link href={`/addresses/edit/${address.id}`}>
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                </Link>
+                {!address.is_default && <Button disabled={loading} onClick={() => handleDefault(index)} variant="outline">Set as default</Button>}
               </div>
             </div>
           ))

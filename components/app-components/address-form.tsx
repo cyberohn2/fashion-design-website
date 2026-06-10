@@ -22,7 +22,7 @@ const AddressForm = () => {
         state: "",
         city: "",
         address: "",
-        postalCode: "",
+        postal_code: "",
         is_default: false,
     });
 
@@ -32,7 +32,7 @@ const AddressForm = () => {
       if (params.id) {
         const fetchAddress = async () => {
           try {
-            const req = await fetch(`/api/get-address/${params.id}`);
+            const req = await fetch(`/api/address/get-address/${params.id}`);
             if (req.ok) {
               req.json().then((data) =>
                 setFormData({
@@ -42,7 +42,7 @@ const AddressForm = () => {
                   state: data.state,
                   city: data.city,
                   address: data.address,
-                  postalCode: data.postal_code as string | undefined,
+                  postal_code: data.postal_code as string | undefined,
                   is_default: data.is_default as boolean | undefined,
                 }),
               );
@@ -78,17 +78,21 @@ const AddressForm = () => {
     try {
       // update address if params.id is present else create a new one
       if (params.id) {
-          const req = await fetch("/api/address/update-address", {
-            method: "POST",
-            body: JSON.stringify({
-              ...formData,
-              addressId: params.id as string,
-            }),
-          })
-          if(req.ok) {
-            setIsSubmitting(false);
-            router.push("/addresses/manage");
-          }
+        const req = await fetch("/api/address/update-address", {
+          method: "POST",
+          body: JSON.stringify({
+            ...formData,
+            addressId: params.id as string,
+          }),
+        })
+        if (req.ok) {
+          setIsSubmitting(false);
+          router.push("/addresses/manage");
+        } else {
+          const errorData = await req.json();
+          setFormError(errorData.error || "Failed to update address");
+          setIsSubmitting(false);
+        }
       } else {
         const req = await fetch("/api/address/create-address", {
           method: "POST",
@@ -97,11 +101,15 @@ const AddressForm = () => {
         if (req.ok) {
           setIsSubmitting(false);
           router.push("/addresses/manage");
-        }   
+        } else {
+          const errorData = await req.json();
+          setFormError(errorData.error || "Failed to update address");
+          setIsSubmitting(false);
+        }
       } 
     } catch (error) {
         const message =
-            error instanceof Error ? error.message : String(error);
+        error instanceof Error ? error.message : String(error);
         setFormError(`Error ${params.id ? "updating" : "creating"} address:${message}`);
         console.error(`Error ${params.id ? "updating" : "creating"} address:`, message);
     }
@@ -109,10 +117,14 @@ const AddressForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 ">
+      <div className="mb-4 border-b pb-6 flex items-center justify-between">
+        <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
+          New Measurement Profile
+        </h1>
+      </div>
       <p className="font-semibold text-red-500">
         {formError && `An error occured: ${formError}`}
       </p>
-
       {/* Full name Section */}
       <Card>
         <CardHeader>
@@ -223,7 +235,7 @@ const AddressForm = () => {
             <Textarea
               id="postalCode"
               name="postalCode"
-              value={formData.postalCode}
+              value={formData.postal_code}
               onChange={handleInputChange}
               placeholder="Enter Postal Code"
               className="mt-2"

@@ -13,7 +13,7 @@ export type CreateAddressData = {
 
   address: string;
 
-  postalCode?: string;
+  postal_code?: string;
 
   is_default?: boolean;
 };
@@ -48,7 +48,7 @@ export async function createAddress(data: CreateAddressData) {
 
       address: data.address,
 
-      postal_code: data.postalCode,
+      postal_code: data.postal_code,
 
       is_default: data.is_default ?? false,
     },

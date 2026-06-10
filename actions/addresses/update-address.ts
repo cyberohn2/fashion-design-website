@@ -6,7 +6,7 @@ import { requireAuth } from "@/lib/auth/require-auth";
 type UpdateAddressData = {
   addressId: string;
 
-  fullName?: string;
+  full_name?: string;
   phone?: string;
 
   country?: string;
@@ -14,9 +14,9 @@ type UpdateAddressData = {
   city?: string;
   address: string;
 
-  postalCode?: string;
+  postal_code?: string;
 
-  isDefault?: boolean;
+  is_default?: boolean;
 };
 
 export async function updateAddress(data: UpdateAddressData) {
@@ -34,15 +34,15 @@ export async function updateAddress(data: UpdateAddressData) {
   }
 
   // Handle default address switching
-  if (data.isDefault) {
+  if (data.is_default) {
     await prisma.user_Addresses.updateMany({
       where: {
         userId: user.id,
-        isDefault: true,
+        is_default: true,
       },
 
       data: {
-        isDefault: false,
+        is_default: false,
       },
     });
   }
@@ -53,7 +53,7 @@ export async function updateAddress(data: UpdateAddressData) {
     },
 
     data: {
-      fullName: data.fullName,
+      full_name: data.full_name,
       phone: data.phone,
 
       country: data.country,
@@ -62,9 +62,9 @@ export async function updateAddress(data: UpdateAddressData) {
 
       address: data.address,
 
-      postalCode: data.postalCode,
+      postal_code: data.postal_code,
 
-      isDefault: data.isDefault,
+      is_default: data.is_default,
     },
   });
 }
