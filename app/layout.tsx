@@ -68,16 +68,15 @@ export default function RootLayout({
         ZTNature.variable,
       )}
     >
-      <AuthContextProvider>
-      <Header />
       <body
         className={`min-h-full flex flex-col ${(lamoricRowen.className, ZTNature.className)}`}
       >
-        {children}
-
+      <AuthContextProvider>
+        <Header />
+          {children}
+        <Footer />
+      </AuthContextProvider>
       </body>
-      <Footer />
-      </AuthContextProvider>▬
     </html>
   );
 }
