@@ -2,8 +2,8 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div>
-      Hello Dashboard
+    <div className='py-20'>
+      Hi There
     </div>
   )
 }
