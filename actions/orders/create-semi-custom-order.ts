@@ -94,9 +94,9 @@ export async function createSemiCustomOrder(data: CreateSemiCustomOrderData) {
 
           custom_material_notes: data.customMaterialNotes ,
 
-          customizationNotes: data.customizationNotes,
+          customization_notes: data.customizationNotes,
 
-          customerBudget: data.customerBudget,
+          customer_budget: data.customerBudget,
         },
       },
 

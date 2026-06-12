@@ -5,7 +5,7 @@ import OrderSummary from "@/components/app-components/order-summary";
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     try {
         const param = await params
-        const order: orders = await getOrder(param.id); 
+        const order = await getOrder(param.id); 
 
         return (
           <main className="pt-34 md:pt-24 container mx-auto px-4 min-h-screen">
