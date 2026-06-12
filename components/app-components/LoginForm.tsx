@@ -37,6 +37,7 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     if (formData.email === "" && formData.password === "") {
       setError("All fields are required!")
       return;
@@ -47,7 +48,9 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div
       if (loggedIn.success) {
         userDispatch({ type: "LOGIN", payload: { user: loggedIn.user } });
         router.push("/catalog")
+        setLoading(false)
       }else{
+        setLoading(false)
         setError("An error occured!")
       }
     } catch (err) {

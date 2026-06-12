@@ -1,0 +1,89 @@
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import "../globals.css";
+import { cn } from "@/lib/utils";
+import { AuthContextProvider } from "@/contexts/AuthContext";
+
+const lamoricRowen = localFont({
+  variable: "--font-lamoric-rowen",
+  src: "../../assets/fonts/Lamoric Rowen TTF.ttf",
+});
+
+const ZTNature = localFont({
+  variable: "--font-ztnature",
+  src: [
+    {
+      path: "../../assets/fonts/ZTNature-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../assets/fonts/ZTNature-Black.ttf",
+      weight: "800",
+      style: "bold"
+    },
+    {
+      path: "../../assets/fonts/ZTNature-Thin.ttf",
+      weight: "200",
+      style: "light"
+    },
+    {
+      path: "../../assets/fonts/ZTNature-MediumItalic.ttf",
+      weight: "500",
+      style: "italic"
+    },
+    {
+      path: "../../assets/fonts/ZTNature-BlackItalic.ttf",
+      weight: "800",
+      style: "italic"
+    },
+    {
+      path: "../../assets/fonts/ZTNature-ThinItalic.ttf",
+      weight: "200",
+      style: "italic"
+    }
+  ]
+})
+
+export const metadata: Metadata = {
+  title: "George Wears Fashion Design",
+  description: "George Wears Fashion Design is a fashion design company in Akure, Nigeria that specializes in creating unique and stylish clothing for men and women. We are dedicated to providing our customers with high-quality clothing that is both fashionable and comfortable. Our team of experienced designers and tailors work tirelessly to create clothing that is both trendy and timeless. Whether you're looking for a casual outfit or a formal ensemble, George Wears Fashion Design has something for everyone. We pride ourselves on our attention to detail and our commitment to customer satisfaction. Shop with us today and experience the difference that George Wears Fashion Design can make in your wardrobe.",
+};
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { RouteGuard } from "@/lib/auth/route-guard";
+import { AdminHeader } from "@/components/app-components/admin-header";
+import { AdminSidebar } from "@/components/app-components/admin-sidebar";
+
+
+export default function layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html
+      lang="en"
+      className={cn(
+        "h-full",
+        "scroll-smooth",
+        "antialiased",
+        lamoricRowen.variable,
+        ZTNature.variable,
+      )}
+    >
+      <body className={`${(lamoricRowen.className, ZTNature.className)}`}>
+        <AuthContextProvider>
+          <RouteGuard>
+            <SidebarProvider>
+              <AdminSidebar />
+              <SidebarInset>
+                <AdminHeader />
+                <main className="flex flex-1 flex-col">{children}</main>
+              </SidebarInset>
+            </SidebarProvider>
+          </RouteGuard>
+        </AuthContextProvider>
+      </body>
+    </html>
+  );
+}

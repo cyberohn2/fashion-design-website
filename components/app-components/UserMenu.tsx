@@ -33,42 +33,40 @@ const UserMenu = () => {
   };
 
   return (
-    <div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Avatar>
-            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-            <AvatarFallback>
-              {userState?.user?.full_name?.slice(0, 2) || "U"}
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 p-4">
-          <DropdownMenuLabel className="font-bold">
-            My Account
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator className="mb-4 space-y-2" />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <Link href={"/order-history"}>Order History</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="">
-              <Link href={"/measurements/manage"}>Measurements</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="">
-              <Link href={"/addresses/manage"}>Addresses</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="bg-black text-white">
-              <Link href={"/create-order"}>New Order</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleLogout()} disabled={loggingOut}>
-              {loggingOut ? "Logging out..." : "Logout"}
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Avatar>
+          {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+          <AvatarFallback>
+            {userState?.user?.full_name?.slice(0, 2) || "U"}
+          </AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56 p-4">
+        <DropdownMenuLabel className="font-bold">
+          My Account
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator className="mb-4 space-y-2" />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <Link href={"/order-history"}>Order History</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="">
+            <Link href={"/measurements/manage"}>Measurements</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="">
+            <Link href={"/addresses/manage"}>Addresses</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="bg-black text-white">
+            <Link href={"/create-order"}>New Order</Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => handleLogout()} disabled={loggingOut}>
+            {loggingOut ? "Logging out..." : "Logout"}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/app-components/header";
 import Footer from "@/components/app-components/footer";
@@ -8,39 +8,39 @@ import { AuthContextProvider } from "@/contexts/AuthContext";
 
 const lamoricRowen = localFont({
   variable: "--font-lamoric-rowen",
-  src: "../assets/fonts/Lamoric Rowen TTF.ttf",
+  src: "../../assets/fonts/Lamoric Rowen TTF.ttf",
 });
 
 const ZTNature = localFont({
   variable: "--font-ztnature",
   src: [
     {
-      path: "../assets/fonts/ZTNature-Medium.ttf",
+      path: "../../assets/fonts/ZTNature-Medium.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../assets/fonts/ZTNature-Black.ttf",
+      path: "../../assets/fonts/ZTNature-Black.ttf",
       weight: "800",
       style: "bold"
     },
     {
-      path: "../assets/fonts/ZTNature-Thin.ttf",
+      path: "../../assets/fonts/ZTNature-Thin.ttf",
       weight: "200",
       style: "light"
     },
     {
-      path: "../assets/fonts/ZTNature-MediumItalic.ttf",
+      path: "../../assets/fonts/ZTNature-MediumItalic.ttf",
       weight: "500",
       style: "italic"
     },
     {
-      path: "../assets/fonts/ZTNature-BlackItalic.ttf",
+      path: "../../assets/fonts/ZTNature-BlackItalic.ttf",
       weight: "800",
       style: "italic"
     },
     {
-      path: "../assets/fonts/ZTNature-ThinItalic.ttf",
+      path: "../../assets/fonts/ZTNature-ThinItalic.ttf",
       weight: "200",
       style: "italic"
     }
@@ -68,16 +68,15 @@ export default function RootLayout({
         ZTNature.variable,
       )}
     >
-      <AuthContextProvider>
-      <Header />
       <body
-        className={`min-h-full flex flex-col ${(lamoricRowen.className, ZTNature.className)}`}
+        className={`min-h-full flex flex-col relative ${(lamoricRowen.className, ZTNature.className)}`}
       >
-        {children}
-
+      <AuthContextProvider>
+        <Header />
+          {children}
+        <Footer />
+      </AuthContextProvider>
       </body>
-      <Footer />
-      </AuthContextProvider>▬
     </html>
   );
 }

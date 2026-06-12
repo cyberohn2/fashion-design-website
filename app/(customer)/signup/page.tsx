@@ -12,7 +12,7 @@ function page() {
 
 export default page
 
-// design product page
-// load catalog from home page with category search
-// ui clean up
 // admin dashboard
+// code base restructuring
+// forgot pwd and reset pwd 
+// order info to user mail feature
