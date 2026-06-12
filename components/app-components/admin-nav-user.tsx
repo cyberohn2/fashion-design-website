@@ -16,15 +16,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { BellDot, CreditCard, EllipsisVertical, LogOut, UserCircle2 } from "lucide-react";
+import { EllipsisVertical, LogOut, ShoppingCart } from "lucide-react";
 
 export function NavUser({
   user,
 }: {
   user: {
-    name: string;
-    email: string;
-    avatar: string;
+    name?: string;
+    email?: string;
+    avatar?: string;
   };
 }) {
   const { isMobile } = useSidebar();
@@ -74,16 +74,8 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <UserCircle2 />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellDot />
-                Notifications
+                <ShoppingCart />
+                Catalog
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

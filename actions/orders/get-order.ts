@@ -7,34 +7,40 @@ import { requireAuth } from "@/lib/auth/require-auth";
 export async function getOrder(orderNumber: string) {
   const user = await requireAuth();
 
-  const order = await prisma.orders.findFirst({
-    where: {
-      order_number: orderNumber,
-      userId: user.id,
-    },
-
-    include: {
-      items: {
-        include: {
-          dress: true,
-        },
+  try {
+    const order = await prisma.orders.findFirst({
+      where: {
+        order_number: orderNumber,
+        userId: user.id,
       },
 
-      payment: true,
+      include: {
+        items: {
+          include: {
+            dress: true,
+          },
+        },
 
-      delivery_address: true,
+        payment: true,
 
-      statusHistory: {
-        orderBy: {
-          createdAt: "asc",
+        delivery_address: true,
+
+        statusHistory: {
+          orderBy: {
+            createdAt: "asc",
+          },
         },
       },
-    },
-  });
+    });
 
-  if (!order) {
-    throw new Error("Order not found");
+    if (!order) {
+      console.error("Order not found");
+    }
+    return order;
+
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(message);
   }
 
-  return order;
 }

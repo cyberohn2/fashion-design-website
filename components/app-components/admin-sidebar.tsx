@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Sidebar,
   SidebarContent,
@@ -14,48 +12,53 @@ import { NavUser } from "./admin-nav-user";
 import { CreditCard, LayoutDashboard, ListTodo, MessageCircle, Store, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Overview",
-      url: "#",
-      icon: LayoutDashboard,
-    },
-    {
-      title: "Orders",
-      url: "#",
-      icon: ListTodo,
-    },
-    {
-      title: "Payments",
-      url: "#",
-      icon: CreditCard,
-    },
-    {
-      title: "Products",
-      url: "#",
-      icon: Store,
-    },
-    {
-      title: "Customers",
-      url: "#",
-      icon: Users,
-    },
-    {
-      title: "Reviews",
-      url: "#",
-      icon: MessageCircle,
-    },
-  ],
-};
 
-export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+export async function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const currentUser = await getCurrentUser();
+
+  const data = {
+    user: {
+      name: currentUser?.full_name,
+      email: currentUser?.email,
+      avatar: "/",
+    },
+    navMain: [
+      {
+        title: "Dashboard",
+        url: "/admin/dashboard",
+        icon: LayoutDashboard,
+      },
+      {
+        title: "Orders",
+        url: "/admin/orders",
+        icon: ListTodo,
+      },
+      {
+        title: "Payments",
+        url: "/admin/payments",
+        icon: CreditCard,
+      },
+      {
+        title: "Products",
+        url: "/admin/products",
+        icon: Store,
+      },
+      {
+        title: "Customers",
+        url: "/admin/customers",
+        icon: Users,
+      },
+      {
+        title: "Reviews",
+        url: "/admin/reviews",
+        icon: MessageCircle,
+      },
+    ],
+  };
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -73,6 +76,7 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
                     width={50}
                     height={50}
                 />
+                <span>George Wears</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
