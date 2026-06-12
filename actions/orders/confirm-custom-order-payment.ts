@@ -28,7 +28,7 @@ export async function confirmCustomOrderPayment(orderId: string) {
       },
 
       data: {
-        paymentStatus: "PAID",
+        payment_status: "PAID",
 
         status: "PAID",
       },

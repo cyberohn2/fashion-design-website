@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    return await prisma.dresses.findMany({
+    const dresses = await prisma.dresses.findMany({
       where: {
         OR: [
           {
@@ -28,6 +28,7 @@ export async function POST(request: Request) {
         reviews: true,
       },
     });
+    return NextResponse.json(dresses)
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("Search error:", message);
