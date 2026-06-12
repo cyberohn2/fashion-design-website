@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 
 export async function getDresses({query}: {
-  query: {
+  query?: {
     searchTerm?: string;
     category?:
       | "FEMALE_NATIVE"
@@ -20,7 +20,7 @@ export async function getDresses({query}: {
         OR: [
           {
             title: {
-              contains: query?.searchTerm,
+              contains: query?.searchTerm || "",
               mode: "insensitive",
             },
             category: query?.category,
