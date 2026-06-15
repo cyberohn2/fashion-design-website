@@ -3,8 +3,8 @@ import { ChangeEvent, SubmitEvent, useEffect } from "react";
 
 import { useState } from "react";
 import Link from "next/link";
-import { IconProps } from "@/components/app-components/socials";
 import { Button } from "@/components/ui/button";
+import { IconProps } from "../home-page/socials";
 
 const Contact = () => {
   useEffect(() => {

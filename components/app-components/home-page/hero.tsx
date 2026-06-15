@@ -2,15 +2,14 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Spotlight } from "../ui/spotlight";
+import { Spotlight } from "@/components/ui/spotlight";
 import SplitType from "split-type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect } from "react";
-import { motion } from "motion/react";
-import { TextGenerateEffect } from "../ui/text-generate-effect";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 

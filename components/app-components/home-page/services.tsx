@@ -1,5 +1,4 @@
-import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
-
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 
 export function Services() {
   return (
@@ -23,19 +22,24 @@ export function Services() {
     </section>
   );
 }
-const Skeleton = ({image}:{image?: string}) => (
-  <div className="flex flex-1 w-full h-full min-h-24 rounded-xl  dark:bg-dot-white/[0.2] bg-dot-black/[0.2]   border border-transparent dark:border-white/20 bg-foreground dark:bg-black bg-top bg-contain bg-no-repeat" style={{ backgroundImage: image ? `url(${image})` : undefined }}></div>
+const Skeleton = ({ image }: { image?: string }) => (
+  <div
+    className="flex flex-1 w-full h-full min-h-24 rounded-xl  dark:bg-dot-white/[0.2] bg-dot-black/[0.2]   border border-transparent dark:border-white/20 bg-foreground dark:bg-black bg-top bg-contain bg-no-repeat"
+    style={{ backgroundImage: image ? `url(${image})` : undefined }}
+  ></div>
 );
 const items = [
   {
     title: "Bespoke",
-    description: "Custom-made garment created entirely from scratch based on your exact body measurements and specifications",
+    description:
+      "Custom-made garment created entirely from scratch based on your exact body measurements and specifications",
     header: <Skeleton image="/bespoke.webp" />,
     className: "md:col-span-2",
   },
   {
     title: "Kaftan",
-    description: "A long, loose and flowing garment, typically characterized by wide, batwing-style sleeves and an ankle-length hem.",
+    description:
+      "A long, loose and flowing garment, typically characterized by wide, batwing-style sleeves and an ankle-length hem.",
     header: <Skeleton image="/kaftan.webp" />,
     className: "md:col-span-1",
   },

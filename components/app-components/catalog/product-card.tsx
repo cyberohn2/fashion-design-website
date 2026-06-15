@@ -11,10 +11,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Star from "@/components/ui/Star";
 import { useMemo, useState } from "react";
 import { HeartIcon } from "lucide-react";
-import { Button } from "../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 export type Reviews = {
   id: string;

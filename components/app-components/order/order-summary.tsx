@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { orders } from "@/app/(customer)/order-history/page";
 import { useRouter } from "next/navigation";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 export default function OrderSummary({ order }: { order: orders | null}) {
     const router = useRouter()

@@ -8,9 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import ProductCard, {
-  ProductType,
-} from "@/components/app-components/product-card";
+
 import {
   Empty,
   EmptyDescription,
@@ -30,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { SearchSlash } from "lucide-react";
 import { useMemo, useState } from "react";
+import ProductCard, { ProductType } from "./product-card";
 
 const Catalog = ({ products }: { products: ProductType[] | undefined }) => {
     

@@ -12,7 +12,13 @@ import {
 } from "@/components/ui/card";
 import { useParams, useRouter } from "next/navigation";
 import { type CreateMeasurementData } from "@/actions/measurements/create-measurement";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const MeasurementForm = () => {
   const [formData, setFormData] = useState<CreateMeasurementData>({

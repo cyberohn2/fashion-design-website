@@ -1,8 +1,7 @@
 "use client"
 import Image from "next/image";
 import Link from "next/link";
-// import logo from "/logo.webp"
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { MenuIcon, SearchIcon, ShoppingCart, XIcon } from "lucide-react";
 import {
   InputGroup,
@@ -10,7 +9,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { SubmitEvent, useRef, useState } from "react";
-import { Label } from "../ui/label";
+import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts/AuthContext";
 import UserMenu from "./UserMenu";

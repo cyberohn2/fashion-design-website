@@ -27,7 +27,7 @@ export type orders = {
   notes: string | null;
   total: number;
   payment: Payment | null;
-  items: Order_Items[];
+  items?: Order_Items[];
   custom_order?: CreateFullCustomOrderData & {
     id: string;
     createdAt: Date;

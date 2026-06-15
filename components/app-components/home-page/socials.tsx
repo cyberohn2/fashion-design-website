@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Dock, DockIcon } from "../ui/dock";
-import { TextHoverEffect } from "../ui/text-hover-effect";
+import { Dock, DockIcon } from "@/components/ui/dock";
+import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Tooltip,

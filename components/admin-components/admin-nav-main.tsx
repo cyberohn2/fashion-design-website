@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -7,7 +6,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { CirclePlusIcon, LucideIcon, MailIcon } from "lucide-react";
-import NavLink from "../ui/navlink";
+import NavLink from "@/components/ui/navlink";
 
 export function NavMain({
   items,

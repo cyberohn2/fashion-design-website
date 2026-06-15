@@ -1,8 +1,8 @@
 import { orders } from "@/app/(customer)/order-history/page";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Card } from "../ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import {
   Empty,

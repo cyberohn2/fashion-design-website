@@ -28,6 +28,7 @@ export async function getUserOrders() {
     });
     return orders;
   } catch (error) {
-    
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(message);
   }
 }

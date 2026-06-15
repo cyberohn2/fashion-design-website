@@ -7,8 +7,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Edit, Eye, SearchSlash } from "lucide-react";
+import { Edit, SearchSlash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
