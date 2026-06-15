@@ -1,5 +1,4 @@
-import CreateOrderForm from "@/components/app-components/create-order-form";
-import React from "react";
+import CreateOrderForm from "@/components/app-components/order/create-order-form";
 
 const page = () => {
   return (

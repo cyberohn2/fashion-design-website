@@ -1,5 +1,7 @@
 import { getAddresses } from "@/actions/addresses/get-addresses";
-import ManageAddresses, { type address } from "@/components/app-components/manage-address"
+import ManageAddresses, {
+  type address,
+} from "@/components/app-components/address/manage-address";
 
 const page = async () => {
   let addresses: address[];

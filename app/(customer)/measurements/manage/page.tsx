@@ -1,5 +1,7 @@
 import { getMeasurements } from '@/actions/measurements/get-measurements';
-import ManageMeasurements, { measurement } from '@/components/app-components/manage-measurements'
+import ManageMeasurements, {
+  measurement,
+} from "@/components/app-components/measurement/manage-measurements";
 
 const page = async () => {
   let measurements: measurement[];

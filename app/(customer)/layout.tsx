@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../globals.css";
 import { cn } from "@/lib/utils";
-import Header from "@/components/app-components/header";
-import Footer from "@/components/app-components/footer";
+import Footer from "@/components/app-components/layout/footer";
 import { AuthContextProvider } from "@/contexts/AuthContext";
+import Header from "@/components/app-components/layout/header";
 
 const lamoricRowen = localFont({
   variable: "--font-lamoric-rowen",

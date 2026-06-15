@@ -1,4 +1,4 @@
-import MeasurementForm from "@/components/app-components/measurement-form"
+import MeasurementForm from "@/components/app-components/measurement/measurement-form";
 
 const page = () => {
   return (

@@ -1,9 +1,9 @@
 import { getCustomers } from "@/actions/admin/get-customers";
 import { getOverview } from "@/actions/admin/get-overview";
 import { getPayments } from "@/actions/payments/get-payment";
-import { CustomerTable } from "@/components/app-components/customer-table";
-import { RevenueChart } from "@/components/app-components/revenue-chart";
-import SectionCards from "@/components/app-components/section-card";
+import { CustomerTable } from "@/components/admin-components/customer-table";
+import { RevenueChart } from "@/components/admin-components/revenue-chart";
+import SectionCards from "@/components/admin-components/section-card";
 
 const page = async () => {
   try {

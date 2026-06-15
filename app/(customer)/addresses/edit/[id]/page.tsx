@@ -1,4 +1,4 @@
-import AddressForm from "@/components/app-components/address-form";
+import AddressForm from "@/components/app-components/address/address-form";
 
 const page = () => {
   return (

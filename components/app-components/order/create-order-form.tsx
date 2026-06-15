@@ -21,8 +21,8 @@ import {
 } from "@/components/ui/card";
 import ImageUploader from "../ui/image-uploader";
 import Link from "next/link";
-import { type address } from "@/components/app-components/manage-address";
-import { measurement } from "./manage-measurements";
+import { type address } from "@/components/app-components/address/manage-address";
+import { measurement } from "./measurement/manage-measurements";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { uploadImage } from "@/lib/supabase/upload-image";

@@ -1,7 +1,6 @@
 import { getDress } from "@/actions/dresses/get-dress";
-import { ProductType } from "@/components/app-components/product-card";
-import ProductPage from "@/components/app-components/product-page";
-
+import { ProductType } from "@/components/app-components/catalog/product-card";
+import ProductPage from "@/components/app-components/catalog/product-page";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   try {

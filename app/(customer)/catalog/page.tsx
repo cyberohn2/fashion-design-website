@@ -1,5 +1,5 @@
 import { getDresses } from "@/actions/dresses/get-dresses";
-import Catalog from "@/components/app-components/catalog";
+import Catalog from "@/components/app-components/catalog/catalog";
 
 const page = async ({
   searchParams,

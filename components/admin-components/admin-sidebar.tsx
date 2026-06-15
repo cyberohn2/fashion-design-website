@@ -28,7 +28,7 @@ export async function AdminSidebar({ ...props }: React.ComponentProps<typeof Sid
     navMain: [
       {
         title: "Dashboard",
-        url: "/admin/dashboard",
+        url: "/admin/",
         icon: LayoutDashboard,
       },
       {

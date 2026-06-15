@@ -1,6 +1,5 @@
 import { getOrder } from "@/actions/orders/get-order";
-import { orders } from "../page";
-import OrderSummary from "@/components/app-components/order-summary";
+import OrderSummary from "@/components/app-components/order/order-summary";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     try {

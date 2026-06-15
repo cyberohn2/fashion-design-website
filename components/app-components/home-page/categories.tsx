@@ -1,5 +1,4 @@
 "use client"
-import { CategoryCard } from "./category-card";
 import {
   Carousel,
   CarouselContent,
@@ -8,6 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { motion } from "framer-motion"
+import { CategoryCard } from "./category-card";
 
 const Categories = () => {
     const sampleCategories = [

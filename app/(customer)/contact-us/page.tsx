@@ -1,6 +1,5 @@
-import Contact from '@/components/app-components/contact-us'
-import Socials from '@/components/app-components/socials'
-import React from 'react'
+import Contact from '@/components/app-components/contact/contact-us';
+import Socials from '@/components/app-components/home-page/socials';
 
 const page = () => {
   return (
