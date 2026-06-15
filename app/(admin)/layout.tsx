@@ -71,7 +71,7 @@ export default function layout({
         ZTNature.variable,
       )}
     >
-      <body className={`${(lamoricRowen.className, ZTNature.className)}`}>
+      <body className={`${(lamoricRowen.className, ZTNature.className)} relative`}>
         <AuthContextProvider>
           <RouteGuard>
             <SidebarProvider>

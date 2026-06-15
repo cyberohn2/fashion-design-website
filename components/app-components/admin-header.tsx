@@ -4,7 +4,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function AdminHeader() {
   return (
-    <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
+    <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) md:static fixed top-0 inset-x-0 bg-sidebar">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6 py-2">
         <SidebarTrigger className="-ml-1" />
         <Separator
