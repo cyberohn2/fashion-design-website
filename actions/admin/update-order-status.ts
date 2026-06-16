@@ -11,49 +11,55 @@ type UpdateOrderStatusData = {
     | "IN_PRODUCTION"
     | "READY_FOR_DELIVERY"
     | "DELIVERED"
+    | "SHIPPED"
     | "COMPLETED"
     | "REJECTED"
+    | "ACCEPTED"
     | "CANCELLED";
 };
 
 export async function updateOrderStatus(data: UpdateOrderStatusData) {
   const admin = await requireAdmin();
-
-  const order = await prisma.orders.findUnique({
-    where: {
-      id: data.orderId,
-    },
-  });
-
-  if (!order) {
-    throw new Error("Order not found");
-  }
-
-  await prisma.$transaction([
-    prisma.orders.update({
+  try {
+    const order = await prisma.orders.findUnique({
       where: {
-        id: order.id,
+        id: data.orderId,
       },
+    });
 
-      data: {
-        status: data.status,
-      },
-    }),
+    if (!order) {
+      throw new Error("Order not found");
+    }
 
-    prisma.orderStatusHistory.create({
-      data: {
-        orderId: order.id,
+    await prisma.$transaction([
+      prisma.orders.update({
+        where: {
+          id: order.id,
+        },
 
-        oldStatus: order.status,
+        data: {
+          status: data.status,
+        },
+      }),
 
-        newStatus: data.status,
+      prisma.orderStatusHistory.create({
+        data: {
+          orderId: order.id,
 
-        changedById: admin.id,
-      },
-    }),
-  ]);
+          oldStatus: order.status,
 
-  return {
-    success: true,
-  };
+          newStatus: data.status,
+
+          changedById: admin.id,
+        },
+      }),
+    ]);
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error(message)
+  }
 }

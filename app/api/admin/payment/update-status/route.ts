@@ -1,0 +1,22 @@
+import { confirmCustomOrderPayment } from "@/actions/admin/confirm-custom-order-payment";
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+    const { orderId } = await req.json();
+    if (!orderId ) {
+        return NextResponse.json(
+          { error: "order id required!" },
+          { status: 400 },
+        );
+    }
+
+    try {
+        const updatedOrder = await confirmCustomOrderPayment(orderId)
+        return NextResponse.json(updatedOrder, { status: 201 });
+    } catch (error) {
+        return NextResponse.json(
+          { error: "Server Error: couldn't update payment status" },
+          { status: 500 },
+        );
+    }
+}

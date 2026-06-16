@@ -18,12 +18,25 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Select,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+} from "@/components/ui/select";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { orders } from "@/app/(customer)/order-history/page";
 import { useState } from "react";
+import Link from "next/link";
+import { paymentStatusColorMap, statusColorMap } from "./order-details";
+import { Badge } from "../ui/badge";
 
 export function OrderTable({orders, totalOrder, page}:{orders: orders[], totalOrder: number, page: number}) {
     const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
+    const [filterBy, setFilterBy] = useState<string>()
 
     const ITEMS_PER_PAGE = 20;
 
@@ -91,16 +104,36 @@ export function OrderTable({orders, totalOrder, page}:{orders: orders[], totalOr
 
   return (
     <Card className="@container/card">
-      <CardHeader>Orders</CardHeader>
+      <CardHeader>
+        Orders
+        <Select value={filterBy} onValueChange={setFilterBy}>
+          <SelectTrigger className="">
+            <SelectValue placeholder="Sort By" />
+          </SelectTrigger>
+          <SelectContent className="z-10 bg-card rounded-sm shadow">
+            <SelectGroup>
+              <SelectLabel>Sort By</SelectLabel>
+              <SelectItem value="relevant">Relevant</SelectItem>
+              <SelectItem value="trending">Trending</SelectItem>
+              <SelectItem value="latest">Latest</SelectItem>
+              <SelectItem value="price-low">Price: Low to High</SelectItem>
+              <SelectItem value="price-high">Price: High to Low</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </CardHeader>
       <CardContent>
         <Table>
           <TableCaption>A list of All your orders.</TableCaption>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-25">Number</TableHead>
-              <TableHead className="text-center">Type</TableHead>
-              <TableHead className="text-right">Status</TableHead>
-              <TableHead className="text-right">Payment Status</TableHead>
+            <TableRow className="font-bold">
+              <TableHead className="w-25 font-bold">Number</TableHead>
+              <TableHead className="text-center font-bold">Type</TableHead>
+              <TableHead className="text-center font-bold">Status</TableHead>
+              <TableHead className="text-center font-bold">
+                Payment Status
+              </TableHead>
+              <TableHead className="text-center font-bold">Amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -109,12 +142,24 @@ export function OrderTable({orders, totalOrder, page}:{orders: orders[], totalOr
                 <TableCell className="font-medium">
                   {order.order_number}
                 </TableCell>
-                <TableCell className="text-center">
-                  {order.order_type}
+                <TableCell className="text-center capitalize">
+                  {order.order_type.toLowerCase().replace(/_/g, " ")}
                 </TableCell>
-                <TableCell className="text-right">{order.status}</TableCell>
+                <TableCell className={`text-center capitalize`}>
+                  <Badge className={statusColorMap[order?.status]}>
+                    {order.status.toLowerCase().replace(/_/g, " ")}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-center capitalize">
+                  <Badge
+                    className={paymentStatusColorMap[order?.payment_status]}
+                  >
+                    {order.payment_status.toLowerCase().replace(/_/g, " ")}
+                  </Badge>
+                </TableCell>
+                <TableCell>₦{order.total || order.payment?.amount}</TableCell>
                 <TableCell className="text-right">
-                  {order.payment?.status}
+                  <Link href={`/admin/orders/${order.order_number}`}>View</Link>
                 </TableCell>
               </TableRow>
             ))}

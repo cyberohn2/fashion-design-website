@@ -27,14 +27,24 @@ export type orders = {
   notes: string | null;
   total: number;
   payment: Payment | null;
+  payment_status:
+    | "UNPAID"
+    | "PARTIALLY_PAID"
+    | "PAID"
+    | "REFUNDED"
+    | "FAILED"
+    | "PENDING"
+    | "SUCCESS";
   items?: Order_Items[];
-  custom_order?: CreateFullCustomOrderData & {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    orderId: string;
-    admin_final_price: number;
-  } | null;
+  custom_order?:
+    | (CreateFullCustomOrderData & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        orderId: string;
+        admin_final_price: number;
+      })
+    | null;
 };
 
 export type Order_Items = {

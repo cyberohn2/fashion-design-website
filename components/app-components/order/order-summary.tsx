@@ -33,7 +33,7 @@ export default function OrderSummary({ order }: { order: orders | null}) {
             Order n° {order?.order_number} <Badge>{order?.status}</Badge>
           </h2>
           <div className="text-sm text-gray-600 space-y-1">
-            <p>{order?.items.length} items</p>
+            <p>{order?.items?.length} items</p>
             <p>
               Placed on{" "}
               {order?.createdAt.toLocaleDateString("en-US", {
@@ -53,7 +53,7 @@ export default function OrderSummary({ order }: { order: orders | null}) {
           </h3>
 
           <Card className="border-gray-200">
-            {order?.items.map((item, index) => (
+            {order?.items?.map((item, index) => (
               <div key={item.id}>
                 {/* Status Badge */}
                 <div className="px-6 pt-6 pb-3">
