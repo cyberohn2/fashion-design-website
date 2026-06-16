@@ -1,4 +1,3 @@
-import { orders } from "@/app/(customer)/order-history/page";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -12,8 +11,10 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { SearchSlash } from "lucide-react";
+import { Order } from "@/components/admin-components/order/order-details";
+import { userOrder } from "@/app/(customer)/order-history/page";
 
-const OrderHistory = ({ orders }: { orders: orders[] | undefined }) => {
+const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
   const orderStatusColors = {
     PENDING_REVIEW: "bg-gray-100 text-gray-800",
     ACCEPTED: "bg-blue-100 text-blue-800",
@@ -73,7 +74,7 @@ const OrderHistory = ({ orders }: { orders: orders[] | undefined }) => {
                   <div className="flex">
                     <Image
                       src={
-                        (order.custom_order?.ideaImageUrl as string) ||
+                        (order.custom_order?.idea_image_url as string) ||
                         "/logo.webp"
                       }
                       alt="order-image"
@@ -121,7 +122,7 @@ const OrderHistory = ({ orders }: { orders: orders[] | undefined }) => {
                   <div className="flex">
                     <Image
                       src={
-                        (order.custom_order?.ideaImageUrl as string) ||
+                        (order.custom_order?.idea_image_url as string) ||
                         "/logo.webp"
                       }
                       alt="order-image"
@@ -169,7 +170,7 @@ const OrderHistory = ({ orders }: { orders: orders[] | undefined }) => {
                   <div className="flex">
                     <Image
                       src={
-                        (order.custom_order?.ideaImageUrl as string) ||
+                        (order.custom_order?.idea_image_url as string) ||
                         "/logo.webp"
                       }
                       alt="order-image"

@@ -1,8 +1,9 @@
-import { CreateFullCustomOrderData } from "@/actions/orders/create-full-custom-order";
+import { type CreateFullCustomOrderData } from "@/actions/orders/create-full-custom-order";
 import { getUserOrders } from "@/actions/orders/get-user-orders";
+import { CustomOrder, OrderItem, Payment } from "@/components/admin-components/order/order-details";
 import OrderHistory from "@/components/app-components/order/order-history";
 
-export type orders = {
+export type userOrder = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -35,50 +36,13 @@ export type orders = {
     | "FAILED"
     | "PENDING"
     | "SUCCESS";
-  items?: Order_Items[];
-  custom_order?:
-    | (CreateFullCustomOrderData & {
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-        orderId: string;
-        admin_final_price: number;
-      })
-    | null;
+  items?: OrderItem[];
+  custom_order?: CustomOrder;
 };
 
-export type Order_Items = {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    orderId: string;
-    dressId: string;
-    quantity: number;
-    price: number;
-}
-
-export type Payment = {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    paidAt: Date;
-    orderId: string;
-    Provider: string;
-    Provider_Reference: string;
-    amount: number;
-    status: 
-        | "UNPAID"
-        | "PARTIALLY_PAID"
-        | "PAID"
-        | "REFUNDED"
-        | "FAILED"
-        | "PENDING"
-        | "SUCCESS"
-    ;
-}
 const page = async () => {
     try {
-        const orders: orders[] | undefined = await getUserOrders();
+        const orders: userOrder[] | undefined = await getUserOrders();
         return (
           <main className="pt-34 md:pt-24">
             <OrderHistory orders={orders} />

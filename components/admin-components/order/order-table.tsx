@@ -28,13 +28,13 @@ import {
   SelectContent,
 } from "@/components/ui/select";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { orders } from "@/app/(customer)/order-history/page";
 import { useState } from "react";
 import Link from "next/link";
-import { paymentStatusColorMap, statusColorMap } from "./order-details";
-import { Badge } from "../ui/badge";
+import { type Order, paymentStatusColorMap, statusColorMap } from "./order-details";
+import { Badge } from "../../ui/badge";
+import { userOrder } from "@/app/(customer)/order-history/page";
 
-export function OrderTable({orders, totalOrder, page}:{orders: orders[], totalOrder: number, page: number}) {
+export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], totalOrder: number, page: number}) {
     const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
     const [filterBy, setFilterBy] = useState<string>()
 

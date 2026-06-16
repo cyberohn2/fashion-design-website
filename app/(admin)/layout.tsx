@@ -51,8 +51,8 @@ export const metadata: Metadata = {
 };
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { RouteGuard } from "@/lib/auth/route-guard";
-import { AdminHeader } from "@/components/admin-components/admin-header";
-import { AdminSidebar } from "@/components/admin-components/admin-sidebar";
+import { AdminHeader } from "@/components/admin-components/layout/admin-header";
+import { AdminSidebar } from "@/components/admin-components/layout/admin-sidebar";
 
 
 export default function layout({

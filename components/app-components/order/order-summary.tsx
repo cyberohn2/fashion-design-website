@@ -4,11 +4,11 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { orders } from "@/app/(customer)/order-history/page";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { Order } from "@/components/admin-components/order/order-details";
 
-export default function OrderSummary({ order }: { order: orders | null}) {
+export default function OrderSummary({ order }: { order: Order | null}) {
     const router = useRouter()
 
   return (

@@ -27,10 +27,9 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
-import { ProductType } from "../app-components/catalog/product-card";
 import { Decimal } from "@prisma/client/runtime/client";
 
-type OrderStatus =
+export type OrderStatus =
   | "PENDING_REVIEW"
   | "ACCEPTED"
   | "REJECTED"
@@ -43,7 +42,7 @@ type OrderStatus =
   | "COMPLETED"
   | "CANCELLED";
 
-type PaymentStatus =
+export type PaymentStatus =
   | "UNPAID"
   | "PARTIALLY_PAID"
   | "PAID"
@@ -52,16 +51,17 @@ type PaymentStatus =
   | "PENDING"
   | "SUCCESS";
 
-type OrderType = "READY_MADE" | "SEMI_CUSTOM" | "FULL_CUSTOM";
+export type OrderType = "READY_MADE" | "SEMI_CUSTOM" | "FULL_CUSTOM";
 
-type DeliveryMethod = "PICKUP" | "LOCAL_DELIVERY" | "SHIPPING";
+export type DeliveryMethod = "PICKUP" | "LOCAL_DELIVERY" | "SHIPPING";
 
-interface OrderItem {
+export interface OrderItem {
   id: string;
   orderId: string;
   dressId: string;
   quantity: number;
   price: number;
+  createdAt: Date;
   dress: {
     id: string;
     title: string;
@@ -82,7 +82,7 @@ interface OrderItem {
   } | null;
 }
 
-interface CustomOrder {
+export interface CustomOrder {
   id: string;
   orderId: string;
   idea_image_url: string | null;
@@ -95,7 +95,7 @@ interface CustomOrder {
   admin_final_price: Decimal | null;
 }
 
-interface OrderStatusHistoryItem {
+export interface OrderStatusHistoryItem {
   id: string;
   orderId: string;
   oldStatus: OrderStatus | null;
@@ -105,17 +105,26 @@ interface OrderStatusHistoryItem {
   createdAt: Date;
 }
 
-interface Payment {
+export interface Payment {
   id: string;
-  orderId: string;
+  createdAt: Date;
+  updatedAt: Date;
   paidAt: Date;
+  orderId: string;
   Provider: string;
   Provider_Reference: string;
   amount: number;
-  status: PaymentStatus;
+  status:
+    | "UNPAID"
+    | "PARTIALLY_PAID"
+    | "PAID"
+    | "REFUNDED"
+    | "FAILED"
+    | "PENDING"
+    | "SUCCESS";
 }
 
-interface DeliveryAddress {
+export interface DeliveryAddress {
     createdAt: Date;
     address: string;
     id: string;
@@ -143,7 +152,7 @@ export interface Order {
   estimated_delivery: Date | null;
   notes: string | null;
   total: number;
-  items: OrderItem[];
+  items: OrderItem[] | null;
   custom_order: CustomOrder | null;
   payment: Payment | null;
   statusHistory: OrderStatusHistoryItem[] | null;
@@ -220,7 +229,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         return
     }
     setUpdating(true)
-    const req = await fetch('/api/admin/payment/update-status', {
+    const req = await fetch('/api/admin/payment/confirm-payment/', {
         method: "POST",
         body: JSON.stringify({orderId: order?.id})
     })

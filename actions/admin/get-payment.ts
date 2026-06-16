@@ -1,24 +1,41 @@
 import { requireAdmin } from "@/lib/auth/require-admin";
+import { TransactionClient } from "@/app/generated/prisma/internal/prismaNamespace";
+import { formatDate } from "@/lib/format-table";
 import prisma from "@/lib/prisma";
 
-export async function getPayments() {
-    const admin = await requireAdmin()
-    function formatDate(date: Date) {
-      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-        2,
-        "0",
-      )}-${String(date.getDate()).padStart(2, "0")}`;
-    }
+export async function getPayments({ pagination }: { pagination: { page: number } }) {
+  await requireAdmin();
 
-    try {
-        const payments = await prisma.payment.findMany({
+  try {
+    const payment = await prisma.$transaction( async (tx: TransactionClient) =>{
+        const fetchedPayment = await tx.payment.findMany({
             where: {
-                status: "PAID"
-            }
-        })
-        return payments.map(pmt => ({date: formatDate(pmt.paidAt), status: pmt.status, amount: pmt.amount}));
-    } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        throw new Error(message);
-    }
+                status: "PAID",
+            },
+            include: {
+                order: true
+            },
+            take: 20,
+            skip: (pagination.page - 1) * 20,
+            orderBy: {
+                paidAt: "desc",
+            },
+        });
+        const totalPayment = await tx.payment.count()
+
+        const formattedPayment = fetchedPayment.map((pmt) => ({
+            ...pmt,
+            date: formatDate(pmt.paidAt),
+          status: pmt.status,
+          amount: pmt.amount,
+        }));
+
+        return {formattedPayment, totalPayment}
+    })
+    
+    return { payment };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(message);
+  }
 }
