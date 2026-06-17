@@ -32,7 +32,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { DeliveryMethod, OrderStatus, OrderType, type Payment, PaymentStatus, paymentStatusColorMap, statusColorMap } from "../order/order-details";
 import { Badge } from "../../ui/badge";
-import { userOrder } from "@/app/(customer)/order-history/page";
 import { formatDate } from "@/lib/format-table";
 
 export type paymentTableProp = Payment & {

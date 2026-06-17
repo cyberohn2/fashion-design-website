@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Payment } from "../order/order-details";
 
 const chartConfig = {
   status: {
@@ -38,7 +39,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RevenueChart({ chartData }: {chartData: {date: string, status: string, amount: number;}[]}) {
+export function RevenueChart({ chartData }: {chartData: Payment[]}) {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState("90d");
 
@@ -49,7 +50,7 @@ export function RevenueChart({ chartData }: {chartData: {date: string, status: s
   }, [isMobile]);
 
   const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
+    const date = new Date(item.paidAt);
     const today = new Date();
     const referenceDate = `${today.getFullYear()}-${String(
       today.getMonth() + 1,

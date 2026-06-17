@@ -8,8 +8,8 @@ import SectionCards from "@/components/admin-components/dashboard/section-card";
 const page = async () => {
   try {
     const dashboardOverview = await getOverview();
-    const payments = await getPayments()
-    const customers = await getCustomers()
+    const payments = await getPayments({pagination: {page: 1}})
+    const customers = await getCustomers({pagination: {page: 1}})
 
     return (
       <main className="flex flex-1 flex-col">
@@ -17,8 +17,8 @@ const page = async () => {
           <div className="flex flex-col gap-4 py-18 md:gap-6 md:py-6">
             <SectionCards overViewData={dashboardOverview} />
             <div className="px-4 lg:px-6 space-y-6">
-              <RevenueChart chartData={payments} />
-              <CustomerTable customers={customers}/>
+              <RevenueChart chartData={payments.payment.formattedPayment} />
+              <CustomerTable customers={customers.fetchedCustomers} totalCustomers={customers.totalCustomer} page={1}/>
             </div>
           </div>
         </div>
