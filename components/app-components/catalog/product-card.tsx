@@ -50,14 +50,14 @@ export type ProductType = {
   base_price: number;
   stock: number;
   thumbnail: string | null;
-  images: ProductImages[];
-  reviews: Reviews[];
+  images?: ProductImages[];
+  reviews?: Reviews[];
   createdAt: Date;
 };
 
 const ProductCard = ({ product }: { product: ProductType }) => {
   const averageRating = useMemo(() => {
-    if (!product.reviews.length) return 0;
+    if (!product.reviews?.length) return 0;
 
     const total = product.reviews.reduce(
       (sum, review) => sum + review.rating,
@@ -107,7 +107,9 @@ const ProductCard = ({ product }: { product: ProductType }) => {
           <img
             className="w-full max-h-42.5 aspect-square object-cover object-top rounded-sm rounded-b-xl "
             src={
-              product?.thumbnail ? product.thumbnail : product?.images[0]?.url
+              product?.thumbnail
+                ? product.thumbnail
+                : product.images && product?.images[0]?.url
             }
             alt={product?.title}
           />
@@ -130,9 +132,9 @@ const ProductCard = ({ product }: { product: ProductType }) => {
                   </span>
                 ))}
               </div>
-              {product.reviews.length > 0 ? (
+              {product?.reviews?.length && product?.reviews?.length > 0 ? (
                 <span className="text-sm text-gray-600">
-                  {averageRating.toFixed(1)} ({product.reviews.length})
+                  {averageRating.toFixed(1)} ({product.reviews?.length})
                 </span>
               ) : (
                 <span className="text-sm text-gray-500">No reviews</span>
