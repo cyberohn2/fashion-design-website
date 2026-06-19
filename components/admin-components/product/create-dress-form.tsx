@@ -152,7 +152,7 @@ const CreateDressForm = ({
         {formError && `An error occured: ${formError}`}
       </p>
       {/* Images section */}
-      {dressData && <Card>
+      {!dressData && <Card>
         <CardHeader>
           <CardTitle>Dress Images</CardTitle>
         </CardHeader>
