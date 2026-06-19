@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/sidebar";
 import { CirclePlusIcon, LucideIcon, MailIcon } from "lucide-react";
 import NavLink from "@/components/ui/navlink";
+import Link from "next/link";
 
 export function NavMain({
   items,
@@ -26,8 +27,10 @@ export function NavMain({
               tooltip="Quick Create"
               className="min-w-8 bg-black text-primary-foreground duration-200 ease-linear hover:bg-black/90 hover:text-primary-foreground active:bg-black/90 active:text-primary-foreground"
             >
-              <CirclePlusIcon />
-              <span>New Dress</span>
+              <Link href={"/admin/products/create"}>
+                <CirclePlusIcon />
+                <span>New Dress</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

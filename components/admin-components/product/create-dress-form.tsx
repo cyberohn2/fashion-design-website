@@ -27,7 +27,7 @@ type dressDataType = CreateDressData & {id: string, imagesUrl?: imagesurls[]}
 const CreateDressForm = ({
   dressData,
 }: {
-  dressData: dressDataType | null;
+  dressData?: dressDataType | null;
 }) => {
   const [formData, setFormData] = useState<dressDataType>(
     dressData || {
@@ -57,7 +57,7 @@ const CreateDressForm = ({
 
   const [ imageUploading, setImageUploading ] = useState(false)
   const handleImageChange = async (files: File[]) => {
-    if (dressData === null){
+    if (!dressData){
         setFormData(prev => ({...prev, images: files}))
         return
     }else {
@@ -84,7 +84,7 @@ const CreateDressForm = ({
 
     try {
       // update address if dressData is present
-      if (dressData !== null) {
+      if (dressData) {
         const req = await fetch("/api/address/update-address", {
           method: "POST",
           body: JSON.stringify({
@@ -132,10 +132,10 @@ const CreateDressForm = ({
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       setFormError(
-        `Error ${dressData !== null ? "updating" : "creating"} dress:${message}`,
+        `Error ${dressData ? "updating" : "creating"} dress:${message}`,
       );
       console.error(
-        `Error ${dressData !== null ? "updating" : "creating"} dress:`,
+        `Error ${dressData ? "updating" : "creating"} dress:`,
         message,
       );
     }
@@ -152,7 +152,7 @@ const CreateDressForm = ({
         {formError && `An error occured: ${formError}`}
       </p>
       {/* Images section */}
-      {dressData !== null && <Card>
+      {dressData && <Card>
         <CardHeader>
           <CardTitle>Dress Images</CardTitle>
         </CardHeader>
