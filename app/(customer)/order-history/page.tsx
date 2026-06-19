@@ -41,17 +41,12 @@ export type userOrder = {
 };
 
 const page = async () => {
-    try {
-        const orders: userOrder[] | undefined = await getUserOrders();
-        return (
-          <main className="pt-34 md:pt-24">
-            <OrderHistory orders={orders} />
-          </main>
-        );
-    } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        console.log(message);
-    }
+  const orders: userOrder[] | undefined = await getUserOrders();
+  return (
+    <main className="pt-34 md:pt-24">
+      <OrderHistory orders={orders} />
+    </main>
+  );
 
 }
 

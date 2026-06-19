@@ -5,17 +5,12 @@ import ManageMeasurements, {
 
 const page = async () => {
   let measurements: measurement[];
-  try {
-    measurements = await getMeasurements();
-    return (
-      <main className="pt-34 md:pt-24">
-        <ManageMeasurements measurements={measurements} />
-      </main>
-    );
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.log(message);
-  }
+  measurements = await getMeasurements();
+  return (
+    <main className="pt-34 md:pt-24">
+      <ManageMeasurements measurements={measurements} />
+    </main>
+  );
 }
 
 export default page

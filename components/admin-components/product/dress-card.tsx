@@ -6,7 +6,7 @@ const DressCard = ({dress}: {dress: ProductType}) => {
   return (
     <div>
       <Card>
-        <CardContent className="flex items-start flex-col md:flex-row ">
+        <CardContent className="flex items-start flex-col md:flex-row justify-between">
           <div className="flex gap-4 flex-col items-start md:flex-row">
             <Image
               src={dress.thumbnail || "/logo.webp"}
