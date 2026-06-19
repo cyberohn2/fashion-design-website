@@ -1,8 +1,8 @@
 "use server";
-
 import prisma from "@/lib/prisma";
-
 import { requireAdmin } from "@/lib/auth/require-admin";
+import slugify from "slugify";
+import { gender } from "./create-dress";
 
 type UpdateDressData = {
   dressId: string;
@@ -16,19 +16,35 @@ type UpdateDressData = {
     | "CORPORATE_FEMALE"
     | "CASUAL"
     | "STREET_WEAR";
-  basePrice?: number;
-  stockQuantity?: number;
+  gender: gender,
+  base_price?: number;
+  stock?: number;
   isPublished?: boolean;
 };
 
 export async function updateDress(data: UpdateDressData) {
   await requireAdmin();
 
+  const baseSlug = slugify(data?.title as string, {
+    lower: true,
+    strict: true,
+  });
+  const slug = `${baseSlug}-${crypto.randomUUID()}`;
+
   return prisma.dresses.update({
     where: {
       id: data.dressId,
     },
 
-    data,
+    data: {
+      title: data.title,
+      slug,
+      description: data.description,
+      category: data.category,
+      gender: data.gender,
+      base_price: data.base_price,
+      stock: data.stock,
+      isPublished: data.isPublished,
+    },
   });
 }
