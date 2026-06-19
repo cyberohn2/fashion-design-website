@@ -6,10 +6,11 @@ import { Upload, Trash } from "lucide-react"
 
 interface ImageUploaderProps {
   maxFiles: number
+  disabled?: boolean
   onImagesChange: (files: File[]) => void
 }
 
-export default function ImageUploader({ maxFiles, onImagesChange }: ImageUploaderProps) {
+export default function ImageUploader({ maxFiles, disabled, onImagesChange }: ImageUploaderProps) {
   const [images, setImages] = useState<{ file: File; preview: string }[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -67,6 +68,7 @@ export default function ImageUploader({ maxFiles, onImagesChange }: ImageUploade
 
       <input
         ref={fileInputRef}
+        disabled={disabled}
         type="file"
         multiple
         accept="image/*"

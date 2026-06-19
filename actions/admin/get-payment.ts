@@ -18,7 +18,7 @@ export async function getPayments({ pagination }: { pagination: { page: number }
             take: 20,
             skip: (pagination.page - 1) * 20,
             orderBy: {
-                paidAt: "desc",
+                paidAt: "asc",
             },
         });
         const totalPayment = await tx.payment.count()

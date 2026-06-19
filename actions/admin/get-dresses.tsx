@@ -2,30 +2,29 @@ import { TransactionClient } from "@/app/generated/prisma/internal/prismaNamespa
 import { requireAdmin } from "@/lib/auth/require-admin";
 import prisma from "@/lib/prisma";
 
-export async function getReviews({ pagination }: { pagination: { page: number } }) {
+export async function getDresses({ pagination }: { pagination: { page: number } }) {
     await requireAdmin()
 
     try {
-        const reviews = await prisma.$transaction(
+        const dresses = await prisma.$transaction(
           async (tx: TransactionClient) => {
-            const reviews = await tx.reviews.findMany({
+            const dresses = await tx.dresses.findMany({
               include: {
-                user: true,
-                dress: true,
+                images: true
               },
               take: 20,
               skip: (pagination.page - 1) * 20,
               orderBy: {
-                createdAt: "desc",
+                soldCount: "desc",
               },
             });
 
-            const totalReview = await tx.reviews.count()
-            return {reviews, totalReview}
+            const totalDress = await tx.dresses.count()
+            return {dresses, totalDress}
           },    
         );
 
-        return reviews;
+        return dresses;
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error)
         console.error(message)

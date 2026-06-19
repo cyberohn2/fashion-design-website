@@ -16,7 +16,7 @@ export async function getCustomers({ pagination }: { pagination: { page: number 
         take: 20,
         skip: (pagination.page - 1) * 20,
         orderBy: {
-          createdAt: "asc",
+          createdAt: "desc",
         },
       });
 

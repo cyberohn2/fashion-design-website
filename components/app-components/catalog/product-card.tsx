@@ -49,6 +49,7 @@ export type ProductType = {
   gender: string;
   base_price: number;
   stock: number;
+  soldCount: number;
   thumbnail: string | null;
   images?: ProductImages[];
   reviews?: Reviews[];

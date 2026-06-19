@@ -41,7 +41,7 @@ const Catalog = ({ products }: { products: ProductType[] | undefined }) => {
 
       switch (sortBy) {
         case "trending":
-          return sorted?.sort((a, b) => b.reviews.length - a.reviews.length);
+          return sorted?.sort((a, b) => (b.reviews?.length as number - (a.reviews?.length as number) ));
 
         case "latest":
           return sorted?.sort(

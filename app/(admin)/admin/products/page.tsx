@@ -1,8 +1,8 @@
-import { getReviews } from '@/actions/admin/get-reviews'
-import ReviewList from '@/components/admin-components/reviews/review-list'
+import { getDresses } from '@/actions/admin/get-dresses';
+import DressList from '@/components/admin-components/product/dress-list';
 
 const page = async () => {
-    const reviews = await getReviews({pagination: {page: 1}})
+    const dresses = await getDresses({ pagination: { page: 1 } });
 
   return (
     <div>
@@ -10,10 +10,10 @@ const page = async () => {
             <div className="flex flex-col gap-4 py-18 md:gap-6 md:py-6">
               <div className="mb-4 flex items-center justify-between">
                 <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
-                  Reviews
+                  Dresses
                 </h1>
               </div>
-              <ReviewList Reviews={reviews?.reviews} totalReview={reviews?.totalReview as number} page={1} />
+              <DressList Dresses={dresses?.dresses} totalDress={dresses?.totalDress as number} page={1} />
             </div>
           </main>
     </div>

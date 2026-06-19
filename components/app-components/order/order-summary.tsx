@@ -7,8 +7,9 @@ import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Order } from "@/components/admin-components/order/order-details";
+import { userOrder } from "@/app/(customer)/order-history/page";
 
-export default function OrderSummary({ order }: { order: Order | null}) {
+export default function OrderSummary({ order }: { order: userOrder | null}) {
     const router = useRouter()
 
   return (

@@ -1,10 +1,11 @@
 "use server"
 import { createClient } from "@/lib/supabase/server";
 
-export async function uploadDressImage(file: File) {
+export async function uploadDressImage({file, slug}: {file: File, slug: string}) {
   const supabase = await createClient();
 
-  const fileName = `${Date.now()}-${file.name}`;
+  const fileExt = file.name.split(".").pop();
+  const fileName = `${Date.now()}-${slug}-${crypto.randomUUID()}.${fileExt}`;
 
   const { data, error } = await supabase.storage
     .from("dress-images")
@@ -18,5 +19,5 @@ export async function uploadDressImage(file: File) {
     data: { publicUrl },
   } = supabase.storage.from("dress-images").getPublicUrl(data.path);
 
-  return publicUrl;
+  return {publicUrl, path: data.path};
 }
