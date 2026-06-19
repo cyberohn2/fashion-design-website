@@ -6,11 +6,11 @@ const DressCard = ({dress}: {dress: ProductType}) => {
   return (
     <div>
       <Card>
-        <CardContent>
+        <CardContent className="flex items-start flex-col md:flex-row ">
           <div className="flex gap-4 flex-col items-start md:flex-row">
             <Image
               src={dress.thumbnail || "/logo.webp"}
-              alt="order-image"
+              alt="dress-image"
               width={100}
               height={100}
             />
@@ -20,8 +20,8 @@ const DressCard = ({dress}: {dress: ProductType}) => {
             </div>
           </div>
           <div>
-            <p>Sales: {dress.soldCount}</p>
-            <p>Revenue: ₦{dress.soldCount * dress.base_price}</p>
+            <p><span className="font-bold">Sales:</span> {dress.soldCount}</p>
+            <p><span className="font-bold">Revenue:</span> ₦{dress.soldCount * dress.base_price}</p>
           </div>
         </CardContent>
       </Card>

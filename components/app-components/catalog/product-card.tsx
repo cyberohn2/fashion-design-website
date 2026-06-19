@@ -118,7 +118,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
         <div className="p-0 px-2 grow flex flex-col justify-between">
           <div>
             <CardTitle className="font-semibold text-sm h-10">
-              <Link href={`/app/products/${product?.id}`}>
+              <Link href={`/catalog/${product?.slug}`}>
                 {product?.title}
               </Link>
             </CardTitle>
