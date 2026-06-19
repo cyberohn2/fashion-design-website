@@ -16,7 +16,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 const Hero = () => {
   gsap.registerPlugin(ScrollTrigger);
-  const isMobile  = typeof window !== "undefined" && useIsMobile()
+  const isMobile  = useIsMobile()
 
   useEffect(() => {
     const parallaxAnimation = () => {

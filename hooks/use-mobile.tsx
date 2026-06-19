@@ -9,7 +9,7 @@ export function useIsMobile(): boolean {
 
   React.useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+      typeof window !== "undefined" && setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     };
 
     checkMobile();
