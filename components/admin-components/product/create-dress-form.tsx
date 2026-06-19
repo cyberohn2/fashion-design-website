@@ -85,7 +85,7 @@ const CreateDressForm = ({
     try {
       // update address if dressData is present
       if (dressData) {
-        const req = await fetch("/api/address/update-address", {
+        const req = await fetch("/api/admin/dress/update", {
           method: "POST",
           body: JSON.stringify({
             ...formData,
@@ -96,7 +96,7 @@ const CreateDressForm = ({
         // check request is okay
         if (req.ok) {
           setIsSubmitting(false);
-          router.push("/addresses/manage");
+          router.push("/admin/products");
         } else {
           const errorData = await req.json();
           setFormError(errorData.error || "Failed to update address");
@@ -116,17 +116,17 @@ const CreateDressForm = ({
         formDataToSend.append('stock', String(formData.stockQuantity))
         formData.images?.map( (_, i) => formData.images && formDataToSend.append('images', formData.images[i]))
 
-        const req = await fetch("/api/address/create-address", {
+        const req = await fetch("/api/admin/dress/create", {
           method: "POST",
           body: formDataToSend,
         });
         if (req.ok) {
           setIsSubmitting(false);
-          router.push("/addresses/manage");
+          router.push("/admin/products");
         } else {
           const errorData = await req.json();
-          setFormError(errorData.error || "Failed to update address");
           setIsSubmitting(false);
+          setFormError(errorData.error || "Failed to update address");
         }
       }
     } catch (error) {
