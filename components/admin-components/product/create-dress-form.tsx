@@ -126,7 +126,7 @@ const CreateDressForm = ({
         } else {
           const errorData = await req.json();
           setIsSubmitting(false);
-          setFormError(errorData.error || "Failed to update address");
+          setFormError(errorData.error || "Failed to update dress");
         }
       }
     } catch (error) {
