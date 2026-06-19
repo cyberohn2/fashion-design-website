@@ -18,7 +18,7 @@ const Hero = () => {
   gsap.registerPlugin(ScrollTrigger);
   const isMobile  = typeof window !== "undefined" && useIsMobile()
 
-  useEffect(() =>{
+  useEffect(() => {
     const parallaxAnimation = () => {
       gsap.to(".hero-image", {
         scrollTrigger: {
@@ -38,9 +38,8 @@ const Hero = () => {
       });
     };
 
-    parallaxAnimation()
-
-  }, [])
+    parallaxAnimation();
+  }, [isMobile]);
 
 
   useEffect(() => {
