@@ -116,9 +116,9 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
             <div className="space-y-2">
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl font-light">
-                  ${product?.base_price}
+                  ₦{product?.base_price}
                 </span>
-                <span className="text-sm text-gray-500">USD</span>
+                <span className="text-sm text-gray-500">NGN</span>
               </div>
               <p className="text-sm text-gray-600">
                 {product?.stock && product?.stock > 0 ? (
