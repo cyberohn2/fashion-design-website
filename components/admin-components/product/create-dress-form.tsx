@@ -12,6 +12,7 @@ import { CreateDressData } from "@/actions/admin/create-dress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ImageUploader from "@/components/ui/image-uploader";
 import { updateDressImage } from "@/lib/supabase/update-dress-image";
+import { RotateCcw } from "lucide-react";
 
 type imagesurls = {
   id: string;
@@ -22,7 +23,7 @@ type imagesurls = {
   dressId: string;
 };
 
-type dressDataType = CreateDressData & {id: string, imagesUrl?: imagesurls[]}
+type dressDataType = CreateDressData & {id: string, imagesUrl?: imagesurls[], isPublished?: boolean}
 
 const CreateDressForm = ({
   dressData,
@@ -88,8 +89,14 @@ const CreateDressForm = ({
         const req = await fetch("/api/admin/dress/update", {
           method: "POST",
           body: JSON.stringify({
-            ...formData,
-            addressId: dressData.id as string,
+            dressId: formData.id,
+            title: formData.title,
+            description: formData.description,
+            category: formData.category,
+            gender: formData.gender,
+            base_price: formData.basePrice,
+            stock: formData.stockQuantity,
+            isPublished: formData.isPublished,
           }),
         });
         
@@ -152,14 +159,48 @@ const CreateDressForm = ({
         {formError && `An error occured: ${formError}`}
       </p>
       {/* Images section */}
-      {!dressData && <Card>
-        <CardHeader>
-          <CardTitle>Dress Images</CardTitle>
-        </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-1">
-          <ImageUploader disabled={imageUploading} maxFiles={5} onImagesChange={(files) => handleImageChange(files)} />
-        </CardContent>
-      </Card>}
+      {!dressData ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Dress Images</CardTitle>
+          </CardHeader>
+          <CardContent className="grid md:grid-cols-2 gap-1">
+            <ImageUploader
+              disabled={imageUploading}
+              maxFiles={5}
+              onImagesChange={(files) => handleImageChange(files)}
+            />
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+          {dressData.imagesUrl?.map((image, index) => (
+            <div key={index} className="relative group">
+              <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-muted">
+                <img
+                  src={image.url}
+                  alt={`Preview ${index}`}
+                  className="object-cover"
+                />
+              </div>
+              <label
+                htmlFor="image-input"
+                className="absolute top-2 right-2 p-1 bg-destructive text-destructive-foreground rounded"
+              >
+                <RotateCcw className="h-4 w-4 text-white" />
+              </label>
+              <input
+                onChange={(e) => handleImageChange(Array.from(e.target.files as FileList))}
+                id="image-input"
+                type="file"
+                multiple
+                accept="image/*"
+                className="hidden"
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Title Section */}
       <Card>

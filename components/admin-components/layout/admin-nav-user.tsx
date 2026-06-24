@@ -16,7 +16,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { EllipsisVertical, LogOut, ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function NavUser({
   user,
@@ -28,6 +31,22 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+    const { userDispatch } = useAuthContext();
+    const router = useRouter()
+    const [loggingOut, setLoggingOut] = useState(false);
+  
+    const handleLogout = async () => {
+      setLoggingOut(true);
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+      const result = await response.json();
+      if (result.success) {
+        userDispatch({ type: "LOGOUT" });
+        router.push("/login");
+      }
+      setLoggingOut(false);
+    };
 
   return (
     <SidebarMenu>
@@ -73,13 +92,13 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/catalog")}>
                 <ShoppingCart />
                 Catalog
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem disabled={loggingOut} onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

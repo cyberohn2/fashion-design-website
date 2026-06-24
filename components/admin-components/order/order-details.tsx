@@ -289,12 +289,14 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                     Update Order Status
                   </Button>
                 )}
-                {order?.payment_status !== "PAID" && <Button
-                  onClick={() => setShowPaymentDialog(true)}
-                  variant="outline"
-                >
-                  Mark as Paid
-                </Button>}
+                {order?.payment_status !== "PAID" && (
+                  <Button
+                    onClick={() => setShowPaymentDialog(true)}
+                    variant="outline"
+                  >
+                    Mark as Paid
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -440,7 +442,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             )}
             {order?.custom_order?.customization_notes && (
               <div>
-                <p className="text-sm text-gray-600">Customization Notes</p>
+                <p className="text-sm text-gray-600 font-bold">Customization Notes</p>
                 <p className="text-sm">
                   {order?.custom_order?.customization_notes}
                 </p>
@@ -448,9 +450,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             )}
             {order?.custom_order?.customer_budget && (
               <div>
-                <p className="text-sm text-gray-600">Customer Budget</p>
+                <p className="text-sm text-gray-600 font-bold">Customer Budget</p>
                 <p className="font-medium">
-                  ${Number(order?.custom_order?.customer_budget).toFixed(2)}
+                  ₦{Number(order?.custom_order?.customer_budget).toFixed(2)}
                 </p>
               </div>
             )}

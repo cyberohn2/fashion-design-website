@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     }
     catch (error) { 
         const message = error instanceof Error ? error.message : String(error);
-        console.error("Error updating address:", message);
+        console.error("Error updating dress:", message);
         return NextResponse.json({ error: "Failed to update dress" }, { status: 500 });
     }
 

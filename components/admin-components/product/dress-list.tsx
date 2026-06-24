@@ -95,7 +95,7 @@ const DressList = ({
       const paginationItems = getPaginationItems();
 
   return (
-    <Card>
+    <Card className='p-0 border-none shadow-none'>
         <CardContent className='space-y-6'>
             {Dresses?.map(dress => (
                 <DressCard dress={dress} />

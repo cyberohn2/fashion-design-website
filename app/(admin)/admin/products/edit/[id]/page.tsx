@@ -13,6 +13,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       basePrice: dressDetails?.base_price as number,
       stockQuantity: dressDetails?.stock as number,
       imagesUrl: dressDetails?.images,
+      isPublished: dressDetails?.isPublished
     };
   return (
     <main className="@container/main flex flex-1 flex-col gap-2 px-6">

@@ -21,8 +21,9 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useState } from "react";
+import Link from "next/link";
 
-type customer = {
+export type customer = {
   id: string;
   email: string;
   createdAt: Date;
@@ -128,7 +129,8 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
                   {customer.full_name}
                 </TableCell>
                 <TableCell className="text-center">{customer.email}</TableCell>
-                <TableCell className="text-right">{customer.phone}</TableCell>
+                <TableCell className="text-center">{customer.phone}</TableCell>
+                <TableCell className="text-right"><Link href={`/admin/customers/orders/${customer.id}`}>View orders</Link></TableCell>
               </TableRow>
             ))}
           </TableBody>

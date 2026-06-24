@@ -105,7 +105,6 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
   return (
     <Card className="@container/card">
       <CardHeader>
-        Orders
         <Select value={filterBy} onValueChange={setFilterBy}>
           <SelectTrigger className="">
             <SelectValue placeholder="Sort By" />
@@ -157,7 +156,7 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
                     {order.payment_status.toLowerCase().replace(/_/g, " ")}
                   </Badge>
                 </TableCell>
-                <TableCell>₦{order.total || order.payment?.amount}</TableCell>
+                <TableCell>₦{order.total || order.payment?.amount || 0}</TableCell>
                 <TableCell className="text-right">
                   <Link href={`/admin/orders/${order.order_number}`}>View</Link>
                 </TableCell>
