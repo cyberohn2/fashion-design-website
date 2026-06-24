@@ -1,5 +1,4 @@
 import { getCustomerOrders } from "@/actions/admin/get-customer-orders";
-import { CustomerTable } from "@/components/admin-components/dashboard/customer-table";
 import { OrderTable } from "@/components/admin-components/order/order-table";
 
 
@@ -13,6 +12,7 @@ const page = async ({
     pagination: { page: 1 },
     userId: param.id,
   });
+  console.log(orders)
 
   return (
       <main className="@container/main flex flex-1 flex-col gap-2 px-6">

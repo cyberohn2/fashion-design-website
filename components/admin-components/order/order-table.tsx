@@ -30,7 +30,7 @@ import {
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { useState } from "react";
 import Link from "next/link";
-import { type Order, paymentStatusColorMap, statusColorMap } from "./order-details";
+import { paymentStatusColorMap, statusColorMap } from "./order-details";
 import { Badge } from "../../ui/badge";
 import { userOrder } from "@/app/(customer)/order-history/page";
 
