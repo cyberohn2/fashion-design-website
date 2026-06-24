@@ -19,9 +19,9 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { ArrowUpRightIcon, SearchSlash } from "lucide-react";
+import { SearchSlash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { toast } from 'sonner';
 
 const ReviewList = ({
   Reviews,
@@ -98,6 +98,9 @@ const ReviewList = ({
           });
         } else {
           setFetchedReviewDetails((prev) => prev);
+          toast.error("Error fetching data.", {
+            position: "top-right",
+          });
           setIsFetching(false);
         }
       };
@@ -135,7 +138,7 @@ const ReviewList = ({
               </EmptyMedia>
               <EmptyTitle>Nothing here!</EmptyTitle>
               <EmptyDescription>
-                You haven't listed any product.
+                You haven't Received any reviews recently.
               </EmptyDescription>
               <Button
                 variant="link"
@@ -143,9 +146,6 @@ const ReviewList = ({
                 className="text-muted-foreground"
                 size="sm"
               >
-                <Link href="#">
-                  Create new Dress <ArrowUpRightIcon />
-                </Link>
               </Button>
             </EmptyHeader>
           </Empty>

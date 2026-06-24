@@ -28,6 +28,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { Decimal } from "@prisma/client/runtime/client";
+import { toast } from "sonner";
 
 export type OrderStatus =
   | "PENDING_REVIEW"
@@ -219,6 +220,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         setShowStatusDialog(false);
     }else {
         setUpdating(false);
+        toast.error("Error updating order.", {
+          position: "top-right",
+        });
         setShowStatusDialog(false);
     }
   };
@@ -228,6 +232,8 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         setShowPaymentDialog(false);
         return
     }
+    if(updating) return
+
     setUpdating(true)
     const req = await fetch('/api/admin/payment/confirm-payment/', {
         method: "POST",
@@ -238,6 +244,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         setShowPaymentDialog(false);
     }else{
         setUpdating(false);
+        toast.error("Error updating order.", {
+          position: "top-right",
+        });
         setShowPaymentDialog(false);
     }
   };

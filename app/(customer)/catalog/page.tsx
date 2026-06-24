@@ -17,10 +17,10 @@ const page = async ({
 }) => {
   const { searchTerm, category } = await searchParams;
   let dresses;
-  dresses = await getDresses({ query: { searchTerm, category } });
+  dresses = await getDresses({ query: { searchTerm, category }, pagination: {page: 1} });
   return (
     <main className="pt-34 md:pt-24 container mx-auto px-4">
-      <Catalog products={dresses} />
+      <Catalog products={dresses.AllProducts} totalProducts={dresses.totalProducts} page={1} />
     </main>
   );
 };

@@ -33,6 +33,7 @@ import Link from "next/link";
 import { paymentStatusColorMap, statusColorMap } from "./order-details";
 import { Badge } from "../../ui/badge";
 import { userOrder } from "@/app/(customer)/order-history/page";
+import { toast } from "sonner";
 
 export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], totalOrder: number, page: number}) {
     const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
@@ -96,6 +97,9 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
             );
         }else{
             setFetchedOrderDetails(prev => prev)
+            toast.error("Error fetching orders.", {
+              position: "top-right",
+            });
             setIsFetching(false)
         }
     }

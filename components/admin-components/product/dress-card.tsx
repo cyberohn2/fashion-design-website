@@ -6,11 +6,11 @@ import { Edit, Eye, Trash2, ZapOff } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const DressCard = ({dress}: {dress: ProductType & {isPublished?: boolean}}) => {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>()
 
   const updateDress = async () => {
     const req = await fetch("/api/admin/dress/update", {
@@ -33,7 +33,9 @@ const DressCard = ({dress}: {dress: ProductType & {isPublished?: boolean}}) => {
       router.refresh();
     } else {
       const errorData = await req.json();
-      setError(errorData.error);
+      toast.error(errorData.error, {
+        position: "top-right"
+      });
       setIsSubmitting(false);
     }
   }
@@ -77,7 +79,6 @@ const DressCard = ({dress}: {dress: ProductType & {isPublished?: boolean}}) => {
                   {dress.isPublished ? "Unpublish" : "Publish"}
                 </Button>
               </div>
-              <p>{error && error}</p>
             </div>
           </div>
           <div>

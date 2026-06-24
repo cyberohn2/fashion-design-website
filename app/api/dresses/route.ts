@@ -1,11 +1,13 @@
 import { getDresses } from "@/actions/dresses/get-dresses";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+        const { searchParams } = new URL(req.url);
+        const page = searchParams.get("page") ?? 1;
     try{
-        const dresses = await getDresses({});
+        const dresses = await getDresses({pagination: {page: Number(page)}});
         if (!dresses) {
-          return NextResponse.json({}, { status: 200 });
+          return NextResponse.json({error: "Error fetching dresses"}, { status: 400 });
         }
 
         return NextResponse.json(dresses, { status: 200 });

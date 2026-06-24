@@ -23,6 +23,7 @@ import {
 import { ArrowUpRightIcon, SearchSlash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { toast } from "sonner";
 
 const DressList = ({
   Dresses,
@@ -99,6 +100,9 @@ const DressList = ({
           });
         } else {
           setFetchedDressDetails((prev) => prev);
+          toast.error("Error fetching data.", {
+            position: "top-right",
+          });
           setIsFetching(false);
         }
       };

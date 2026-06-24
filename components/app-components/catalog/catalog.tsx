@@ -29,15 +29,21 @@ import {
 import { SearchSlash } from "lucide-react";
 import { useMemo, useState } from "react";
 import ProductCard, { ProductType } from "./product-card";
+import { toast } from "sonner";
 
-const Catalog = ({ products }: { products: ProductType[] | undefined }) => {
+const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | undefined, totalProducts: number, page: number }) => {
+    const [fetchedProducts, setFetchedProducts] = useState({
+      products,
+      totalProducts,
+      page,
+    });
     
     const [sortBy, setSortBy] = useState<string>("relevant");
 
     const sortedProducts = useMemo(() => {
-      if (sortBy === "relevant") return products;
+      if (sortBy === "relevant") return fetchedProducts.products;
 
-      const sorted = products && [...products];
+      const sorted = fetchedProducts.products && [...fetchedProducts.products];
 
       switch (sortBy) {
         case "trending":
@@ -56,9 +62,75 @@ const Catalog = ({ products }: { products: ProductType[] | undefined }) => {
           return sorted?.sort((a, b) => b.base_price - a.base_price);
 
         default:
-          return products;
+          return fetchedProducts.products;
       }
-    }, [products, sortBy]);
+    }, [fetchedProducts.products, sortBy]);
+
+
+    const ITEMS_PER_PAGE = 20;
+
+    const totalPages = Math.ceil(fetchedProducts.totalProducts / ITEMS_PER_PAGE);
+
+    const getPaginationItems = () => {
+      const items: (number | "ellipsis")[] = [];
+
+      // Always show first page
+      items.push(1);
+
+      // Left ellipsis
+      if (fetchedProducts.page > 3) {
+        items.push("ellipsis");
+      }
+
+      // Pages around current page
+      for (
+        let i = Math.max(2, fetchedProducts.page - 1);
+        i <= Math.min(totalPages - 1, fetchedProducts.page + 1);
+        i++
+      ) {
+        items.push(i);
+      }
+
+      // Right ellipsis
+      if (fetchedProducts.page < totalPages - 2) {
+        items.push("ellipsis");
+      }
+
+      // Always show last page
+      if (totalPages > 1) {
+        items.push(totalPages);
+      }
+
+      return items;
+    };
+
+    const [isFetching, setIsFetching] = useState(false);
+
+    const handleFetchedProducts = async (page: number) => {
+      if (isFetching) {
+        return;
+      }
+      setIsFetching(true);
+      const newProducts = await fetch(`/api/dresses?page=${page}`);
+      if (newProducts.ok) {
+        newProducts.json().then((data) => {
+          setFetchedProducts({
+            products: data.AllProducts,
+            totalProducts: data.totalProducts,
+            page: page,
+          });
+          setIsFetching(false);
+        });
+      } else {
+        setFetchedProducts((prev) => prev);
+        toast.error("Error fetching dresses.", {
+          position: "top-right",
+        });
+        setIsFetching(false);
+      }
+    };
+
+    const paginationItems = getPaginationItems();
 
 
   return (
@@ -84,7 +156,7 @@ const Catalog = ({ products }: { products: ProductType[] | undefined }) => {
         </Select>
       </div>
       <div
-        className={`${ sortedProducts && sortedProducts?.length > 0 && "grid"} gap-4 md:grid-cols-2 lg:grid-cols-4 p-4 mt-8 min-h-screen`}
+        className={`${sortedProducts && sortedProducts?.length > 0 && "grid"} gap-4 md:grid-cols-2 lg:grid-cols-4 p-4 mt-8 min-h-screen`}
       >
         {sortedProducts && sortedProducts?.length < 0 ? (
           <ItemSkeletonGrid />
@@ -107,21 +179,36 @@ const Catalog = ({ products }: { products: ProductType[] | undefined }) => {
       <Pagination className="py-5 mt-auto">
         <PaginationContent>
           <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
+            <PaginationPrevious
+              onClick={() => handleFetchedProducts(page - 1)}
+              aria-disabled={page === 1}
+              className={page === 1 ? "pointer-events-none opacity-50" : ""}
+            />
           </PaginationItem>
+
+          {paginationItems.map((item, index) => (
+            <PaginationItem key={`${item}-${index}`}>
+              {item === "ellipsis" ? (
+                <PaginationEllipsis />
+              ) : (
+                <PaginationLink
+                  onClick={() => handleFetchedProducts(page)}
+                  isActive={item === page}
+                >
+                  {item}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+          ))}
+
           <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
+            <PaginationNext
+              onClick={() => handleFetchedProducts(page + 1)}
+              aria-disabled={page === totalPages}
+              className={
+                page === totalPages ? "pointer-events-none opacity-50" : ""
+              }
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>

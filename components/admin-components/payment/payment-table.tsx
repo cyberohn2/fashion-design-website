@@ -33,6 +33,7 @@ import Link from "next/link";
 import { DeliveryMethod, OrderStatus, OrderType, type Payment, PaymentStatus, paymentStatusColorMap, statusColorMap } from "../order/order-details";
 import { Badge } from "../../ui/badge";
 import { formatDate } from "@/lib/format-table";
+import { toast } from "sonner";
 
 export type paymentTableProp = Payment & {
   order: {
@@ -127,6 +128,9 @@ export function PaymentTable({
     } else {
       setFetchedPaymentDetails((prev) => prev);
       setIsFetching(false);
+      toast.error("Error fetching payments.", {
+        position: "top-right",
+      });
     }
   };
 
