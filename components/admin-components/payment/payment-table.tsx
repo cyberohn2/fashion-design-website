@@ -133,9 +133,11 @@ export function PaymentTable({
   const paginationItems = getPaginationItems();
 
   return (
-    <Card className="@container/card">
-      <CardHeader>
-        Payments
+    <Card className="@container/card min-h-full">
+      <CardHeader className="flex items-center justify-between">
+        <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
+          Payments
+        </h1>
         <Select value={filterBy} onValueChange={setFilterBy}>
           <SelectTrigger className="">
             <SelectValue placeholder="Sort By" />
@@ -166,29 +168,35 @@ export function PaymentTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {fetchedPaymentDetails.Payments.map((Payment) => (
-              <TableRow key={Payment.id}>
-                <TableCell className="font-medium">
-                  {Payment.order.order_number}
-                </TableCell>
-                <TableCell className={`text-center capitalize`}>
-                  <Badge className={paymentStatusColorMap[Payment?.status]}>
-                    {Payment.status.toLowerCase().replace(/_/g, " ")}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-center capitalize">
-                  {formatDate(Payment.paidAt)}
-                </TableCell>
-                <TableCell>
-                  ₦{Payment.amount}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Link href={`/admin/orders/${Payment.order.order_number}`}>
-                    View Order
-                  </Link>
+            {fetchedPaymentDetails.Payments.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center">
+                  You do not have any payments yet!
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              fetchedPaymentDetails.Payments.map((Payment) => (
+                <TableRow key={Payment.id}>
+                  <TableCell className="font-medium">
+                    {Payment.order.order_number}
+                  </TableCell>
+                  <TableCell className={`text-center capitalize`}>
+                    <Badge className={paymentStatusColorMap[Payment?.status]}>
+                      {Payment.status.toLowerCase().replace(/_/g, " ")}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center capitalize">
+                    {formatDate(Payment.paidAt)}
+                  </TableCell>
+                  <TableCell>₦{Payment.amount}</TableCell>
+                  <TableCell className="text-right">
+                    <Link href={`/admin/orders/${Payment.order.order_number}`}>
+                      View Order
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
           <TableFooter>
             <TableRow>

@@ -116,7 +116,7 @@ export function RevenueChart({ chartData }: {chartData: Payment[]}) {
           config={chartConfig}
           className="aspect-auto h-62.5 w-full"
         >
-          <AreaChart data={filteredData}>
+          {filteredData.length === 0 ? <p>No revenue data yet.</p> :<AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillStatus" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -186,7 +186,7 @@ export function RevenueChart({ chartData }: {chartData: Payment[]}) {
               stroke="var(--color-status)"
               stackId="a"
             />
-          </AreaChart>
+          </AreaChart>}
         </ChartContainer>
       </CardContent>
     </Card>

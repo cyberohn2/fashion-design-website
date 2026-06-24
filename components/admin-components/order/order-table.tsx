@@ -103,8 +103,11 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
     const paginationItems = getPaginationItems();
 
   return (
-    <Card className="@container/card">
-      <CardHeader>
+    <Card className="@container/card min-h-full">
+      <CardHeader className="flex items-center justify-between">
+        <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
+          Orders
+        </h1>
         <Select value={filterBy} onValueChange={setFilterBy}>
           <SelectTrigger className="">
             <SelectValue placeholder="Sort By" />
@@ -136,32 +139,42 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
             </TableRow>
           </TableHeader>
           <TableBody>
-            {fetchedOrderDetails.orders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="font-medium">
-                  {order.order_number}
-                </TableCell>
-                <TableCell className="text-center capitalize">
-                  {order.order_type.toLowerCase().replace(/_/g, " ")}
-                </TableCell>
-                <TableCell className={`text-center capitalize`}>
-                  <Badge className={statusColorMap[order?.status]}>
-                    {order.status.toLowerCase().replace(/_/g, " ")}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-center capitalize">
-                  <Badge
-                    className={paymentStatusColorMap[order?.payment_status]}
-                  >
-                    {order.payment_status.toLowerCase().replace(/_/g, " ")}
-                  </Badge>
-                </TableCell>
-                <TableCell>₦{order.total || order.payment?.amount || 0}</TableCell>
-                <TableCell className="text-right">
-                  <Link href={`/admin/orders/${order.order_number}`}>View</Link>
-                </TableCell>
+            {fetchedOrderDetails.orders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center">You do not have any orders yet!</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              fetchedOrderDetails.orders.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-medium">
+                    {order.order_number}
+                  </TableCell>
+                  <TableCell className="text-center capitalize">
+                    {order.order_type.toLowerCase().replace(/_/g, " ")}
+                  </TableCell>
+                  <TableCell className={`text-center capitalize`}>
+                    <Badge className={statusColorMap[order?.status]}>
+                      {order.status.toLowerCase().replace(/_/g, " ")}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center capitalize">
+                    <Badge
+                      className={paymentStatusColorMap[order?.payment_status]}
+                    >
+                      {order.payment_status.toLowerCase().replace(/_/g, " ")}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    ₦{order.total || order.payment?.amount || 0}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Link href={`/admin/orders/${order.order_number}`}>
+                      View
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
           <TableFooter>
             <TableRow>

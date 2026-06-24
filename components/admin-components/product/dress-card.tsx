@@ -44,16 +44,20 @@ const DressCard = ({dress}: {dress: ProductType & {isPublished?: boolean}}) => {
         <CardContent className="flex items-start flex-col md:flex-row justify-between">
           <div className="flex gap-4 flex-col items-start md:flex-row">
             <Image
-              src={dress.thumbnail as string}
+              src={
+                (dress?.thumbnail
+                  ? dress.thumbnail
+                  : dress.images && dress?.images[0]?.url) as string
+              }
               alt="dress-image"
               width={100}
               height={100}
             />
-            <div>
+            <div className="space-y-4">
               <p className="font-bold text-xl ">{dress.title}</p>
               <p>{dress.description}</p>
               <div className="flex items-center gap-2">
-                <Button variant={"link"} onClick={() => router.push(`/catalog/${dress.slug}`)}>
+                <Button onClick={() => router.push(`/catalog/${dress.slug}`)}>
                   <Eye /> View
                 </Button>
                 <Button

@@ -256,8 +256,6 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 Created{" "}
                 {format(new Date(order?.createdAt as Date), "MMM dd, yyyy")}
               </CardDescription>
-            </div>
-            <div className="flex flex-col gap-6">
               <div className="flex gap-2">
                 <Badge className={statusColorMap[order?.status as OrderStatus]}>
                   {order?.status.replace(/_/g, " ")}
@@ -272,6 +270,8 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                   {order?.payment_status.replace(/_/g, " ")}
                 </Badge>
               </div>
+            </div>
+            <div className="">
               <div className="space-x-4">
                 {order?.status === "PENDING_REVIEW" ? (
                   <Button
@@ -442,7 +442,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             )}
             {order?.custom_order?.customization_notes && (
               <div>
-                <p className="text-sm text-gray-600 font-bold">Customization Notes</p>
+                <p className="text-sm text-gray-600 font-bold">
+                  Customization Notes
+                </p>
                 <p className="text-sm">
                   {order?.custom_order?.customization_notes}
                 </p>
@@ -450,7 +452,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             )}
             {order?.custom_order?.customer_budget && (
               <div>
-                <p className="text-sm text-gray-600 font-bold">Customer Budget</p>
+                <p className="text-sm text-gray-600 font-bold">
+                  Customer Budget
+                </p>
                 <p className="font-medium">
                   ₦{Number(order?.custom_order?.customer_budget).toFixed(2)}
                 </p>

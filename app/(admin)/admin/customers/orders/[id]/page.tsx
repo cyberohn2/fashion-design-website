@@ -19,7 +19,7 @@ const page = async ({
         <div className="flex flex-col gap-4 py-18 md:gap-6 md:py-6">
           <div className="mb-4 flex items-center justify-between">
             <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
-              Orders by {orders.username}
+              Orders by {orders.username || "Customer"}
             </h1>
           </div>
           <OrderTable orders={orders.AllOrders} totalOrder={orders.totalOrders} page={1} />

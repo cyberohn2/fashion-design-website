@@ -123,16 +123,30 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
             </TableRow>
           </TableHeader>
           <TableBody>
-            {customers.map((customer) => (
-              <TableRow key={customer.id}>
-                <TableCell className="font-medium">
-                  {customer.full_name}
-                </TableCell>
-                <TableCell className="text-center">{customer.email}</TableCell>
-                <TableCell className="text-center">{customer.phone}</TableCell>
-                <TableCell className="text-right"><Link href={`/admin/customers/orders/${customer.id}`}>View orders</Link></TableCell>
+            {customers.length === 0 ? (
+              <TableRow>
+                <TableCell className="text-center" colSpan={4}>No customers yet!</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              customers.map((customer) => (
+                <TableRow key={customer.id}>
+                  <TableCell className="font-medium">
+                    {customer.full_name}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {customer.email}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {customer.phone}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Link href={`/admin/customers/orders/${customer.id}`}>
+                      View orders
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
           <TableFooter>
             <TableRow>

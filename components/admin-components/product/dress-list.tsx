@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react'
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import {
   Pagination,
   PaginationContent,
@@ -12,6 +12,17 @@ import {
 } from "@/components/ui/pagination";
 import { ProductType } from '@/components/app-components/catalog/product-card';
 import DressCard from './dress-card';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { ArrowUpRightIcon, SearchSlash } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const DressList = ({
   Dresses,
@@ -95,12 +106,54 @@ const DressList = ({
       const paginationItems = getPaginationItems();
 
   return (
-    <Card className='p-0 border-none shadow-none'>
-        <CardContent className='space-y-6'>
-            {Dresses?.map(dress => (
-                <DressCard dress={dress} />
-            ))}            
-        </CardContent>
+    <Card className="p-0! border-none shadow-none">
+      <CardHeader className="flex items-center justify-between">
+        <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
+          Dresses
+        </h1>
+        <Select value={filterBy} onValueChange={setFilterBy}>
+          <SelectTrigger className="">
+            <SelectValue placeholder="Sort By" />
+          </SelectTrigger>
+          <SelectContent className="z-10 bg-card rounded-sm shadow">
+            <SelectGroup>
+              <SelectLabel>Sort By</SelectLabel>
+              <SelectItem value="relevant">Relevant</SelectItem>
+              <SelectItem value="trending">Trending</SelectItem>
+              <SelectItem value="latest">Latest</SelectItem>
+              <SelectItem value="price-low">Price: Low to High</SelectItem>
+              <SelectItem value="price-high">Price: High to Low</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {Dresses?.length === 0 ? (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <SearchSlash />
+              </EmptyMedia>
+              <EmptyTitle>Nothing here!</EmptyTitle>
+              <EmptyDescription>
+                You haven't listed any product.
+              </EmptyDescription>
+              <Button
+                variant="link"
+                asChild
+                className="text-muted-foreground"
+                size="sm"
+              >
+                <Link href="#">
+                  Create new Dress <ArrowUpRightIcon />
+                </Link>
+              </Button>
+            </EmptyHeader>
+          </Empty>
+        ) : (
+          Dresses?.map((dress) => <DressCard dress={dress} />)
+        )}
+      </CardContent>
       <CardFooter>
         <Pagination className="py-5 mt-auto">
           <PaginationContent>
