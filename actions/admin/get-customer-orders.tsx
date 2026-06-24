@@ -24,9 +24,13 @@ export async function getCustomerOrders({pagination, userId}: {pagination:{page:
                 createdAt: "desc",
             },
         });
-        const totalOrders = await tx.orders.count()
+        const totalOrders = await tx.orders.count({
+            where: {
+                userId
+            }
+        })
 
-        return {AllOrders, totalOrders, username: AllOrders[0].user.full_name}
+        return {AllOrders: AllOrders || [], totalOrders, username: AllOrders[0]?.user?.full_name}
     })
 
     return orders;
