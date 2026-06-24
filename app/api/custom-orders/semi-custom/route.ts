@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("Error creating order:", message);
     return NextResponse.json(
-      { error: "Failed to create order" },
+      { error: `"Failed to create order": ${message}` },
       { status: 500 },
     );
   }

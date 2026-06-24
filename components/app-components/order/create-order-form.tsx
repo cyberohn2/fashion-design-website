@@ -56,7 +56,7 @@ const CreateOrderForm = () => {
             setFormData((prev) => ({
               ...prev,
               selectedDressId: val?.id,
-              ideaImageUrl: val?.thumbnail,
+              ideaImageUrl: val?.images[0].url,
             })),
           );
       }
@@ -178,7 +178,6 @@ const CreateOrderForm = () => {
         <Label className="text-base font-semibold text-foreground">
           Product Images
         </Label>
-        <p className="mt-1 text-sm text-muted-foreground">Upload image</p>
         <div className="mt-4">
           {params.slug? (
             <Image
