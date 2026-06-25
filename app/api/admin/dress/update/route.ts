@@ -10,9 +10,13 @@ export async function POST(request: Request) {
     try{
         const updatedDress = await updateDress({
           dressId,
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          gender: data.gender,
           base_price: Number(data.base_price),
           stock: Number(data.stock),
-          ...data,
+          isPublished: data.isPublished,
         });
         if (!updatedDress) {
           return NextResponse.json(
