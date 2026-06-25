@@ -245,8 +245,6 @@ model Custom_Order {
   orderId     String   @unique
   idea_image_url String?
   selected_dress_id String?
-  material_choice String?
-  custom_material_notes String?
   measurement_profile_id String?
   customization_notes String?
   customer_budget Decimal? @db.Decimal(10,2)

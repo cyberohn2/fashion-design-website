@@ -45,7 +45,7 @@ const CreateOrderForm = () => {
 
   const router = useRouter()
   const params = useParams();
-  // fetch selected dress details if user
+  // fetch selected dress details if custom order
   useEffect(()=>{
     const fetchDress = async () => {
       const req = await fetch(`/api/dresses/${params.slug}`);
@@ -56,7 +56,7 @@ const CreateOrderForm = () => {
             setFormData((prev) => ({
               ...prev,
               selectedDressId: val?.id,
-              ideaImageUrl: val?.images[0].url,
+              ideaImageUrl: val?.images[0]?.url,
             })),
           );
       }
@@ -120,13 +120,12 @@ const CreateOrderForm = () => {
         setFormData((prev) => ({ ...prev, ideaImageUrl: imageUrl }));
       }
 
-
+      // create semi-custom order if param.slug and selectedDressId is available 
       if (params.slug && formData.selectedDressId) {
         const formDataToSubmit = {
           ...formData,
           selectedDressId: formData.selectedDressId,
         }
-        console.log("Submitting form data for new semi-custom order:", formDataToSubmit);
         const req = await fetch(`/api/custom-orders/semi-custom`, {
           method: "POST",
           body: JSON.stringify({data: formDataToSubmit}),
@@ -137,7 +136,6 @@ const CreateOrderForm = () => {
           router.push("/catalog");
         } else {
           const errorData = await req.json();
-          console.log(errorData.error)
           setFormError(errorData.error || "Failed to create order");
           setIsSubmitting(false);
         }

@@ -90,10 +90,6 @@ export async function createSemiCustomOrder(data: CreateSemiCustomOrderData) {
 
           measurement_profile_id: data.measurementProfileId,
 
-          material_choice: data.materialChoice ,
-
-          custom_material_notes: data.customMaterialNotes ,
-
           customization_notes: data.customizationNotes,
 
           customer_budget: data.customerBudget,
