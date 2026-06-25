@@ -221,39 +221,37 @@ const CreateOrderForm = () => {
       </Card>
 
       {/* Delivery Address Section */}
-      {formData.deliveryMethod === "LOCAL_DELIVERY" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Address</CardTitle>
-            <CardDescription>What's your address</CardDescription>
-          </CardHeader>
-          <CardContent className="grid md:grid-cols-3 gap-1">
-            <div>
-              <Label htmlFor="type">Address *</Label>
-              <Select
-                disabled={loading}
-                required
-                value={formData.deliveryAddressId}
-                onValueChange={(value) =>
-                  handleSelectChange("deliveryAddressId", value)
-                }
-              >
-                <SelectTrigger id="type" className="mt-2">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {addresses?.map((address) => (
-                    <SelectItem value={address.id}>
-                      {address.address}
-                    </SelectItem>
-                  ))}
-                  <Link href={"/address/new"}>Add New Address</Link>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <Card>
+        <CardHeader>
+          <CardTitle>Address</CardTitle>
+          <CardDescription>What's your address</CardDescription>
+        </CardHeader>
+        <CardContent className="grid md:grid-cols-3 gap-1">
+          <div>
+            <Label htmlFor="type">Address *</Label>
+            <Select
+              disabled={loading}
+              required
+              value={formData.deliveryAddressId}
+              onValueChange={(value) =>
+                handleSelectChange("deliveryAddressId", value)
+              }
+            >
+              <SelectTrigger id="type" className="mt-2">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {addresses?.map((address) => (
+                  <SelectItem value={address.id}>
+                    {address.address}
+                  </SelectItem>
+                ))}
+                <Link href={"/address/new"}>Add New Address</Link>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Measurement Section */}
       <Card>

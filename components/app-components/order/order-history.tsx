@@ -74,9 +74,7 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
                   <div className="flex">
                     <Image
                       src={
-                        (order.custom_order?.idea_image_url as string) ||
-                        "/logo.webp"
-                      }
+                        (order.custom_order?.idea_image_url as string)}
                       alt="order-image"
                       width={100}
                       height={100}
