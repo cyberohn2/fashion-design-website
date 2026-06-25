@@ -170,14 +170,14 @@ const DressList = ({
               ))}
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem
-                checked={filters.includes("PUBLISHED")}
-                onCheckedChange={() => toggleFilter("PUBLISHED")}
+                checked={filters.includes("published")}
+                onCheckedChange={() => toggleFilter("published")}
               >
                 Published
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={filters.includes("UNPUBLISHED")}
-                onCheckedChange={() => toggleFilter("UNPUBLISHED")}
+                checked={filters.includes("unpublished")}
+                onCheckedChange={() => toggleFilter("unpublished")}
               >
                 Unpublished
               </DropdownMenuCheckboxItem>
