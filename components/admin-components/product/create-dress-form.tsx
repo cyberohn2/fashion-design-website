@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import ImageUploader from "@/components/ui/image-uploader";
 import { updateDressImage } from "@/lib/supabase/update-dress-image";
 import { RotateCcw } from "lucide-react";
+import { toast } from "sonner";
 
 type imagesurls = {
   id: string;
@@ -103,6 +104,7 @@ const CreateDressForm = ({
         // check request is okay
         if (req.ok) {
           setIsSubmitting(false);
+          toast.success("Updated Successfully!")
           router.push("/admin/products");
         } else {
           const errorData = await req.json();
@@ -352,7 +354,7 @@ const CreateDressForm = ({
           className="bg-primary text-primary-foreground hover:bg-primary/90"
           size="lg"
         >
-          {isSubmitting ? "Creating..." : "Create Dress"}
+          {isSubmitting ? (dressData ? "Updating" :"Creating...") : (dressData ? "Update Dress" : "Create Dress")}
         </Button>
       </div>
     </form>
