@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import { useState } from "react";
 import Link from "next/link";
+import { getPaginationItems } from "@/lib/getPaginationItems";
 
 export type customer = {
   id: string;
@@ -41,49 +42,16 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
     totalCustomers,
     page,
   });
-  const [filterBy, setFilterBy] = useState<string>();
 
+  // pagination fn
   const ITEMS_PER_PAGE = 20;
-
   const totalPages = Math.ceil(
     fetchedCustomers.totalCustomers / ITEMS_PER_PAGE,
   );
+  const paginationItems = getPaginationItems(fetchedCustomers.page, totalPages);
 
-  const getPaginationItems = () => {
-    const items: (number | "ellipsis")[] = [];
-
-    // Always show first page
-    items.push(1);
-
-    // Left ellipsis
-    if (fetchedCustomers.page > 3) {
-      items.push("ellipsis");
-    }
-
-    // Pages around current page
-    for (
-      let i = Math.max(2, fetchedCustomers.page - 1);
-      i <= Math.min(totalPages - 1, fetchedCustomers.page + 1);
-      i++
-    ) {
-      items.push(i);
-    }
-
-    // Right ellipsis
-    if (fetchedCustomers.page < totalPages - 2) {
-      items.push("ellipsis");
-    }
-
-    // Always show last page
-    if (totalPages > 1) {
-      items.push(totalPages);
-    }
-
-    return items;
-  };
-
+  // get next page data fn
   const [isFetching, setIsFetching] = useState(false);
-
   const handleFetchedCustomers = async (page: number) => {
     if (isFetching) {
       return;
@@ -105,13 +73,11 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
     }
   };
 
-  const paginationItems = getPaginationItems();
-
   return (
     <Card className="@container/card">
       <CardHeader>
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
-          Orders
+          Customers
         </h1>
       </CardHeader>
       <CardContent>
@@ -120,10 +86,10 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
             A list of New Customers in the last 30 days.
           </TableCaption>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-25">Name</TableHead>
-              <TableHead className="text-center">Email</TableHead>
-              <TableHead className="text-right">Phone</TableHead>
+            <TableRow className="bg-muted-foreground">
+              <TableHead className="w-25 font-bold">Name</TableHead>
+              <TableHead className="text-center font-bold">Email</TableHead>
+              <TableHead className="text-right font-bold">Phone</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
