@@ -44,7 +44,7 @@ export default function SectionCards(
         description: "Accept/Reject new orders.",
         action: {
           title: "See All",
-          url: "/admin/orders?tab=pending",
+          url: "/admin/orders?type=pending",
         },
       },
       {

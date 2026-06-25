@@ -30,6 +30,7 @@ import { SearchSlash } from "lucide-react";
 import { useMemo, useState } from "react";
 import ProductCard, { ProductType } from "./product-card";
 import { toast } from "sonner";
+import { getPaginationItems } from "@/lib/getPaginationItems";
 
 const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | undefined, totalProducts: number, page: number }) => {
     const [fetchedProducts, setFetchedProducts] = useState({
@@ -68,41 +69,11 @@ const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | 
 
 
     const ITEMS_PER_PAGE = 20;
-
     const totalPages = Math.ceil(fetchedProducts.totalProducts / ITEMS_PER_PAGE);
-
-    const getPaginationItems = () => {
-      const items: (number | "ellipsis")[] = [];
-
-      // Always show first page
-      items.push(1);
-
-      // Left ellipsis
-      if (fetchedProducts.page > 3) {
-        items.push("ellipsis");
-      }
-
-      // Pages around current page
-      for (
-        let i = Math.max(2, fetchedProducts.page - 1);
-        i <= Math.min(totalPages - 1, fetchedProducts.page + 1);
-        i++
-      ) {
-        items.push(i);
-      }
-
-      // Right ellipsis
-      if (fetchedProducts.page < totalPages - 2) {
-        items.push("ellipsis");
-      }
-
-      // Always show last page
-      if (totalPages > 1) {
-        items.push(totalPages);
-      }
-
-      return items;
-    };
+    const paginationItems = getPaginationItems(
+      fetchedProducts.page,
+      totalPages,
+    );
 
     const [isFetching, setIsFetching] = useState(false);
 
@@ -129,8 +100,6 @@ const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | 
         setIsFetching(false);
       }
     };
-
-    const paginationItems = getPaginationItems();
 
 
   return (

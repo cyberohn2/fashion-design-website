@@ -29,6 +29,7 @@ import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { Decimal } from "@prisma/client/runtime/client";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export type OrderStatus =
   | "PENDING_REVIEW"
@@ -199,6 +200,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | undefined>(
     order?.status,
   );
+  const router = useRouter()
   const [showStatusDialog, setShowStatusDialog] = useState(false);
   const [updating, setUpdating] = useState(false)
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
@@ -215,7 +217,11 @@ export function OrderDetails({ order }: OrderDetailsProps) {
     })
     if (req.ok) {
         setUpdating(false);
+        toast.success("Success!", {
+          position: "top-right"
+        })
         setShowStatusDialog(false);
+        router.refresh()
     }else {
         setUpdating(false);
         toast.error("Error updating order.", {
@@ -240,6 +246,10 @@ export function OrderDetails({ order }: OrderDetailsProps) {
     if (req.ok) {
         setUpdating(false);
         setShowPaymentDialog(false);
+        toast.success("Success!", {
+          position: "top-right",
+        });
+        router.refresh()
     }else{
         setUpdating(false);
         toast.error("Error updating order.", {

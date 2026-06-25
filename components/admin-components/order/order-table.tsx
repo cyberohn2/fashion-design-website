@@ -27,56 +27,43 @@ import {
   SelectValue,
   SelectContent,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { paymentStatusColorMap, statusColorMap } from "./order-details";
 import { Badge } from "../../ui/badge";
 import { userOrder } from "@/app/(customer)/order-history/page";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { getPaginationItems } from "@/lib/getPaginationItems";
 
 export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], totalOrder: number, page: number}) {
-    const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
-    const [filterBy, setFilterBy] = useState<string>()
+  const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
+  const [isFetching, setIsFetching] = useState(false)
+  const [filters, setFilters] = useState<string[]>([]);
+
+  const toggleFilter = (value: string) => {
+    setFilters((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value],
+    );
+  };
 
     const ITEMS_PER_PAGE = 20;
-
     const totalPages = Math.ceil(fetchedOrderDetails.totalOrder / ITEMS_PER_PAGE);
-
-    const getPaginationItems = () => {
-      const items: (number | "ellipsis")[] = [];
-
-      // Always show first page
-      items.push(1);
-
-      // Left ellipsis
-      if (fetchedOrderDetails.page > 3) {
-        items.push("ellipsis");
-      }
-
-      // Pages around current page
-      for (
-        let i = Math.max(2, fetchedOrderDetails.page - 1);
-        i <= Math.min(totalPages - 1, fetchedOrderDetails.page + 1);
-        i++
-      ) {
-        items.push(i);
-      }
-
-      // Right ellipsis
-      if (fetchedOrderDetails.page < totalPages - 2) {
-        items.push("ellipsis");
-      }
-
-      // Always show last page
-      if (totalPages > 1) {
-        items.push(totalPages);
-      }
-
-      return items;
-    };
-
-    const [isFetching, setIsFetching] = useState(false)
+    const paginationItems = getPaginationItems(
+      fetchedOrderDetails.page,
+      totalPages,
+    );
 
     const handleFetchedOrdersDetails = async (page: number) => {
         if (isFetching) {
@@ -104,7 +91,16 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
         }
     }
 
-    const paginationItems = getPaginationItems();
+  const filteredOrders = useMemo(() => {
+    if (filters.length === 0) {
+      return fetchedOrderDetails.orders;
+    }
+
+    return fetchedOrderDetails.orders.filter(
+      (order) =>
+        filters.includes(order.status) || filters.includes(order.order_type),
+    );
+  }, [fetchedOrderDetails.orders, filters]);
 
   return (
     <Card className="@container/card min-h-full">
@@ -112,21 +108,67 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Orders
         </h1>
-        <Select value={filterBy} onValueChange={setFilterBy}>
-          <SelectTrigger className="">
-            <SelectValue placeholder="Sort By" />
-          </SelectTrigger>
-          <SelectContent className="z-10 bg-card rounded-sm shadow">
-            <SelectGroup>
-              <SelectLabel>Sort By</SelectLabel>
-              <SelectItem value="relevant">Relevant</SelectItem>
-              <SelectItem value="trending">Trending</SelectItem>
-              <SelectItem value="latest">Latest</SelectItem>
-              <SelectItem value="price-low">Price: Low to High</SelectItem>
-              <SelectItem value="price-high">Price: High to Low</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              Filters {filters.length > 0 && `(${filters.length})`}
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Order Status</DropdownMenuLabel>
+            <DropdownMenuCheckboxItem
+              checked={filters.includes("PENDING_REVIEW")}
+              onCheckedChange={() => toggleFilter("PENDING_REVIEW")}
+            >
+              Pending Review
+            </DropdownMenuCheckboxItem>
+
+            <DropdownMenuCheckboxItem
+              checked={filters.includes("PAID")}
+              onCheckedChange={() => toggleFilter("PAID")}
+            >
+              Paid
+            </DropdownMenuCheckboxItem>
+
+            <DropdownMenuCheckboxItem
+              checked={filters.includes("IN_PRODUCTION")}
+              onCheckedChange={() => toggleFilter("IN_PRODUCTION")}
+            >
+              In Production
+            </DropdownMenuCheckboxItem>
+
+            <DropdownMenuCheckboxItem
+              checked={filters.includes("DELIVERED")}
+              onCheckedChange={() => toggleFilter("DELIVERED")}
+            >
+              Delivered
+            </DropdownMenuCheckboxItem>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuCheckboxItem
+              checked={filters.includes("READY_MADE")}
+              onCheckedChange={() => toggleFilter("READY_MADE")}
+            >
+              Ready Made
+            </DropdownMenuCheckboxItem>
+
+            <DropdownMenuCheckboxItem
+              checked={filters.includes("SEMI_CUSTOM")}
+              onCheckedChange={() => toggleFilter("SEMI_CUSTOM")}
+            >
+              Semi Custom
+            </DropdownMenuCheckboxItem>
+
+            <DropdownMenuCheckboxItem
+              checked={filters.includes("FULL_CUSTOM")}
+              onCheckedChange={() => toggleFilter("FULL_CUSTOM")}
+            >
+              Full Custom
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
       <CardContent>
         <Table>
@@ -143,12 +185,14 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
             </TableRow>
           </TableHeader>
           <TableBody>
-            {fetchedOrderDetails.orders.length === 0 ? (
+            {filteredOrders.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center">You do not have any orders yet!</TableCell>
+                <TableCell colSpan={4} className="text-center">
+                  You do not have any orders yet!
+                </TableCell>
               </TableRow>
             ) : (
-              fetchedOrderDetails.orders.map((order) => (
+              filteredOrders.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="font-medium">
                     {order.order_number}
@@ -172,9 +216,11 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
                     ₦{order.total || order.payment?.amount || 0}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Link href={`/admin/orders/${order.order_number}`}>
-                      View
-                    </Link>
+                    <Button>
+                      <Link href={`/admin/orders/${order.order_number}`}>
+                        View
+                      </Link>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))

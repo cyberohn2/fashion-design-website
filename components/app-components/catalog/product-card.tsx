@@ -118,9 +118,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
         <div className="p-0 px-2 grow flex flex-col justify-between">
           <div>
             <CardTitle className="font-semibold text-sm h-10">
-              <Link href={`/catalog/${product?.slug}`}>
-                {product?.title}
-              </Link>
+              <Link href={`/catalog/${product?.slug}`}>{product?.title}</Link>
             </CardTitle>
           </div>
           <CardContent className="p-0 mt-2 mb-2 flex items-center justify-between">
@@ -151,10 +149,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
                 Custom Order
               </Button>
             </Link>
-            <Link
-              className="block  w-full"
-              href={`/create-order/${product?.slug}`}
-            >
+            <Link className="block  w-full" href={`/catalog/${product?.slug}`}>
               <Button className="w-full cursor-pointer">Buy Now</Button>
             </Link>
           </CardFooter>
