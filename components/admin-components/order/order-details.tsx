@@ -88,8 +88,6 @@ export interface CustomOrder {
   orderId: string;
   idea_image_url: string | null;
   selected_dress_id: string | null;
-  material_choice: string | null;
-  custom_material_notes: string | null;
   measurement_profile_id: string | null;
   customization_notes: string | null;
   customer_budget: Decimal | null;
@@ -433,22 +431,6 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             <CardTitle>Custom Order Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {order?.custom_order?.material_choice && (
-              <div>
-                <p className="text-sm text-gray-600">Material Choice</p>
-                <p className="font-medium">
-                  {order?.custom_order?.material_choice}
-                </p>
-              </div>
-            )}
-            {order?.custom_order?.custom_material_notes && (
-              <div>
-                <p className="text-sm text-gray-600">Material Notes</p>
-                <p className="text-sm">
-                  {order?.custom_order?.custom_material_notes}
-                </p>
-              </div>
-            )}
             {order?.custom_order?.customization_notes && (
               <div>
                 <p className="text-sm text-gray-600 font-bold">
