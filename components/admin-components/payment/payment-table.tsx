@@ -24,7 +24,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { useMemo, useState } from "react";

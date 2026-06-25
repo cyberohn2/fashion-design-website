@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import {
   Pagination,
@@ -12,7 +12,14 @@ import {
 } from "@/components/ui/pagination";
 import { ProductType } from '@/components/app-components/catalog/product-card';
 import DressCard from './dress-card';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyDescription,
@@ -24,6 +31,9 @@ import { ArrowUpRightIcon, SearchSlash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { toast } from "sonner";
+import { dressCategory } from '@/lib/lib';
+import { getPaginationItems } from '@/lib/getPaginationItems';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const DressList = ({
   Dresses,
@@ -35,79 +45,91 @@ const DressList = ({
   page: number;
 }) => {
 
-    const [fetchedDressDetails, setFetchedDressDetails] = useState({
-        Dresses,
-        totalDress,
-        page,
+  const [fetchedDresses, setFetchedDresses] = useState({
+    Dresses,
+    totalDress,
+    page,
+  });
+  
+  // filter fn
+  const [filters, setFilters] = useState<string[]>([]);
+  const toggleFilter = (value: string) => {
+    setFilters((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value],
+    );
+  };
+  const filteredDresses = useMemo(() => {
+    if (filters.length === 0) {
+      return fetchedDresses.Dresses;
+    }
+
+    return fetchedDresses.Dresses?.filter((dress) => {
+      if (filters.includes("published") && dress.isPublished) {
+        return true;
+      }
+
+      if (filters.includes("unpublished") && !dress.isPublished) {
+        return true;
+      }
+
+      return filters.includes(dress.category);
+    });
+  }, [fetchedDresses.Dresses, filters]);
+
+  // sort fn
+  const [ sortBy, setSortBy ] = useState("relevance")
+  const sortedDresses = useMemo(() => {
+    if (sortBy === "relevance") return filteredDresses;
+
+    const sorted = filteredDresses && [...filteredDresses];
+
+    switch (sortBy) {
+
+      case "sales-low":
+        return sorted?.sort((a, b) => a.soldCount - b.soldCount);
+
+      case "sales-high":
+        return sorted?.sort((a, b) => b.soldCount - a.soldCount);
+
+      default:
+        return filteredDresses;
+    }
+  }, [fetchedDresses.Dresses, sortBy]);
+
+  // pagination fn
+  const ITEMS_PER_PAGE = 20;
+  const totalPages = Math.ceil(
+    fetchedDresses.totalDress / ITEMS_PER_PAGE,
+  );
+  const paginationItems = getPaginationItems(fetchedDresses.page, totalPages);
+
+  // fetch new page data
+  const [isFetching, setIsFetching] = useState(false);
+  const handleFetchedDressesDetails = async (page: number) => {
+    if (isFetching) {
+      return;
+    }
+    setIsFetching(true);
+    const newDresses = await fetch(`/api/admin/dress?page=${page}`);
+    if (newDresses.ok) {
+      newDresses.json().then((data) => {
+        setFetchedDresses({
+          Dresses: data.AllDresses,
+          totalDress: data.totalDresses,
+          page: page,
+        });
+        setIsFetching(false);
       });
-      const [filterBy, setFilterBy] = useState<string>();
-    
-      const ITEMS_PER_PAGE = 20;
-    
-      const totalPages = Math.ceil(
-        fetchedDressDetails.totalDress / ITEMS_PER_PAGE,
-      );
-    
-      const getPaginationItems = () => {
-        const items: (number | "ellipsis")[] = [];
-    
-        // Always show first page
-        items.push(1);
-    
-        // Left ellipsis
-        if (fetchedDressDetails.page > 3) {
-          items.push("ellipsis");
-        }
-    
-        // Pages around current page
-        for (
-          let i = Math.max(2, fetchedDressDetails.page - 1);
-          i <= Math.min(totalPages - 1, fetchedDressDetails.page + 1);
-          i++
-        ) {
-          items.push(i);
-        }
-    
-        // Right ellipsis
-        if (fetchedDressDetails.page < totalPages - 2) {
-          items.push("ellipsis");
-        }
-    
-        // Always show last page
-        if (totalPages > 1) {
-          items.push(totalPages);
-        }
-    
-        return items;
-      };
-    
-      const [isFetching, setIsFetching] = useState(false);
-    
-      const handleFetchedDressesDetails = async (page: number) => {
-        if (isFetching) {
-          return;
-        }
-        setIsFetching(true);
-        const newDresses = await fetch(`/api/admin/dress?page=${page}`);
-        if (newDresses.ok) {
-          newDresses.json().then((data) => {
-            setFetchedDressDetails({
-              Dresses: data.AllDresses,
-              totalDress: data.totalDresses,
-              page: page,
-            });
-            setIsFetching(false);
-          });
-        } else {
-          setFetchedDressDetails((prev) => prev);
-          toast.error("Error fetching data.", {
-            position: "top-right",
-          });
-          setIsFetching(false);
-        }
-      };
-    
-      const paginationItems = getPaginationItems();
+    } else {
+      setFetchedDresses((prev) => prev);
+      toast.error("Error fetching data.", {
+        position: "top-right",
+      });
+      setIsFetching(false);
+    }
+  };
 
   return (
     <Card className="p-0! border-none shadow-none">
@@ -115,24 +137,56 @@ const DressList = ({
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Dresses
         </h1>
-        <Select value={filterBy} onValueChange={setFilterBy}>
-          <SelectTrigger className="">
-            <SelectValue placeholder="Sort By" />
-          </SelectTrigger>
-          <SelectContent className="z-10 bg-card rounded-sm shadow">
-            <SelectGroup>
-              <SelectLabel>Sort By</SelectLabel>
-              <SelectItem value="relevant">Relevant</SelectItem>
-              <SelectItem value="trending">Trending</SelectItem>
-              <SelectItem value="latest">Latest</SelectItem>
-              <SelectItem value="price-low">Price: Low to High</SelectItem>
-              <SelectItem value="price-high">Price: High to Low</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-2">
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="">
+              <SelectValue placeholder="Sort By" />
+            </SelectTrigger>
+            <SelectContent className="z-10 bg-card rounded-sm shadow">
+              <SelectGroup>
+                <SelectLabel>Sort By</SelectLabel>
+                <SelectItem value="relevance">Relevance</SelectItem>
+                <SelectItem value="sales-low">Sales: Low to High</SelectItem>
+                <SelectItem value="sales-high">Sales: High to Low</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                Filters {filters.length > 0 && `(${filters.length})`}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Dress Category</DropdownMenuLabel>
+              {dressCategory.map((category, index) => (
+                <DropdownMenuCheckboxItem
+                  key={index}
+                  checked={filters.includes(category)}
+                  onCheckedChange={() => toggleFilter(category)}
+                >
+                  {category.toLowerCase().replace(/_/g, " ")}
+                </DropdownMenuCheckboxItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem
+                checked={filters.includes("PUBLISHED")}
+                onCheckedChange={() => toggleFilter("PUBLISHED")}
+              >
+                Published
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={filters.includes("UNPUBLISHED")}
+                onCheckedChange={() => toggleFilter("UNPUBLISHED")}
+              >
+                Unpublished
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        {Dresses?.length === 0 ? (
+        {sortedDresses?.length === 0 ? (
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant="icon">
@@ -155,7 +209,7 @@ const DressList = ({
             </EmptyHeader>
           </Empty>
         ) : (
-          Dresses?.map((dress) => <DressCard dress={dress} />)
+          sortedDresses?.map((dress) => <DressCard dress={dress} />)
         )}
       </CardContent>
       <CardFooter>

@@ -52,6 +52,7 @@ export type ProductType = {
   soldCount: number;
   thumbnail: string | null;
   images?: ProductImages[];
+  isPublished?: boolean;
   reviews?: Reviews[];
   createdAt: Date;
 };

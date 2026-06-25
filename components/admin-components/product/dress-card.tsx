@@ -56,7 +56,7 @@ const DressCard = ({dress}: {dress: ProductType & {isPublished?: boolean}}) => {
               height={100}
             />
             <div className="space-y-4">
-              <p className="font-bold text-xl ">{dress.title}</p>
+              <h2 className="font-bold text-xl ">{dress.title}</h2>
               <p>{dress.description}</p>
               <div className="flex items-center gap-2">
                 <Button onClick={() => router.push(`/catalog/${dress.slug}`)}>
