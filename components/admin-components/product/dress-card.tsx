@@ -47,9 +47,7 @@ const DressCard = ({dress}: {dress: ProductType & {isPublished?: boolean}}) => {
           <div className="flex gap-4 flex-col items-start md:flex-row">
             <Image
               src={
-                (dress?.thumbnail
-                  ? dress.thumbnail
-                  : dress.images && dress?.images[0]?.url) as string
+                (dress.images && dress?.images[0]?.url) as string
               }
               alt="dress-image"
               width={100}
