@@ -156,15 +156,15 @@ export interface Order {
   items: OrderItem[] | null;
   custom_order: CustomOrder | null;
   payment: Payment | null;
-  statusHistory: OrderStatusHistoryItem[] | null;
+  statusHistory: OrderStatusHistoryItem[];
   user: {
     id: string;
-    createdAt: Date;
-    updatedAt: Date;
+    role: "USER" | "ADMIN";
     email: string;
     full_name: string;
     phone: string;
-    role: "USER" | "ADMIN";
+    createdAt: Date;
+    updatedAt: Date;
   } | null;
   delivery_address: DeliveryAddress | null;
 }
