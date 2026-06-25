@@ -65,7 +65,7 @@ const DressCard = ({dress}: {dress: ProductType & {isPublished?: boolean}}) => {
                 <Button
                   variant={"outline"}
                   onClick={() =>
-                    router.push(`/admin/products/edit/${dress.id}`)
+                    router.push(`/admin/products/edit/${dress.slug}`)
                   }
                 >
                   <Edit /> Edit

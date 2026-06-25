@@ -1,9 +1,9 @@
 import { getDress } from "@/actions/dresses/get-dress";
 import CreateDressForm from "@/components/admin-components/product/create-dress-form";
 
-const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const param = await params;
-  const dressDetails = await getDress(param.id);
+  const dressDetails = await getDress(param.slug);
 
   if (!dressDetails) {
     return <div>Dress not found</div>;
