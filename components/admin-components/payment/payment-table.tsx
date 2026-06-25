@@ -19,21 +19,23 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
-  Select,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { DeliveryMethod, OrderStatus, OrderType, type Payment, PaymentStatus, paymentStatusColorMap, statusColorMap } from "../order/order-details";
 import { Badge } from "../../ui/badge";
 import { formatDate } from "@/lib/format-table";
 import { toast } from "sonner";
+import { getPaginationItems } from "@/lib/getPaginationItems";
+import { Button } from "@/components/ui/button";
+import { paymentStatus } from "@/lib/lib";
 
 export type paymentTableProp = Payment & {
   order: {
@@ -62,54 +64,44 @@ export function PaymentTable({
   totalPayment: number;
   page: number;
 }) {
-  const [fetchedPaymentDetails, setFetchedPaymentDetails] = useState({
+  const [fetchedPayments, setFetchedPayments] = useState({
     Payments,
     totalPayment,
     page,
   });
-  const [filterBy, setFilterBy] = useState<string>();
 
+  // filter fn
+  const [filters, setFilters] = useState<string[]>([]);
+  const toggleFilter = (value: string) => {
+    setFilters((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value],
+    );
+  };
+  const filteredPayments = useMemo(() => {
+    if (filters.length === 0) {
+      return fetchedPayments.Payments;
+    }
+
+    return fetchedPayments.Payments.filter((payment) =>
+      filters.includes(payment.status),
+    );
+  }, [fetchedPayments.Payments, filters]);
+
+  // pagination fn
   const ITEMS_PER_PAGE = 20;
-
   const totalPages = Math.ceil(
-    fetchedPaymentDetails.totalPayment / ITEMS_PER_PAGE,
+    fetchedPayments.totalPayment / ITEMS_PER_PAGE,
+  );
+  const paginationItems = getPaginationItems(
+    fetchedPayments.page,
+    totalPages,
   );
 
-  const getPaginationItems = () => {
-    const items: (number | "ellipsis")[] = [];
 
-    // Always show first page
-    items.push(1);
-
-    // Left ellipsis
-    if (fetchedPaymentDetails.page > 3) {
-      items.push("ellipsis");
-    }
-
-    // Pages around current page
-    for (
-      let i = Math.max(2, fetchedPaymentDetails.page - 1);
-      i <= Math.min(totalPages - 1, fetchedPaymentDetails.page + 1);
-      i++
-    ) {
-      items.push(i);
-    }
-
-    // Right ellipsis
-    if (fetchedPaymentDetails.page < totalPages - 2) {
-      items.push("ellipsis");
-    }
-
-    // Always show last page
-    if (totalPages > 1) {
-      items.push(totalPages);
-    }
-
-    return items;
-  };
-
+  // function to fetch more pages
   const [isFetching, setIsFetching] = useState(false);
-
   const handleFetchedPaymentsDetails = async (page: number) => {
     if (isFetching) {
       return;
@@ -118,7 +110,7 @@ export function PaymentTable({
     const newPayments = await fetch(`/api/admin/payments?page=${page}`);
     if (newPayments.ok) {
       newPayments.json().then((data) => {
-        setFetchedPaymentDetails({
+        setFetchedPayments({
           Payments: data.AllPayments,
           totalPayment: data.totalPayments,
           page: page,
@@ -126,7 +118,7 @@ export function PaymentTable({
         setIsFetching(false);
       });
     } else {
-      setFetchedPaymentDetails((prev) => prev);
+      setFetchedPayments((prev) => prev);
       setIsFetching(false);
       toast.error("Error fetching payments.", {
         position: "top-right",
@@ -134,29 +126,32 @@ export function PaymentTable({
     }
   };
 
-  const paginationItems = getPaginationItems();
-
   return (
-    <Card className="@container/card min-h-full">
+    <Card className="@container/card min-h-full!">
       <CardHeader className="flex items-center justify-between">
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Payments
         </h1>
-        <Select value={filterBy} onValueChange={setFilterBy}>
-          <SelectTrigger className="">
-            <SelectValue placeholder="Sort By" />
-          </SelectTrigger>
-          <SelectContent className="z-10 bg-card rounded-sm shadow">
-            <SelectGroup>
-              <SelectLabel>Sort By</SelectLabel>
-              <SelectItem value="relevant">Relevant</SelectItem>
-              <SelectItem value="trending">Trending</SelectItem>
-              <SelectItem value="latest">Latest</SelectItem>
-              <SelectItem value="price-low">Price: Low to High</SelectItem>
-              <SelectItem value="price-high">Price: High to Low</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              Filters {filters.length > 0 && `(${filters.length})`}
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Payment Status</DropdownMenuLabel>
+            {paymentStatus.map((status, index) => (
+              <DropdownMenuCheckboxItem
+                key={index}
+                checked={filters.includes(status)}
+                onCheckedChange={() => toggleFilter(status)}
+              >
+                {status.toLowerCase().replace(/_/g, " ")}
+              </DropdownMenuCheckboxItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
       <CardContent>
         <Table>
@@ -172,14 +167,14 @@ export function PaymentTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {fetchedPaymentDetails.Payments.length === 0 ? (
+            {filteredPayments.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center">
                   You do not have any payments yet!
                 </TableCell>
               </TableRow>
             ) : (
-              fetchedPaymentDetails.Payments.map((Payment) => (
+              filteredPayments.map((Payment) => (
                 <TableRow key={Payment.id}>
                   <TableCell className="font-medium">
                     {Payment.order.order_number}

@@ -19,15 +19,6 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
-  Select,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-} from "@/components/ui/select";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
@@ -44,6 +35,7 @@ import { userOrder } from "@/app/(customer)/order-history/page";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getPaginationItems } from "@/lib/getPaginationItems";
+import { orderStatus } from "@/lib/lib";
 
 export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], totalOrder: number, page: number}) {
   const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
@@ -103,7 +95,7 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
   }, [fetchedOrderDetails.orders, filters]);
 
   return (
-    <Card className="@container/card min-h-full">
+    <Card className="@container/card min-h-full!">
       <CardHeader className="flex items-center justify-between">
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Orders
@@ -117,36 +109,19 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
 
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Order Status</DropdownMenuLabel>
-            <DropdownMenuCheckboxItem
-              checked={filters.includes("PENDING_REVIEW")}
-              onCheckedChange={() => toggleFilter("PENDING_REVIEW")}
-            >
-              Pending Review
-            </DropdownMenuCheckboxItem>
-
-            <DropdownMenuCheckboxItem
-              checked={filters.includes("PAID")}
-              onCheckedChange={() => toggleFilter("PAID")}
-            >
-              Paid
-            </DropdownMenuCheckboxItem>
-
-            <DropdownMenuCheckboxItem
-              checked={filters.includes("IN_PRODUCTION")}
-              onCheckedChange={() => toggleFilter("IN_PRODUCTION")}
-            >
-              In Production
-            </DropdownMenuCheckboxItem>
-
-            <DropdownMenuCheckboxItem
-              checked={filters.includes("DELIVERED")}
-              onCheckedChange={() => toggleFilter("DELIVERED")}
-            >
-              Delivered
-            </DropdownMenuCheckboxItem>
+            {orderStatus.map((status, index) => (
+              <DropdownMenuCheckboxItem
+                key={index}
+                checked={filters.includes(status)}
+                onCheckedChange={() => toggleFilter(status)}
+              >
+                {status.toLowerCase().replace(/_/g, " ")}
+              </DropdownMenuCheckboxItem>
+            ))}
 
             <DropdownMenuSeparator />
 
+            <DropdownMenuLabel>Order Type</DropdownMenuLabel>
             <DropdownMenuCheckboxItem
               checked={filters.includes("READY_MADE")}
               onCheckedChange={() => toggleFilter("READY_MADE")}
