@@ -65,17 +65,11 @@ const DressList = ({
       return fetchedDresses.Dresses;
     }
 
-    return fetchedDresses.Dresses?.filter((dress) => {
-      if (filters.includes("published") && dress.isPublished) {
-        return true;
-      }
-
-      if (filters.includes("unpublished") && !dress.isPublished) {
-        return true;
-      }
-
-      return filters.includes(dress.category);
-    });
+    return fetchedDresses.Dresses?.filter(
+      (dress) =>
+        (filters.includes("unpublished") && !dress.isPublished) ||
+        filters.includes(dress.category),
+    );
   }, [fetchedDresses.Dresses, filters]);
 
   // sort fn
@@ -169,12 +163,6 @@ const DressList = ({
                 </DropdownMenuCheckboxItem>
               ))}
               <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem
-                checked={filters.includes("published")}
-                onCheckedChange={() => toggleFilter("published")}
-              >
-                Published
-              </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={filters.includes("unpublished")}
                 onCheckedChange={() => toggleFilter("unpublished")}
