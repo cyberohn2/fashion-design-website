@@ -89,7 +89,8 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
             <TableRow className="bg-muted-foreground">
               <TableHead className="w-25 font-bold">Name</TableHead>
               <TableHead className="text-center font-bold">Email</TableHead>
-              <TableHead className="text-right font-bold">Phone</TableHead>
+              <TableHead className="text-center font-bold">Phone</TableHead>
+              <TableHead className="text-right font-bold">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

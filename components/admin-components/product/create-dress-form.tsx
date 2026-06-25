@@ -41,7 +41,7 @@ const CreateDressForm = ({
       stockQuantity: 0,
       images: undefined,
       imagesUrl: []
-    },
+    }
   );
 
   const router = useRouter();
