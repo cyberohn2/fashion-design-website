@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useParams, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const AddressForm = () => {
     const [formData, setFormData] = useState<CreateAddressData>({
@@ -87,9 +88,11 @@ const AddressForm = () => {
         })
         if (req.ok) {
           setIsSubmitting(false);
+          toast.success("Success!! You can now create new orders with the address!")
           router.push("/addresses/manage");
         } else {
           const errorData = await req.json();
+          toast.error("Failed to update address")
           setFormError(errorData.error || "Failed to update address");
           setIsSubmitting(false);
         }
@@ -100,10 +103,12 @@ const AddressForm = () => {
         })
         if (req.ok) {
           setIsSubmitting(false);
+          toast.success("Success!! You can now create new orders with the address!");
           router.push("/addresses/manage");
         } else {
           const errorData = await req.json();
           setFormError(errorData.error || "Failed to update address");
+          toast.error("Failed to update address");
           setIsSubmitting(false);
         }
       } 
