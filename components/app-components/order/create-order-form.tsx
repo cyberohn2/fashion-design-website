@@ -34,7 +34,7 @@ const CreateOrderForm = () => {
     deliveryAddressId: undefined,
     measurementProfileId: undefined,
     customizationNotes: "",
-    customerBudget: undefined,
+    customerBudget: 0,
   });
   const [ideaImageFile, setIdeaImageFile] = useState<File | null>(null);
 

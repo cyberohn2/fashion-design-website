@@ -22,6 +22,8 @@ type CreateSemiCustomOrderData = {
   customizationNotes?: string;
 
   customerBudget?: number;
+
+  ideaImageUrl?: string;
 };
 
 export async function createSemiCustomOrder(data: CreateSemiCustomOrderData) {
@@ -93,6 +95,7 @@ export async function createSemiCustomOrder(data: CreateSemiCustomOrderData) {
           customization_notes: data.customizationNotes,
 
           customer_budget: data.customerBudget,
+          idea_image_url: data.ideaImageUrl
         },
       },
 
