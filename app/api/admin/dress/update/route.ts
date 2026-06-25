@@ -8,7 +8,12 @@ export async function POST(request: Request) {
     }
 
     try{
-        const updatedDress = await updateDress({ dressId, ...data });
+        const updatedDress = await updateDress({
+          dressId,
+          base_price: Number(data.base_price),
+          stock: Number(data.stock),
+          ...data,
+        });
         if (!updatedDress) {
           return NextResponse.json(
             { error: "dress not found" },
