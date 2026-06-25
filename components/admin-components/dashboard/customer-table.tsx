@@ -109,7 +109,11 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
 
   return (
     <Card className="@container/card">
-      <CardHeader>Customers</CardHeader>
+      <CardHeader>
+        <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
+          Orders
+        </h1>
+      </CardHeader>
       <CardContent>
         <Table>
           <TableCaption>
@@ -125,7 +129,9 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
           <TableBody>
             {customers.length === 0 ? (
               <TableRow>
-                <TableCell className="text-center" colSpan={4}>No customers yet!</TableCell>
+                <TableCell className="text-center" colSpan={4}>
+                  No customers yet!
+                </TableCell>
               </TableRow>
             ) : (
               customers.map((customer) => (
