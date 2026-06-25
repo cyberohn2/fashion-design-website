@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import ReviewCard, { Review } from './review-card';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import {
@@ -22,6 +22,7 @@ import {
 import { SearchSlash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
+import { getPaginationItems } from '@/lib/getPaginationItems';
 
 const ReviewList = ({
   Reviews,
@@ -33,79 +34,63 @@ const ReviewList = ({
   page: number;
 }) => {
 
-    const [fetchedReviewDetails, setFetchedReviewDetails] = useState({
-        Reviews,
-        totalReview,
-        page,
+  const [fetchedReviews, setFetchedReviews] = useState({
+    Reviews,
+    totalReview,
+    page,
+  });
+
+  // sort fn
+  const [sortBy, setSortBy] = useState<string>();
+  const sortedReviews = useMemo(() => {
+    if (sortBy === "relevance") return fetchedReviews.Reviews;
+
+    const sorted = fetchedReviews.Reviews && [...fetchedReviews.Reviews];
+
+    switch (sortBy) {
+      case "rating-low":
+        return sorted?.sort((a, b) => a.rating - b.rating);
+
+      case "rating-high":
+        return sorted?.sort((a, b) => b.rating - a.rating);
+
+      default:
+        return fetchedReviews.Reviews;
+    }
+  }, [fetchedReviews.Reviews, sortBy]);
+
+  // pagination fn
+  const ITEMS_PER_PAGE = 20;
+  const totalPages = Math.ceil(
+    fetchedReviews.totalReview / ITEMS_PER_PAGE,
+  );
+  const paginationItems = getPaginationItems(fetchedReviews.page, totalPages);
+
+  // fetch new page data fn
+  const [isFetching, setIsFetching] = useState(false);
+  const handleFetchedReviewsDetails = async (page: number) => {
+    if (isFetching) {
+      return;
+    }
+    setIsFetching(true);
+    const newReviews = await fetch(`/api/admin/reviews?page=${page}`);
+    if (newReviews.ok) {
+      newReviews.json().then((data) => {
+        setFetchedReviews({
+          Reviews: data.AllReviews,
+          totalReview: data.totalReviews,
+          page: page,
+        });
+        setIsFetching(false);
       });
-      const [filterBy, setFilterBy] = useState<string>();
-    
-      const ITEMS_PER_PAGE = 20;
-    
-      const totalPages = Math.ceil(
-        fetchedReviewDetails.totalReview / ITEMS_PER_PAGE,
-      );
-    
-      const getPaginationItems = () => {
-        const items: (number | "ellipsis")[] = [];
-    
-        // Always show first page
-        items.push(1);
-    
-        // Left ellipsis
-        if (fetchedReviewDetails.page > 3) {
-          items.push("ellipsis");
-        }
-    
-        // Pages around current page
-        for (
-          let i = Math.max(2, fetchedReviewDetails.page - 1);
-          i <= Math.min(totalPages - 1, fetchedReviewDetails.page + 1);
-          i++
-        ) {
-          items.push(i);
-        }
-    
-        // Right ellipsis
-        if (fetchedReviewDetails.page < totalPages - 2) {
-          items.push("ellipsis");
-        }
-    
-        // Always show last page
-        if (totalPages > 1) {
-          items.push(totalPages);
-        }
-    
-        return items;
-      };
-    
-      const [isFetching, setIsFetching] = useState(false);
-    
-      const handleFetchedReviewsDetails = async (page: number) => {
-        if (isFetching) {
-          return;
-        }
-        setIsFetching(true);
-        const newReviews = await fetch(`/api/admin/reviews?page=${page}`);
-        if (newReviews.ok) {
-          newReviews.json().then((data) => {
-            setFetchedReviewDetails({
-              Reviews: data.AllReviews,
-              totalReview: data.totalReviews,
-              page: page,
-            });
-            setIsFetching(false);
-          });
-        } else {
-          setFetchedReviewDetails((prev) => prev);
-          toast.error("Error fetching data.", {
-            position: "top-right",
-          });
-          setIsFetching(false);
-        }
-      };
-    
-      const paginationItems = getPaginationItems();
+    } else {
+      setFetchedReviews((prev) => prev);
+      toast.error("Error fetching data.", {
+        position: "top-right",
+      });
+      setIsFetching(false);
+    }
+  };
 
   return (
     <Card>
@@ -113,24 +98,22 @@ const ReviewList = ({
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Reviews
         </h1>
-        <Select value={filterBy} onValueChange={setFilterBy}>
+        <Select value={sortBy} onValueChange={setSortBy}>
           <SelectTrigger className="">
             <SelectValue placeholder="Sort By" />
           </SelectTrigger>
           <SelectContent className="z-10 bg-card rounded-sm shadow">
             <SelectGroup>
               <SelectLabel>Sort By</SelectLabel>
-              <SelectItem value="relevant">Relevant</SelectItem>
-              <SelectItem value="trending">Trending</SelectItem>
-              <SelectItem value="latest">Latest</SelectItem>
-              <SelectItem value="price-low">Price: Low to High</SelectItem>
-              <SelectItem value="price-high">Price: High to Low</SelectItem>
+              <SelectItem value="relevance">Relevant</SelectItem>
+              <SelectItem value="price-low">Rating: Low </SelectItem>
+              <SelectItem value="price-high">Rating: High</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
       </CardHeader>
       <CardContent className="space-y-6">
-        {Reviews?.length === 0 ? (
+        {sortedReviews?.length === 0 ? (
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant="icon">
@@ -145,12 +128,11 @@ const ReviewList = ({
                 asChild
                 className="text-muted-foreground"
                 size="sm"
-              >
-              </Button>
+              ></Button>
             </EmptyHeader>
           </Empty>
         ) : (
-          Reviews?.map((review) => <ReviewCard review={review} />)
+          sortedReviews?.map((review) => <ReviewCard key={review.id} review={review} />)
         )}
       </CardContent>
       <CardFooter>

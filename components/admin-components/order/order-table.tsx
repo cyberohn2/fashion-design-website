@@ -39,9 +39,9 @@ import { orderStatus } from "@/lib/lib";
 
 export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], totalOrder: number, page: number}) {
   const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
-  const [isFetching, setIsFetching] = useState(false)
-  const [filters, setFilters] = useState<string[]>([]);
 
+  // filter fn
+  const [filters, setFilters] = useState<string[]>([]);
   const toggleFilter = (value: string) => {
     setFilters((prev) =>
       prev.includes(value)
@@ -49,40 +49,6 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
         : [...prev, value],
     );
   };
-
-    const ITEMS_PER_PAGE = 20;
-    const totalPages = Math.ceil(fetchedOrderDetails.totalOrder / ITEMS_PER_PAGE);
-    const paginationItems = getPaginationItems(
-      fetchedOrderDetails.page,
-      totalPages,
-    );
-
-    const handleFetchedOrdersDetails = async (page: number) => {
-        if (isFetching) {
-            return
-        }
-        setIsFetching(true)
-        const newOrders = await fetch(`/api/admin/orders?page=${page}`)
-        if (newOrders.ok) {
-            newOrders
-            .json()
-            .then((data) =>
-            {setFetchedOrderDetails({
-                orders: data.AllOrders,
-                totalOrder: data.totalOrders,
-                page: page
-            })
-            setIsFetching(false)}
-            );
-        }else{
-            setFetchedOrderDetails(prev => prev)
-            toast.error("Error fetching orders.", {
-              position: "top-right",
-            });
-            setIsFetching(false)
-        }
-    }
-
   const filteredOrders = useMemo(() => {
     if (filters.length === 0) {
       return fetchedOrderDetails.orders;
@@ -93,6 +59,42 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
         filters.includes(order.status) || filters.includes(order.order_type),
     );
   }, [fetchedOrderDetails.orders, filters]);
+
+  // pagination fn
+  const ITEMS_PER_PAGE = 20;
+  const totalPages = Math.ceil(fetchedOrderDetails.totalOrder / ITEMS_PER_PAGE);
+  const paginationItems = getPaginationItems(
+    fetchedOrderDetails.page,
+    totalPages,
+  );
+
+  // fetch new page data fn
+  const [isFetching, setIsFetching] = useState(false);
+  const handleFetchedOrdersDetails = async (page: number) => {
+      if (isFetching) {
+          return
+      }
+      setIsFetching(true)
+      const newOrders = await fetch(`/api/admin/orders?page=${page}`)
+      if (newOrders.ok) {
+          newOrders
+          .json()
+          .then((data) =>
+          {setFetchedOrderDetails({
+              orders: data.AllOrders,
+              totalOrder: data.totalOrders,
+              page: page
+          })
+          setIsFetching(false)}
+          );
+      }else{
+          setFetchedOrderDetails(prev => prev)
+          toast.error("Error fetching orders.", {
+            position: "top-right",
+          });
+          setIsFetching(false)
+      }
+  }
 
   return (
     <Card className="@container/card min-h-full!">
