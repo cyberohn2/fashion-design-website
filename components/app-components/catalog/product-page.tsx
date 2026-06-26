@@ -12,13 +12,15 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel";
 import { ProductType } from "./product-card";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { NewOrderDialog } from "./new-order-dialog";
 
 const ProductPage = ({ product }: { product: ProductType | null }) => {
   const [quantity, setQuantity] = useState(1);
 
   const averageRating = product?.reviews && 
-    product?.reviews?.reduce((sum, review) => sum + review.rating, 0) /
-    product?.reviews.length;
+    product?.reviews?.reduce((sum, review) => sum + review?.rating, 0) /
+    product?.reviews?.length;
 
   const getCategoryLabel = (category: string) => {
     const labels: { [key: string]: string } = {
@@ -193,12 +195,17 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
               </div>
 
               <div className="flex gap-3 pt-4">
-                <Button
-                  className="flex-1 bg-black text-white hover:bg-gray-800 py-3 font-light tracking-wide"
-                  disabled={product?.stock === 0}
-                >
-                  Buy Now
-                </Button>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      className="flex-1 bg-black text-white hover:bg-gray-800 py-3 font-light tracking-wide"
+                      disabled={product?.stock === 0}
+                    >
+                      Buy Now
+                    </Button>
+                  </DialogTrigger>
+                  <NewOrderDialog product={product as ProductType}/>
+                </Dialog>
                 <Button
                   variant="outline"
                   className="flex-1 py-3 font-light tracking-wide"
@@ -220,7 +227,7 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
           <h2 className="text-2xl font-light mb-8">Customer Reviews</h2>
 
           <div className="space-y-6">
-            {product?.reviews?.map((review) => (
+            {product?.reviews?.length === 0 ? <p>There are no reviews for this product yet!.</p> : product?.reviews?.map((review) => (
               <Card key={review.id} className="border-0 bg-gray-50">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">

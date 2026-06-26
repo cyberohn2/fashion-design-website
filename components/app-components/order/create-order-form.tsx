@@ -228,7 +228,7 @@ const CreateOrderForm = () => {
         </CardHeader>
         <CardContent className="grid md:grid-cols-3 gap-1">
           <div>
-            <Label htmlFor="type">Address *</Label>
+            <Label htmlFor="address">Address *</Label>
             <Select
               disabled={loading}
               required
@@ -237,7 +237,7 @@ const CreateOrderForm = () => {
                 handleSelectChange("deliveryAddressId", value)
               }
             >
-              <SelectTrigger id="type" className="mt-2">
+              <SelectTrigger id="address" className="mt-2">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

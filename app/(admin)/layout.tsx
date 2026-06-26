@@ -53,6 +53,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { RouteGuard } from "@/lib/auth/route-guard";
 import { AdminHeader } from "@/components/admin-components/layout/admin-header";
 import { AdminSidebar } from "@/components/admin-components/layout/admin-sidebar";
+import { Toaster } from "@/components/ui/sonner";
 
 
 export default function layout({
@@ -72,6 +73,7 @@ export default function layout({
       )}
     >
       <body className={`${(lamoricRowen.className, ZTNature.className)} relative`}>
+        <Toaster />
         <AuthContextProvider>
           <RouteGuard>
             <SidebarProvider>

@@ -38,7 +38,7 @@ export async function initializePayment(orderId: string) {
   // Initialize Paystack payment
   const response = await paystack.post("/transaction/initialize", {
     email: user.email,
-
+    
     amount: Number(order.total) * 100,
 
     currency: "NGN",
@@ -48,7 +48,7 @@ export async function initializePayment(orderId: string) {
       orderNumber: order.order_number,
     },
 
-    callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment/success`,
+    callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/payment-status`,
   });
 
   const paymentData = response.data.data;
@@ -57,7 +57,7 @@ export async function initializePayment(orderId: string) {
   await prisma.payment.create({
     data: {
       orderId: order.id,
-
+      userId: user.id,
       Provider: "PAYSTACK",
 
       Provider_Reference: paymentData.reference,
@@ -72,5 +72,6 @@ export async function initializePayment(orderId: string) {
 
   return {
     authorizationUrl: paymentData.authorization_url,
+    access_code: paymentData.access_code,
   };
 }
