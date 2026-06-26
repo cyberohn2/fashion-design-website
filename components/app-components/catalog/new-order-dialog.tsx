@@ -48,12 +48,13 @@ export function NewOrderDialog({product}: {product: ProductType}) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [ createdOrder, setCreatedOrder ] = useState<userOrder | null>()
+
   const handleBuy = async () => {
     if (isLoading) {
       return
     }
     setIsLoading(true);
+    let createdOrder: userOrder | null = null;
     try {
       toast.promise<userOrder>(
         async () => {
@@ -74,14 +75,14 @@ export function NewOrderDialog({product}: {product: ProductType}) {
         {
           loading: "Creating order...",
           success: (data) => {
-            setCreatedOrder(data)
+            createdOrder = data
             return `Order created with Number ${data.order_number}!`
           },
           error: (err) => err.message,
         },
       );
 
-      if (createdOrder) {
+      if (createdOrder !== null) {
         toast.promise<{ authorizationUrl: string, access_code: string}>(
           async () => {
             const res = await fetch("/api/payment/initialize", {
@@ -89,7 +90,7 @@ export function NewOrderDialog({product}: {product: ProductType}) {
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify({orderId:createdOrder.id})
+              body: JSON.stringify({orderId:createdOrder?.id})
             })
             if (!res.ok) {
               throw new Error("Failed to initialise payment");
