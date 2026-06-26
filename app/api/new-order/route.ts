@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
   try {
     const newOrder = await createReadyMadeOrder({
-      dressId: data.dressIs,
+      dressId: data.dressId,
       quantity: Number(data.quantity),
       notes: data.notes,
       deliveryMethod: data.deliveryMethod,
