@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Footer from "@/components/app-components/layout/footer";
 import { AuthContextProvider } from "@/contexts/AuthContext";
 import Header from "@/components/app-components/layout/header";
+import { Toaster } from "@/components/ui/sonner";
 
 const lamoricRowen = localFont({
   variable: "--font-lamoric-rowen",
@@ -71,6 +72,7 @@ export default function RootLayout({
       <body
         className={`min-h-full flex flex-col relative ${(lamoricRowen.className, ZTNature.className)}`}
       >
+        <Toaster />
       <AuthContextProvider>
         <Header />
           {children}

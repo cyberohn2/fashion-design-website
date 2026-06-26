@@ -110,11 +110,9 @@ export function NewOrderDialog({product}: {product: ProductType}) {
 
 
     } catch (error) {
-
-      toast.error(error instanceof Error ? error.message : String(error));
-    } finally {
       setIsLoading(false);
-    }
+      toast.error(error instanceof Error ? error.message : String(error));
+    } 
   };
 
   return (
