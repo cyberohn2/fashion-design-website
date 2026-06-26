@@ -50,70 +50,55 @@ export function NewOrderDialog({product}: {product: ProductType}) {
 
 
   const handleBuy = async () => {
-    if (isLoading) {
-      return
-    }
+    if (isLoading) return;
+
     setIsLoading(true);
-    let createdOrder: userOrder | null = null;
+
     try {
-      toast.promise<userOrder>(
-        async () => {
-          const res = await fetch("/api/new-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ data: formData }),
-          });
-
-          if (!res.ok) {
-            throw new Error("Failed to create order");
-          }
-
-          return res.json() ;
-        },
+      const createdOrder = await toast.promise(
+        fetch("/api/new-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: formData }),
+        }).then(async (res) => {
+          if (!res.ok) throw new Error("Failed to create order");
+          return res.json() as Promise<userOrder>;
+        }),
         {
           loading: "Creating order...",
-          success: (data) => {
-            createdOrder = data
-            return `Order created with Number ${data.order_number}!`
-          },
+          success: (data) => `Order created with Number ${data.order_number}!`,
           error: (err) => err.message,
         },
-      );
+      ).unwrap();
 
-      if (createdOrder !== null) {
-        toast.promise<{ authorizationUrl: string, access_code: string}>(
-          async () => {
-            const res = await fetch("/api/payment/initialize", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({orderId:createdOrder?.id})
-            })
-            if (!res.ok) {
-              throw new Error("Failed to initialise payment");
-            }
-
-            return res.json();
+      const payment = await toast.promise(
+        fetch("/api/payment/initialize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-          {
-            loading: "Initializing Payment...",
-            success: (data) => {
-              popup.resumeTransaction(data.access_code);
-              return "Payment initialized"
-            },
-            error: "Error while initializing payment!"
-          }
-        );
-      }
+          body: JSON.stringify({
+            orderId: createdOrder.id,
+          }),
+        }).then(async (res) => {
+          if (!res.ok) throw new Error("Failed to initialise payment");
+          return res.json();
+        }),
+        {
+          loading: "Initializing payment...",
+          success: "Payment initialized!",
+          error: "Error while initializing payment!",
+        },
+      ).unwrap();
 
-
+      popup.resumeTransaction(payment.access_code);
     } catch (error) {
-      setIsLoading(false);
       toast.error(error instanceof Error ? error.message : String(error));
-    } 
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
