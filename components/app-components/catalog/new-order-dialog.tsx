@@ -12,7 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { SubmitEvent, useEffect, useState } from "react";
 import { ProductType } from "./product-card";
 import { Textarea } from "@/components/ui/textarea";
 import { type address } from "../address/manage-address";
@@ -49,7 +49,8 @@ export function NewOrderDialog({product}: {product: ProductType}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [ createdOrder, setCreatedOrder ] = useState<userOrder | null>()
-  const handleBuy = async () => {
+  const handleBuy = async (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setIsLoading(true);
     try {
       toast.promise<userOrder>(
@@ -128,6 +129,7 @@ export function NewOrderDialog({product}: {product: ProductType}) {
             <Label htmlFor="quantity">Quantity</Label>
             <div className="flex items-center border border-gray-300 rounded-lg">
               <Button
+                size={"icon-sm"}
                 onClick={() =>
                   setFormData((prev) => ({
                     ...prev,
@@ -154,6 +156,7 @@ export function NewOrderDialog({product}: {product: ProductType}) {
                 max={product?.stock}
               />
               <Button
+                size={"icon-sm"}
                 onClick={() =>
                   setFormData((prev) => ({
                     ...prev,
