@@ -8,7 +8,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const newOrder = await createReadyMadeOrder(data);
+    const newOrder = await createReadyMadeOrder({
+      dressId: data.dressIs,
+      quantity: Number(data.quantity),
+      notes: data.notes,
+      deliveryMethod: data.deliveryMethod,
+      deliveryAddressId: data.deliveryAddressId,
+    });
     if (!newOrder) {
       return NextResponse.json(
         { error: "Error creating order" },

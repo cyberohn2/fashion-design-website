@@ -1,3 +1,4 @@
+"use client"
 import { CheckCircle2, LoaderCircle, XCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

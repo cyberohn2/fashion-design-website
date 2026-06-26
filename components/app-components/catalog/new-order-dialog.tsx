@@ -98,6 +98,7 @@ export function NewOrderDialog({product}: {product: ProductType}) {
             loading: "Initializing Payment...",
             success: (data) => {
               popup.resumeTransaction(data.access_code);
+              return "Payment initialized"
             },
             error: "Error while initializing payment!"
           }
