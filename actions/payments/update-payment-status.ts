@@ -11,29 +11,52 @@ export async function updatePaymentStatus({ref, status}:{ref: string, status: Pa
   try {
     const data = await prisma.$transaction( async (tx: TransactionClient) => {
         const payment = await tx.payment.update({
-        where: {
-            Provider_Reference: ref,
-            userId: user.id,
-        },
-        data: {
-            status,
-        },
-        include: {
-            order: true
-        }
+            where: {
+                Provider_Reference: ref,
+                userId: user.id,
+            },
+            data: {
+                status,
+            },
+            include: {
+                order: true
+            }
         });
 
         if (status === "PAID") {
-            const order = await tx.orders.update({
+          const order = await tx.orders.update({
+            where: {
+              id: payment.order.id,
+            },
+            data: {
+              status,
+              payment_status: "PAID",
+            },
+            include: {
+              items: {
+                include: {
+                  dress: true,
+                },
+              },
+            },
+          });
+
+          // Update stock for every dress in the order
+          await Promise.all(
+            order.items.map((item) =>
+              tx.dresses.update({
                 where: {
-                    id: payment.order.id,
+                  id: item.dress.id,
                 },
                 data: {
-                    status,
-                    payment_status: "PAID",
+                  stock: {
+                    decrement: item.quantity,
+                  },
                 },
-            });
-            return { payment, order };
+              }),
+            ),
+          );
+          return { payment, order };
         }
 
         return {payment};
