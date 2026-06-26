@@ -26,7 +26,7 @@ const popup = new PaystackPop();
 
 export function NewOrderDialog({product}: {product: ProductType}) {
   const [formData, setFormData] = useState({
-    dressId: "",
+    dressId: product.id,
     quantity: 1,
     notes: "",
     deliveryMethod: "PICKUP",
