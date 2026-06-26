@@ -49,8 +49,10 @@ export function NewOrderDialog({product}: {product: ProductType}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [ createdOrder, setCreatedOrder ] = useState<userOrder | null>()
-  const handleBuy = async (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleBuy = async () => {
+    if (isLoading) {
+      return
+    }
     setIsLoading(true);
     try {
       toast.promise<userOrder>(
@@ -227,7 +229,7 @@ export function NewOrderDialog({product}: {product: ProductType}) {
           <DialogClose disabled={isLoading} asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button disabled={isLoading} type="submit">
+          <Button disabled={isLoading} type="submit" onClick={handleBuy}>
             Place Order
           </Button>
         </DialogFooter>
