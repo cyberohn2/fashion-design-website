@@ -93,7 +93,7 @@ export function NewOrderDialog({product}: {product: ProductType}) {
         },
       ).unwrap();
 
-      popup.resumeTransaction(payment.access_code);
+      router.push(payment.authorization_url);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : String(error));
     } finally {
