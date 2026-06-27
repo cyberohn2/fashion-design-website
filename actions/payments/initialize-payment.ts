@@ -71,7 +71,7 @@ export async function initializePayment(orderId: string) {
   });
 
   return {
-    authorizationUrl: paymentData.authorization_url,
+    authorization_url: paymentData.authorization_url,
     access_code: paymentData.access_code,
   };
 }
