@@ -94,6 +94,7 @@ export function NewOrderDialog({product}: {product: ProductType}) {
       ).unwrap();
 
       router.push(payment.authorization_url);
+      console.log(payment.authorization_url);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : String(error));
     } finally {
