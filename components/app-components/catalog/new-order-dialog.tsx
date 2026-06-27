@@ -88,13 +88,15 @@ export function NewOrderDialog({product}: {product: ProductType}) {
         }),
         {
           loading: "Initializing payment...",
-          success: "Payment initialized!",
+          success: (data) => {
+            console.log(data, data.authorization_url);
+            return "Payment initialized"
+          },
           error: "Error while initializing payment!",
         },
       ).unwrap();
 
       router.push(payment.authorization_url);
-      console.log(payment.authorization_url);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : String(error));
     } finally {
