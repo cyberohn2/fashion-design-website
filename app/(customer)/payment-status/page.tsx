@@ -14,18 +14,21 @@ const page = async ({searchParams}: {searchParams: Promise<{reference?: string;}
     }
     const res = await paystack.get(`/transaction/verify/${paymentData.Provider_Reference}`);
     console.log(paymentData.Provider_Reference, res.data)
-    if (res.data.data.status === "success" && res.data.data.amount === paymentData.amount/100) {
-        const updatePayment = await updatePaymentStatus({
+    if (
+      res.data.data.status === "success" &&
+      res.data.data.amount / 100 === paymentData.amount
+    ) {
+      const updatePayment = await updatePaymentStatus({
         ref: paymentData.Provider_Reference,
         status: "PAID",
-        });
-        return (
-            <main className="py-24 pt-34 md:pt-24 container mx-auto">
-                <div className="w-full max-w-sm md:max-w-4xl mx-auto">
-                    <PaymentStatusCard status={"success"} />
-                </div>
-            </main>
-        ); 
+      });
+      return (
+        <main className="py-24 pt-34 md:pt-24 container mx-auto">
+          <div className="w-full max-w-sm md:max-w-4xl mx-auto">
+            <PaymentStatusCard status={"success"} />
+          </div>
+        </main>
+      );
     }
     if(res.data.data.status === "failed"){
         const updatePayment = await updatePaymentStatus({
