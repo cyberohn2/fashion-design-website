@@ -14,7 +14,7 @@ const page = async ({searchParams}: {searchParams: Promise<{reference?: string;}
     }
     const res = await paystack.get(`/transaction/verify/${paymentData.Provider_Reference}`);
     console.log(paymentData.Provider_Reference, res.data)
-    if (res.data.data.status === "success" && res.data.data.amount === paymentData.amount) {
+    if (res.data.data.status === "success" && res.data.data.amount === paymentData.amount/100) {
         const updatePayment = await updatePaymentStatus({
         ref: paymentData.Provider_Reference,
         status: "PAID",
