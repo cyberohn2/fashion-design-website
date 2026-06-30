@@ -57,7 +57,7 @@ export async function initializePayment(orderId: string) {
   const paymentData = response.data.data;
 
   // Create payment record
-  if (!order.payment) {
+  if (!order.payment || order.order_type === "READY_MADE") {
     await prisma.payment.create({
       data: {
         orderId: order.id,
@@ -66,7 +66,7 @@ export async function initializePayment(orderId: string) {
 
         Provider_Reference: paymentData.reference,
 
-        amount,
+        amount: amount / 100,
 
         status: "PENDING",
 
