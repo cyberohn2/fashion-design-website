@@ -148,7 +148,7 @@ export function RevenueChart({ chartData }: {chartData: Payment[]}) {
               </defs>
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="date"
+                dataKey="paidAt"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
@@ -176,14 +176,14 @@ export function RevenueChart({ chartData }: {chartData: Payment[]}) {
                 }
               />
               <Area
-                dataKey="mobile"
+                dataKey="amount"
                 type="natural"
                 fill="url(#fillAmount)"
                 stroke="var(--color-amount)"
                 stackId="a"
               />
               <Area
-                dataKey="desktop"
+                dataKey="status"
                 type="natural"
                 fill="url(#fillStatus)"
                 stroke="var(--color-status)"

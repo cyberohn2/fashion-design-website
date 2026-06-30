@@ -132,7 +132,6 @@ const CreateOrderForm = () => {
           body: JSON.stringify({data: formDataToSubmit}),
         });
         if (req.ok) { 
-          // move on to payment
           setIsSubmitting(false);
           toast.success("Order Created!")
           router.push("/order-history");
@@ -148,7 +147,6 @@ const CreateOrderForm = () => {
           body: JSON.stringify({data: formData}),
         });
         if (req.ok) {
-          // move on to payment
           setIsSubmitting(false);
           router.push("/catalog");
         } else {

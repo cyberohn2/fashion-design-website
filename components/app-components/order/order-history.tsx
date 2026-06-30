@@ -127,9 +127,11 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
                         See Details
                       </Link>
                     </Button>
-                    {order.payment?.status !== "PAID" && <Button onClick={() => handlePayment(order)}>
-                      Complete Payment
-                    </Button>}
+                    {order.payment?.some((pay) => pay.status !== "PAID") && (
+                      <Button onClick={() => handlePayment(order)}>
+                        Complete Payment
+                      </Button>
+                    )}
                   </div>
                 </Card>
               ))

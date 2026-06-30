@@ -11,14 +11,13 @@ export async function confirmCustomOrderPayment(orderId: string) {
     where: {
       id: orderId,
     },
+    include: {
+      payment: true
+    }
   });
 
   if (!order) {
     throw new Error("Order not found");
-  }
-
-  if (order.order_type === "READY_MADE") {
-    throw new Error("Ready-made payments are automatic");
   }
 
   await prisma.$transaction([
@@ -29,8 +28,18 @@ export async function confirmCustomOrderPayment(orderId: string) {
 
       data: {
         payment_status: "PAID",
-
         status: "PAID",
+        payment: {
+          update: {
+            where:{
+              id: order.payment[0].id
+            },
+            data: {
+              status: "PAID"
+            }
+          }
+        }
+
       },
     }),
 

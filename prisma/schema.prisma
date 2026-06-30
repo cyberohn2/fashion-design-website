@@ -156,7 +156,7 @@ model   Orders {
   user        User @relation(fields: [userId], references: [id])
   delivery_address User_Addresses @relation(fields: [delivery_address_id], references: [id])
   total       Float
-  payment Payment?
+  payment Payment[]
   items        Order_Items[]
   custom_order Custom_Order?
   statusHistory OrderStatusHistory[]
@@ -263,7 +263,7 @@ model Payment {
   updatedAt   DateTime @updatedAt
   userId      String   @db.Uuid
   paidAt      DateTime
-  orderId     String  @unique
+  orderId     String
   Provider    String  @default("PAYSTACK")
   Provider_Reference String @unique
   amount      Float

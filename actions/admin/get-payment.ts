@@ -9,9 +9,6 @@ export async function getPayments({ pagination }: { pagination: { page: number }
   try {
     const payment = await prisma.$transaction( async (tx: TransactionClient) =>{
         const fetchedPayment = await tx.payment.findMany({
-            where: {
-                status: "PAID",
-            },
             include: {
                 order: true
             },

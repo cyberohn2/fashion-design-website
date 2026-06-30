@@ -10,7 +10,7 @@ export async function initializePayment(orderId: string) {
   const user = await requireAuth();
 
   // Find order
-  const order = await prisma.orders.findFirst({
+  const order = await prisma.orders.findUnique({
     where: {
       id: orderId,
       userId: user.id,
@@ -27,8 +27,8 @@ export async function initializePayment(orderId: string) {
   }
 
   // Prevent duplicate payments
-  if (order.payment?.status === "PAID") {
-    throw new Error("Order already paid");
+  if (order.payment?.some( pay => pay.status === "PAID")) {
+    throw new Error("Order already paid!");
   }
 
   const amount =
@@ -57,23 +57,21 @@ export async function initializePayment(orderId: string) {
   const paymentData = response.data.data;
 
   // Create payment record
-  if (!order.payment || order.order_type === "READY_MADE") {
-    await prisma.payment.create({
-      data: {
-        orderId: order.id,
-        userId: user.id,
-        Provider: "PAYSTACK",
+  await prisma.payment.create({
+    data: {
+      orderId: order.id,
+      userId: user.id,
+      Provider: "PAYSTACK",
 
-        Provider_Reference: paymentData.reference,
+      Provider_Reference: paymentData.reference,
 
-        amount: amount / 100,
+      amount: amount / 100,
 
-        status: "PENDING",
+      status: "PENDING",
 
-        paidAt: new Date(),
-      },
-    });
-  }
+      paidAt: new Date(),
+    },
+  });
 
   return {
     authorization_url: paymentData.authorization_url,

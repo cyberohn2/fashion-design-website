@@ -158,7 +158,7 @@ export interface Order {
   total: number;
   items: OrderItem[] | null;
   custom_order: CustomOrder | null;
-  payment: Payment | null;
+  payment: Payment[] | null;
   statusHistory: OrderStatusHistoryItem[];
   user: {
     id: string;
@@ -237,7 +237,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   };
 
   const handleMarkAsPaid = async() => {
-    if (order?.payment?.status === "PAID"){
+    if (order?.payment?.some( pay => pay.status === "PAID")){
         setShowPaymentDialog(false);
         return
     }
@@ -531,34 +531,33 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             <CardTitle>Payment Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <p className="text-sm text-gray-600">Provider</p>
-              <p className="font-medium">{order?.payment.Provider}</p>
-            </div>
-            <Separator />
-            <div>
-              <p className="text-sm text-gray-600">Amount</p>
-              <p className="text-lg font-medium">
-                ₦{order?.payment.amount.toFixed(2)}
-              </p>
-            </div>
-            <Separator />
-            <div>
-              <p className="text-sm text-gray-600">Reference</p>
-              <p className="text-sm font-mono">
-                {order?.payment.Provider_Reference}
-              </p>
-            </div>
-            <Separator />
-            <div>
-              <p className="text-sm text-gray-600">Payment Date</p>
-              <p className="font-medium">
-                {format(
-                  new Date(order?.payment.paidAt),
-                  "MMM dd, yyyy hh:mm a",
-                )}
-              </p>
-            </div>
+            {order.payment.map((pay) => (
+              <div key={pay.id} className="flex items-start justify-between">
+                <div>
+                  <p className="text-lg font-medium">
+                    ₦{pay.amount.toFixed(2)}
+                  </p>
+                  <div className="flex gap-2">
+                    <p>Ref:{pay.Provider_Reference}</p>
+                    <Badge>{pay.status}</Badge>
+                  </div>
+                </div>
+                <div>
+                  <p>
+                    Initiated on:{" "}
+                    <span className="font-semibold">
+                      {format(new Date(pay.createdAt), "MMM dd, yyyy hh:mm a")}
+                    </span>
+                  </p>
+                  <p>
+                    Paid on:{" "}
+                    <span className="font-semibold">
+                      {format(new Date(pay.paidAt), "MMM dd, yyyy hh:mm a")}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            ))}
           </CardContent>
         </Card>
       )}

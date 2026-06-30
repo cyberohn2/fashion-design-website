@@ -190,7 +190,7 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    ₦{order.total || order.payment?.amount || 0}
+                    ₦{order.total || 0}
                   </TableCell>
                   <TableCell className="text-right">
                     <Button>

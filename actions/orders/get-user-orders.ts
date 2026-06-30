@@ -20,6 +20,7 @@ export async function getUserOrders() {
           },
         },
         payment: true,
+        statusHistory: true
       },
 
       orderBy: {
