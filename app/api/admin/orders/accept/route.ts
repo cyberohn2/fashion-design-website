@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
     const { orderId, status, adminAmount } = await req.json();
     if (!orderId || !status) {
+      console.log("error here")
         return NextResponse.json(
           { error: "order id and status required" },
           { status: 400 },
