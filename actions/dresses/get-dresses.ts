@@ -29,6 +29,8 @@ export async function getDresses({
                contains: query?.searchTerm,
                mode: "insensitive",
              },
+           },
+           {
              category: query?.category,
            },
          ],

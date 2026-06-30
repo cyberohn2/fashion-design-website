@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/input-group";
 import { SubmitEvent, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts/AuthContext";
 import UserMenu from "./UserMenu";
 
@@ -18,6 +18,7 @@ import UserMenu from "./UserMenu";
 const Header = () => {
   const { userState } = useAuthContext();
   const router = useRouter()
+  const pathname = usePathname()
   const [searchVisible, setSearchVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("")
@@ -28,7 +29,12 @@ const Header = () => {
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if(searchTerm !== "") router.push(`/catalog?searchTerm=${searchTerm}`);
+    if(searchTerm !== "") {
+      pathname === "/catalog"
+        ? router.push(`/catalog?searchTerm=${searchTerm}`)
+        : ( typeof window !== undefined && window.location.assign(`/catalog?searchTerm=${searchTerm}`)); //for full page reload
+
+    };
   }
 
   return (
