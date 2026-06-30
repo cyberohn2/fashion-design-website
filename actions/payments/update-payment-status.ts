@@ -5,7 +5,7 @@ import { PaymentStatus } from "@/components/admin-components/order/order-details
 import { requireAuth } from "@/lib/auth/require-auth";
 import prisma from "@/lib/prisma";
 
-export async function updatePaymentStatus({ref, status}:{ref: string, status: PaymentStatus}) {
+export async function updatePaymentStatus({ref, status, paidAt}:{ref: string, status: PaymentStatus, paidAt?: string}) {
   const user = await requireAuth();
 
   try {
@@ -17,6 +17,7 @@ export async function updatePaymentStatus({ref, status}:{ref: string, status: Pa
             },
             data: {
                 status,
+                paidAt: new Date(paidAt as string)
             },
             include: {
                 order: true

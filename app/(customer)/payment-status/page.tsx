@@ -21,6 +21,7 @@ const page = async ({searchParams}: {searchParams: Promise<{reference?: string;}
       const updatePayment = await updatePaymentStatus({
         ref: paymentData.Provider_Reference,
         status: "PAID",
+        paidAt: res.data.data.paid_at,
       });
       return (
         <main className="py-24 pt-34 md:pt-24 container mx-auto">
