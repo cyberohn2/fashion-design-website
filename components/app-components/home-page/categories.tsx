@@ -11,31 +11,38 @@ import { CategoryCard } from "./category-card";
 
 const Categories = () => {
     const sampleCategories = [
-        {
-            title: "Female Native",
-            description: "Explore our latest collection of women's clothing and accessories.",
-            imageUrl: "/three-men.webp"
-        },
-        {
-            title: "Male Native",
-            description: "Discover the newest trends in men's fashion.",
-            imageUrl: "/three-men.webp"
-        },
-        {
-            title: "Corporate Male",
-            description: "Find the perfect corporate attire for men.",
-            imageUrl: "/three-men.webp"
-        },
-        {
-            title: "Corporate Female",
-            description: "Find the perfect corporate attire for women.",
-            imageUrl: "/three-men.webp"
-        },
-        {
-            title: "Street Wears",
-            description: "Explore our latest collection of streetwear clothing and accessories.",
-            imageUrl: "/three-men.webp"
-        }
+      {
+        title: "Female Native",
+        category: "FEMALE_NATIVE",
+        description:
+          "Explore our latest collection of women's clothing and accessories.",
+        imageUrl: "/three-men.webp",
+      },
+      {
+        title: "Male Native",
+        category: "MALE_NATIVE",
+        description: "Discover the newest trends in men's fashion.",
+        imageUrl: "/three-men.webp",
+      },
+      {
+        title: "Corporate Male",
+        category: "CORPORATE_MALE",
+        description: "Find the perfect corporate attire for men.",
+        imageUrl: "/three-men.webp",
+      },
+      {
+        title: "Corporate Female",
+        category: "CORPORATE_FEMALE",
+        description: "Find the perfect corporate attire for women.",
+        imageUrl: "/three-men.webp",
+      },
+      {
+        title: "Street Wears",
+        category: "STREET_WEAR",
+        description:
+          "Explore our latest collection of streetwear clothing and accessories.",
+        imageUrl: "/three-men.webp",
+      },
     ];
 
   return (
@@ -61,6 +68,7 @@ const Categories = () => {
                     title={category.title}
                     description={category.description}
                     imageUrl={category.imageUrl}
+                    category={category.category}
                   />
                 </CarouselItem>
               </motion.div>
