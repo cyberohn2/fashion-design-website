@@ -26,7 +26,7 @@ export async function initializePayment(orderId: string) {
   }
 
   // Prevent duplicate payments
-  if (order.payment_status === "PAID") {
+  if (order.payment?.status === "PAID") {
     throw new Error("Order already paid");
   }
 
