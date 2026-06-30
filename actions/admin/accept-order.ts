@@ -61,21 +61,26 @@ export async function acceptOrder(data: UpdateOrderStatusData) {
     ]);
 
     if (data.adminAmount > 0) {
-      const payment = await initializePayment(order.id);
-      const html = await render(
-        createElement(OrderAcceptedEmail, {
-          customerName: order.user.full_name,
-          orderNumber: order.order_number,
-          paymentUrl: payment && payment.authorization_url,
-          price: payment && data.adminAmount,
-        }),
-      );
+      try {
+        const payment = await initializePayment(order.id);
+        const html = await render(
+          createElement(OrderAcceptedEmail, {
+            customerName: order.user.full_name,
+            orderNumber: order.order_number,
+            paymentUrl: payment && payment.authorization_url,
+            price: payment && data.adminAmount,
+          }),
+        );
 
-      await sendEmail({
-        to: order.user.email,
-        subject: "Order Accepted!",
-        html,
-      });
+        await sendEmail({
+          to: order.user.email,
+          subject: "Order Accepted!",
+          html,
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(message);
+      }
     }
     return {
       success: true,
