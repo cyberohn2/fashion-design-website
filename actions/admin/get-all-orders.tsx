@@ -12,6 +12,7 @@ export async function getAllOrders({pagination}: {pagination:{page: number }}) {
         const AllOrders = await tx.orders.findMany({
             include: {
                 payment: true,
+                statusHistory: true
             },
 
             take: 20,
