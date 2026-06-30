@@ -18,6 +18,7 @@ export async function initializePayment(orderId: string) {
 
     include: {
       payment: true,
+      custom_order: true
     },
   });
 
@@ -30,11 +31,18 @@ export async function initializePayment(orderId: string) {
     throw new Error("Order already paid");
   }
 
+  const amount =
+    Number(order.total) > 0
+      ? Number(order.total) * 100
+      : Number(order.custom_order?.admin_final_price) > 0
+        ? Number(order.custom_order?.admin_final_price) * 100
+        : Number(order.custom_order?.customer_budget) * 100 
+
   // Initialize Paystack payment
   const response = await paystack.post("/transaction/initialize", {
     email: user.email,
     
-    amount: Number(order.total) * 100,
+    amount,
 
     currency: "NGN",
 

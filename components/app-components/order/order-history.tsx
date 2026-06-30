@@ -35,6 +35,7 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
   const ongoingOrders = orders?.filter((order) =>
     [
       "ACCEPTED",
+      "AWAITING_PAYMENT",
       "COMPLETED",
       "DELIVERED",
       "SHIPPED",

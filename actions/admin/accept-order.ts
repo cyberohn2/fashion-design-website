@@ -79,7 +79,7 @@ export async function acceptOrder(data: UpdateOrderStatusData) {
         });
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        throw new Error(message);
+        console.log(message)
       }
     }
     return {
