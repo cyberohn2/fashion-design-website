@@ -393,7 +393,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 {order?.custom_order?.admin_final_price === undefined ||
                 order?.custom_order?.admin_final_price === null
                   ? order?.total?.toFixed(2)
-                  : order?.custom_order?.admin_final_price.toFixed(2)}
+                  : Number(order?.custom_order?.admin_final_price).toFixed(2)}
               </p>
             </div>
             {order?.estimated_delivery && (
