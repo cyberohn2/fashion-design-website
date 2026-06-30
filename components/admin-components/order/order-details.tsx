@@ -676,24 +676,24 @@ export function OrderDetails({ order }: OrderDetailsProps) {
           <DialogHeader>
             <DialogTitle>Accept order?</DialogTitle>
             <DialogDescription>
-              Accept order {order?.order_number} with customer budget (₦
-              {Number(order?.custom_order?.customer_budget)}) or counter with
-              your own price.
+              <p>
+                Accept order {order?.order_number} with customer budget (₦
+                {Number(order?.custom_order?.customer_budget)}) or counter with
+                your own price.
+              </p>
+              <Field>
+                <Label htmlFor="admin_final_price">Your Price</Label>
+                <Input
+                  id="admin_final_price"
+                  name="admin_final_price"
+                  value={adminPrice}
+                  onChange={(e) => setAdminPrice(Number(e.target.value))}
+                  placeholder="0"
+                  className="mt-2"
+                />
+              </Field>
             </DialogDescription>
           </DialogHeader>
-          <DialogContent>
-            <Field>
-              <Label htmlFor="admin_final_price">Your Price</Label>
-              <Input
-                id="admin_final_price"
-                name="admin_final_price"
-                value={adminPrice}
-                onChange={(e) => setAdminPrice(Number(e.target.value))}
-                placeholder="0"
-                className="mt-2"
-              />
-            </Field>
-          </DialogContent>
           <DialogFooter>
             <Button
               disabled={updating}
