@@ -4,10 +4,9 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   const { orderId } = await request.json();
   if (!orderId) {
-    console.log("Error here")
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
-
+console.log(orderId)
   try {
     const newPayment = await initializePayment(orderId);
     if (!newPayment) {

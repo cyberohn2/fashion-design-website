@@ -120,14 +120,16 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
                       <p>On: {order.createdAt.getDate()}</p>
                     </div>
                   </div>
-                  <Button>
-                    <Link href={`/order-history/${order.order_number}`}>
-                      See Details
-                    </Link>
-                  </Button>
-                  {order.payment?.status !== "PAID" && <Button onClick={() => handlePayment(order)}>
-                    Complete Payment
-                  </Button>}
+                  <div className="flex items-center gap-2">
+                    <Button variant={"outline"}>
+                      <Link href={`/order-history/${order.order_number}`}>
+                        See Details
+                      </Link>
+                    </Button>
+                    {order.payment?.status !== "PAID" && <Button onClick={() => handlePayment(order)}>
+                      Complete Payment
+                    </Button>}
+                  </div>
                 </Card>
               ))
             ) : (
