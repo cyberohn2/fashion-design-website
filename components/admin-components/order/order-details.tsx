@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
+import { ArrowLeft } from "lucide-react";
 
 export type OrderStatus =
   | "PENDING_REVIEW"
@@ -293,6 +294,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   return (
     <div className="w-full space-y-6">
       {/* Header Section */}
+      <Button size={"icon"} onClick={() => router.back()}>
+        <ArrowLeft />
+      </Button>
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between">
