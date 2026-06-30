@@ -57,21 +57,23 @@ export async function initializePayment(orderId: string) {
   const paymentData = response.data.data;
 
   // Create payment record
-  await prisma.payment.create({
-    data: {
-      orderId: order.id,
-      userId: user.id,
-      Provider: "PAYSTACK",
+  if (!order.payment) {
+    await prisma.payment.create({
+      data: {
+        orderId: order.id,
+        userId: user.id,
+        Provider: "PAYSTACK",
 
-      Provider_Reference: paymentData.reference,
+        Provider_Reference: paymentData.reference,
 
-      amount: order.total,
+        amount,
 
-      status: "PENDING",
+        status: "PENDING",
 
-      paidAt: new Date(),
-    },
-  });
+        paidAt: new Date(),
+      },
+    });
+  }
 
   return {
     authorization_url: paymentData.authorization_url,
