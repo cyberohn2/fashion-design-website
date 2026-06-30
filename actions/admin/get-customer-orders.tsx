@@ -15,6 +15,7 @@ export async function getCustomerOrders({pagination, userId}: {pagination:{page:
             },
             include: {
                 payment: true,
+                statusHistory: true,
                 user: true
             },
 
