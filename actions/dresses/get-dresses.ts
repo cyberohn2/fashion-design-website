@@ -21,12 +21,12 @@ export async function getDresses({
 }) {
   try {
     const dresses = await prisma.$transaction( async (tx: TransactionClient) =>{
-     const AllProducts = await prisma.dresses.findMany({
+     const AllProducts = await tx.dresses.findMany({
        where: {
          OR: [
            {
              title: {
-               contains: query?.searchTerm || "",
+               contains: query?.searchTerm,
                mode: "insensitive",
              },
              category: query?.category,
@@ -43,12 +43,12 @@ export async function getDresses({
        },
      });
 
-     const totalProducts = await prisma.dresses.count({
+     const totalProducts = await tx.dresses.count({
        where: {
          OR: [
            {
              title: {
-               contains: query?.searchTerm || "",
+               contains: query?.searchTerm ,
                mode: "insensitive",
              },
              category: query?.category,
