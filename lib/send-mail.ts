@@ -9,7 +9,7 @@ type SendEmailProps = {
 
 export async function sendEmail({ to, subject, html, text }: SendEmailProps) {
   return transporter.sendMail({
-    from: `"My Store" <${process.env.EMAIL_USER}>`,
+    from: `"George Wears" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,
