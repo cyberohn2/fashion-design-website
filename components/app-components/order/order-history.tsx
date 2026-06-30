@@ -16,6 +16,7 @@ import { userOrder } from "@/app/(customer)/order-history/page";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 
 const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
   const orderStatusColors = {
@@ -118,7 +119,22 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
                       <Badge className={orderStatusColors[order.status]}>
                         {order.status}
                       </Badge>
-                      <p>On: {order.createdAt.getDate()}</p>
+                      {order.payment?.some((pay) => pay.status === "PAID") ? (
+                        <Badge >
+                          PAID
+                        </Badge>
+                      ) : (
+                        <Badge >
+                          UNPAID
+                        </Badge>
+                      )}
+                      <p>
+                        On:{" "}
+                        {format(
+                          new Date(order.createdAt) as Date,
+                          "MMM dd, yyyy",
+                        )}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -127,7 +143,8 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
                         See Details
                       </Link>
                     </Button>
-                    {(order.payment?.every((pay) => pay.status !== "PAID") || !order.payment) && (
+                    {(order.payment?.every((pay) => pay.status !== "PAID") ||
+                      !order.payment) && (
                       <Button onClick={() => handlePayment(order)}>
                         Complete Payment
                       </Button>
