@@ -25,11 +25,6 @@ export async function initializePayment(orderId: string) {
     throw new Error("Order not found");
   }
 
-  // Only ready-made orders can pay online
-  if (order.order_type !== "READY_MADE") {
-    throw new Error("Online payment unavailable for this order");
-  }
-
   // Prevent duplicate payments
   if (order.payment_status === "PAID") {
     throw new Error("Order already paid");
