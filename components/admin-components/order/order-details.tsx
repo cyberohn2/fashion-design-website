@@ -324,7 +324,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 {order?.status === "PENDING_REVIEW" ? (
                   <Button
                     disabled={updating}
-                    onClick={() => handleStatusUpdate("ACCEPTED")}
+                    onClick={() => setShowAcceptOrderDialog(true)}
                     className="bg-green-500"
                   >
                     Accept Order
