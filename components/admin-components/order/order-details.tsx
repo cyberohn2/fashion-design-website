@@ -388,7 +388,13 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             <Separator />
             <div>
               <p className="text-sm text-gray-600">Total Amount</p>
-              <p className="text-2xl font-bold">₦{order?.custom_order?.admin_final_price !== undefined ? order?.custom_order?.admin_final_price?.toFixed(2) : order?.total?.toFixed(2)}</p>
+              <p className="text-2xl font-bold">
+                ₦
+                {order?.custom_order?.admin_final_price === undefined ||
+                order?.custom_order?.admin_final_price === null
+                  ? order?.total?.toFixed(2)
+                  : order?.custom_order?.admin_final_price.toFixed(2)}
+              </p>
             </div>
             {order?.estimated_delivery && (
               <>
