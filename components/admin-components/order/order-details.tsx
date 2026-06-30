@@ -30,6 +30,9 @@ import { format } from "date-fns";
 import { Decimal } from "@prisma/client/runtime/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Field } from "@/components/ui/field";
 
 export type OrderStatus =
   | "PENDING_REVIEW"
@@ -202,8 +205,9 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   );
   const router = useRouter()
   const [showStatusDialog, setShowStatusDialog] = useState(false);
-  const [updating, setUpdating] = useState(false)
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [showAcceptOrderDialog, setShowAcceptOrderDialog] = useState(false);
+  const [updating, setUpdating] = useState(false)
 
   const handleStatusUpdate = async (status?: string) => {
     if (selectedStatus === status) {
@@ -259,6 +263,33 @@ export function OrderDetails({ order }: OrderDetailsProps) {
     }
   };
 
+  const [adminPrice, setAdminPrice ] = useState(0)
+  const handleAcceptOrder = async () => {
+    setUpdating(true);
+    const req = await fetch("/api/admin/orders/accept", {
+      method: "POST",
+      body: JSON.stringify({
+        orderId: order?.id,
+        status: "ACCEPTED",
+        adminAmount: adminPrice,
+      }),
+    });
+    if (req.ok) {
+      setUpdating(false);
+      toast.success("Success!", {
+        position: "top-right",
+      });
+      setShowStatusDialog(false);
+      router.refresh();
+    } else {
+      setUpdating(false);
+      toast.error("Error updating order.", {
+        position: "top-right",
+      });
+      setShowStatusDialog(false);
+}
+  }
+
   return (
     <div className="w-full space-y-6">
       {/* Header Section */}
@@ -306,12 +337,22 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                     Update Order Status
                   </Button>
                 )}
-                {order?.payment_status !== "PAID" && (
+                {order?.payment_status !== "PAID" &&
+                order?.order_type !== "READY_MADE" &&
+                order?.status === "ACCEPTED" ? (
                   <Button
                     onClick={() => setShowPaymentDialog(true)}
                     variant="outline"
                   >
                     Mark as Paid
+                  </Button>
+                ) : (
+                  <Button
+                    disabled={updating}
+                    onClick={() => handleStatusUpdate("REJECTED")}
+                    className="bg-red-500"
+                  >
+                    Reject Order
                   </Button>
                 )}
               </div>
@@ -465,7 +506,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <div>
                 <p className="text-sm text-gray-600">Admin Final Price</p>
                 <p className="font-medium">
-                  ${Number(order?.custom_order?.admin_final_price).toFixed(2)}
+                  ₦{Number(order?.custom_order?.admin_final_price).toFixed(2)}
                 </p>
               </div>
             )}
@@ -488,7 +529,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             <div>
               <p className="text-sm text-gray-600">Amount</p>
               <p className="text-lg font-medium">
-                ${order?.payment.amount.toFixed(2)}
+                ₦{order?.payment.amount.toFixed(2)}
               </p>
             </div>
             <Separator />
@@ -621,6 +662,48 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             </Button>
             <Button disabled={updating} onClick={handleMarkAsPaid}>
               Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Accept order Dialog */}
+      <Dialog
+        open={showAcceptOrderDialog}
+        onOpenChange={setShowAcceptOrderDialog}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Accept order?</DialogTitle>
+            <DialogDescription>
+              Accept order {order?.order_number} with customer budget (₦
+              {Number(order?.custom_order?.customer_budget)}) or counter with
+              your own price.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogContent>
+            <Field>
+              <Label htmlFor="admin_final_price">Your Price</Label>
+              <Input
+                id="admin_final_price"
+                name="admin_final_price"
+                value={adminPrice}
+                onChange={(e) => setAdminPrice(Number(e.target.value))}
+                placeholder="0"
+                className="mt-2"
+              />
+            </Field>
+          </DialogContent>
+          <DialogFooter>
+            <Button
+              disabled={updating}
+              variant="outline"
+              onClick={() => setShowAcceptOrderDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button disabled={updating} onClick={handleAcceptOrder}>
+              Accept
             </Button>
           </DialogFooter>
         </DialogContent>

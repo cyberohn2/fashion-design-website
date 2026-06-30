@@ -13,7 +13,7 @@ export async function getOverview() {
     try {
         const dashboardOverview = await prisma.$transaction(async (tx: TransactionClient) => {
             // 1. Total revenue
-            const totalRevenue = await tx.payment.count({
+            const payments = await tx.payment.findMany({
               where: {
                 status: "PAID",
                 createdAt: {
@@ -21,6 +21,8 @@ export async function getOverview() {
                 },
               },
             });
+            let totalRevenue = 0;
+            payments.forEach( pay => totalRevenue+= pay.amount)
             
             // 2. total orders
             const totalOrder = await tx.orders.count({

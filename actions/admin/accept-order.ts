@@ -5,24 +5,16 @@ import { render } from "@react-email/render";
 import { createElement } from "react";
 import { sendEmail } from "@/lib/send-mail";
 import { requireAdmin } from "@/lib/auth/require-admin";
-import OrderCompletedEmail from "@/lib/email-templates/order-completed";
-import OrderRejectedEmail from "@/lib/email-templates/order-rejected";
+import OrderAcceptedEmail from "@/lib/email-templates/order-accepted";
+import { initializePayment } from "../payments/initialize-payment";
 
 type UpdateOrderStatusData = {
   orderId: string;
-
-  status:
-    | "IN_PRODUCTION"
-    | "READY_FOR_DELIVERY"
-    | "DELIVERED"
-    | "SHIPPED"
-    | "COMPLETED"
-    | "REJECTED"
-    | "ACCEPTED"
-    | "CANCELLED";
+  status: "ACCEPTED";
+  adminAmount: number;
 };
 
-export async function updateOrderStatus(data: UpdateOrderStatusData) {
+export async function acceptOrder(data: UpdateOrderStatusData) {
   const admin = await requireAdmin();
   try {
     const order = await prisma.orders.findUnique({
@@ -46,6 +38,12 @@ export async function updateOrderStatus(data: UpdateOrderStatusData) {
 
         data: {
           status: data.status,
+          custom_order: {
+            update: {
+                admin_final_price: data.adminAmount
+                // create a route for this server fn that will also send email to the customer
+            }
+          }
         },
       }),
 
@@ -62,36 +60,24 @@ export async function updateOrderStatus(data: UpdateOrderStatusData) {
       }),
     ]);
 
-    if (data.status === "COMPLETED") {
-      const html = await render(
-        createElement(OrderCompletedEmail, {
-          customerName: order.user.full_name,
-          orderNumber: order.order_number,
-          delivery: order.delivery_method === "LOCAL_DELIVERY"
-        }),
-      );
-
-      await sendEmail({
-        to: order.user.email,
-        subject: "Order Accepted!",
-        html,
-      });
+    let payment;
+    if (data.adminAmount > 0) {
+      payment = await initializePayment(order.id)
     }
 
-    if (data.status === "REJECTED") {
-      const html = await render(
-        createElement(OrderRejectedEmail, {
-          customerName: order.user.full_name,
-          orderNumber: order.order_number,
-        }),
-      );
+    const html = await render(
+      createElement(OrderAcceptedEmail, {
+        customerName: order.user.full_name,
+        orderNumber: order.order_number,
+        paymentUrl: payment && payment.authorization_url
+      }),
+    );
 
-      await sendEmail({
-        to: order.user.email,
-        subject: "Order Accepted!",
-        html,
-      });
-    }
+    await sendEmail({
+      to: order.user.email,
+      subject: "Order Accepted!",
+      html,
+    });
 
     return {
       success: true,
