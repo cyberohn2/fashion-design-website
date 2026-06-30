@@ -26,6 +26,7 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { uploadImage } from "@/lib/supabase/upload-image";
 import { measurement } from "../measurement/manage-measurements";
+import { toast } from "sonner";
 
 const CreateOrderForm = () => {
   const [formData, setFormData] = useState<(CreateFullCustomOrderData & {selectedDressId?: string, materialChoice?: string, customMaterialNotes?: string})>({
@@ -133,9 +134,11 @@ const CreateOrderForm = () => {
         if (req.ok) { 
           // move on to payment
           setIsSubmitting(false);
-          router.push("/catalog");
+          toast.success("Order Created!")
+          router.push("/order-history");
         } else {
           const errorData = await req.json();
+          toast.error("Error while creating order!")
           setFormError(errorData.error || "Failed to create order");
           setIsSubmitting(false);
         }

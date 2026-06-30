@@ -1,10 +1,13 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-
+import { render } from "@react-email/render";
+import { createElement } from "react";
+import { sendEmail } from "@/lib/send-mail";
 import { requireAuth } from "@/lib/auth/require-auth";
 
 import { generateOrderNumber } from "@/lib/orders/generate-order-number";
+import OrderCreatedEmail from "@/lib/email-templates/order-created";
 
 type CreateSemiCustomOrderData = {
   selectedDressId: string;
@@ -114,6 +117,19 @@ export async function createSemiCustomOrder(data: CreateSemiCustomOrderData) {
       custom_order: true,
     },
   });
+
+    const html = await render(
+      createElement(OrderCreatedEmail, {
+        customerName: user.full_name,
+        orderNumber: order.order_number,
+      }),
+    );
+
+    await sendEmail({
+      to: user.email,
+      subject: "We've received your order",
+      html,
+    });
 
   return order;
 }
