@@ -15,12 +15,14 @@ type OrderAcceptedEmailProps = {
   customerName: string;
   orderNumber: string;
   paymentUrl?: string;
+  price?: number;
 };
 
 export default function OrderAcceptedEmail({
   customerName,
   orderNumber,
   paymentUrl,
+  price
 }: OrderAcceptedEmailProps) {
   return (
     <Html>
@@ -88,6 +90,7 @@ export default function OrderAcceptedEmail({
               <>
                 <Text>
                   To begin processing your order, please complete your payment
+                  of ₦{price}
                   using the button below.
                 </Text>
 

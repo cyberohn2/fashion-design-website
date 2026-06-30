@@ -1,10 +1,13 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-
+import { render } from "@react-email/render";
+import { createElement } from "react";
+import { sendEmail } from "@/lib/send-mail";
 import { requireAuth } from "@/lib/auth/require-auth";
 
 import { generateOrderNumber } from "@/lib/orders/generate-order-number";
+import ReadyMadeEmail from "@/lib/email-templates/ready-made";
 
 type CreateReadyMadeOrderData = {
   dressId: string;
@@ -104,6 +107,19 @@ export async function createReadyMadeOrder(data: CreateReadyMadeOrderData) {
       items: true,
     },
   });
+
+      const html = await render(
+        createElement(ReadyMadeEmail, {
+          customerName: user.full_name,
+          orderNumber: order.order_number,
+        }),
+      );
+
+      await sendEmail({
+        to: user.email,
+        subject: "We've received your order",
+        html,
+      });
 
   return order;
 }

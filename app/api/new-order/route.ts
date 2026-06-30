@@ -23,6 +23,7 @@ export async function POST(request: Request) {
         { status: 404 },
       );
     }
+    
     return NextResponse.json(newOrder, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

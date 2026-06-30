@@ -11,8 +11,10 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { SearchSlash } from "lucide-react";
-import { Order } from "@/components/admin-components/order/order-details";
 import { userOrder } from "@/app/(customer)/order-history/page";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
   const orderStatusColors = {
@@ -49,6 +51,34 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
     ["REJECTED", "CANCELLED"].includes(order.status),
   );
 
+  const router = useRouter()
+  const handlePayment = async (order: userOrder) => {
+    const payment = await toast
+      .promise(
+        fetch("/api/payment/initialize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderId: order.id,
+          }),
+        }).then(async (res) => {
+          if (!res.ok) throw new Error("Failed to initialise payment");
+          return res.json();
+        }),
+        {
+          loading: "Initializing payment...",
+          success: (data) => {
+            router.push(data.authorization_url);
+            return "Payment initialized";
+          },
+          error: "Error while initializing payment!",
+        },
+      )
+      .unwrap();
+  }
+
   return (
     <section className="px-4 py-6 container mx-auto min-h-screen">
       <div className="mb-4">
@@ -73,8 +103,7 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
                 >
                   <div className="flex">
                     <Image
-                      src={
-                        (order.custom_order?.idea_image_url as string)}
+                      src={order.custom_order?.idea_image_url as string}
                       alt="order-image"
                       width={100}
                       height={100}
@@ -90,9 +119,14 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
                       <p>On: {order.createdAt.getDate()}</p>
                     </div>
                   </div>
-                  <Link href={`/order-history/${order.order_number}`}>
-                    See Details
-                  </Link>
+                  <Button>
+                    <Link href={`/order-history/${order.order_number}`}>
+                      See Details
+                    </Link>
+                  </Button>
+                  {order.payment?.status !== "PAID" && <Button onClick={() => handlePayment(order)}>
+                    Complete Payment
+                  </Button>}
                 </Card>
               ))
             ) : (

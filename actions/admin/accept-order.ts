@@ -60,25 +60,23 @@ export async function acceptOrder(data: UpdateOrderStatusData) {
       }),
     ]);
 
-    let payment;
     if (data.adminAmount > 0) {
-      payment = await initializePayment(order.id)
+      const payment = await initializePayment(order.id);
+      const html = await render(
+        createElement(OrderAcceptedEmail, {
+          customerName: order.user.full_name,
+          orderNumber: order.order_number,
+          paymentUrl: payment && payment.authorization_url,
+          price: payment && data.adminAmount,
+        }),
+      );
+
+      await sendEmail({
+        to: order.user.email,
+        subject: "Order Accepted!",
+        html,
+      });
     }
-
-    const html = await render(
-      createElement(OrderAcceptedEmail, {
-        customerName: order.user.full_name,
-        orderNumber: order.order_number,
-        paymentUrl: payment && payment.authorization_url
-      }),
-    );
-
-    await sendEmail({
-      to: order.user.email,
-      subject: "Order Accepted!",
-      html,
-    });
-
     return {
       success: true,
     };
