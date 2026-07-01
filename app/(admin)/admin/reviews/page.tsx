@@ -7,7 +7,7 @@ const page = async () => {
   return (
     <main className="@container/main flex flex-1 flex-col gap-2 px-6">
       <div className="flex flex-col gap-4 py-18 md:gap-6 md:py-6">
-        <ReviewList Reviews={reviews?.reviews} totalReview={reviews?.totalReview as number} page={1} />
+        <ReviewList Reviews={reviews?.reviews} totalReview={reviews?.totalReview || 1} page={reviews?.page || 1} />
       </div>
     </main>
   )

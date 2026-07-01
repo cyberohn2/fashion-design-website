@@ -3,7 +3,7 @@ import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 export function Services() {
   return (
     <section id="services" className="py-14 md:pt-24 border-t">
-      <div className="mx-auto container">
+      <div className="mx-auto container px-4">
         <h2 className="lg:text-5xl md:text-4xl text-2xl lg:leading-18 md:leading-10 font-bold mb-10">
           What we offer
         </h2>

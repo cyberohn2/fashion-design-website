@@ -12,7 +12,6 @@ const page = async ({
     pagination: { page: 1 },
     userId: param.id,
   });
-  console.log(orders)
 
   return (
       <main className="@container/main flex flex-1 flex-col gap-2 px-6">
@@ -22,7 +21,7 @@ const page = async ({
               Orders by {orders.username || "Customer"}
             </h1>
           </div>
-          <OrderTable orders={orders.AllOrders} totalOrder={orders.totalOrders} page={1} />
+          <OrderTable orders={orders.AllOrders} totalOrder={orders.totalOrders} page={orders.page} />
         </div>
       </main>
     );

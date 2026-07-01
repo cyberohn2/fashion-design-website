@@ -62,18 +62,12 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
             </h3>
 
             <Card className="border-gray-200">
-              {order?.items?.map((item, index) => (
+              {order?.items?.map((item) => (
                 <div key={item.id}>
                   {/* Status Badge */}
                   <div className="px-6 pt-6 pb-3">
-                    <p className="text-sm text-gray-600 mt-3">
-                      On{" "}
-                      {item.createdAt.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                      })}
-                    </p>
+                    <img src={item.dress?.thumbnail || "/logo"} alt={item.dress?.title} />
+                    <p>{item.dress?.title}</p>
                   </div>
 
                   <Separator className="my-0" />
@@ -94,7 +88,7 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
         )}
 
         {order?.statusHistory && order?.statusHistory.length > 0 && (
-          <Card>
+          <Card className="mb-6">
             <CardHeader>
               <CardTitle>Status History</CardTitle>
             </CardHeader>
@@ -140,7 +134,7 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                   <p className="text-sm font-light text-gray-600 mb-2">
                     Payment Status
                   </p>
-                  <Badge className="text-sm text-gray-900">
+                  <Badge className="text-sm">
                     {order?.payment[0].status}
                   </Badge>
                 </div>
@@ -182,19 +176,6 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                 </p>
                 <p className="text-sm text-gray-900">
                   {order?.delivery_method}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm font-light text-gray-600 mb-2">
-                  Shipping Details
-                </p>
-                <p className="text-sm text-gray-600 mt-2">
-                  {order?.estimated_delivery?.toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })}
                 </p>
               </div>
             </CardContent>

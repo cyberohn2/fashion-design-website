@@ -11,7 +11,7 @@ const page = async () => {
         <CustomerTable
           customers={customers.fetchedCustomers}
           totalCustomers={customers.totalCustomer}
-          page={1}
+          page={customers.page}
         />
       </div>
     </main>

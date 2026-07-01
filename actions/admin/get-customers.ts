@@ -22,7 +22,7 @@ export async function getCustomers({ pagination }: { pagination: { page: number 
 
       const totalCustomer = await tx.user.count();
 
-      return {fetchedCustomers, totalCustomer}
+      return {fetchedCustomers, totalCustomer, page: pagination.page}
     })
 
     return customers;

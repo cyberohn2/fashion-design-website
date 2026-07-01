@@ -81,10 +81,10 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
           .json()
           .then((data) =>
           {setFetchedOrderDetails({
-              orders: data.AllOrders,
-              totalOrder: data.totalOrders,
-              page: page
-          })
+            orders: data.AllOrders,
+            totalOrder: data.totalOrders,
+            page: data.page,
+          });
           setIsFetching(false)}
           );
       }else{

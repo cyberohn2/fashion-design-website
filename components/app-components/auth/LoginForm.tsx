@@ -15,11 +15,13 @@ import Image from "next/image"
 import { loginUser } from "@/actions/auth/login"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/contexts/AuthContext"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
+import { Eye, EyeOff } from "lucide-react"
 
 export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
   const router = useRouter()
   const {userDispatch} = useAuthContext()
-
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -94,14 +96,22 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div
                     Forgot your password?
                   </Link>
                 </div>
-                <Input
-                  onChange={handleInputChange}
-                  id="password"
-                  type="password"
-                  name="password"
-                  required
-                  value={formData.password}
-                />
+                <InputGroup>
+                  <InputGroupInput
+                    onChange={handleInputChange}
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    required
+                    value={formData.password}
+                  />
+                  <InputGroupAddon
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </InputGroupAddon>
+                </InputGroup>
               </Field>
               <Field>
                 <Button type="submit" disabled={loading}>

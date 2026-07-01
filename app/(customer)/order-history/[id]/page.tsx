@@ -6,7 +6,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const order = await getOrder(param.id);
 
   return (
-    <main className="pt-34 md:pt-24 container mx-auto px-4 min-h-screen">
+    <main className="pt-24 container mx-auto px-4 min-h-screen">
       <OrderSummary order={order} />
     </main>
   );

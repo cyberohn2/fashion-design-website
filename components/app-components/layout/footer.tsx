@@ -55,17 +55,6 @@ const Footer = () => {
         <h2 className="text-[18px] font-medium md:text-[20px]">
           George Wears &copy; 2026
         </h2>
-        <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[#999999]">
-          <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">
-            Cookie Policy
-          </li>
-          <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">
-            Terms of service
-          </li>
-          <li className="hover:text-[#cccccc] cursor-pointer transition-colors w-fit">
-            Privacy policy
-          </li>
-        </ul>
       </div>
     </footer>
   );

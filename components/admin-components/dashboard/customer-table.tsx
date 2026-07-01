@@ -63,7 +63,7 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
         setFetchedCustomers({
           customers: data.AllCustomer,
           totalCustomers: data.totalCustomers,
-          page: page,
+          page: data.page,
         });
         setIsFetching(false);
       });

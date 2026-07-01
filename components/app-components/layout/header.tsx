@@ -108,8 +108,8 @@ const Header = () => {
           <ul className="flex flex-col items-center gap-4 text-white">
             <Link onClick={() => setIsMenuOpen(false)} href="/catalog">
               <li className="flex items-center gap-1">
-                <span className="hidden md:block">Catalog</span>{" "}
                 <ShoppingCart size={8} />
+                <span className="">Catalog</span>{" "}
               </li>
             </Link>
             <Link onClick={() => setIsMenuOpen(false)} href="/contact-us">

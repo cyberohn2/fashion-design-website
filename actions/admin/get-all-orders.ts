@@ -23,7 +23,7 @@ export async function getAllOrders({pagination}: {pagination:{page: number }}) {
         });
         const totalOrders = await tx.orders.count()
 
-        return {AllOrders, totalOrders}
+        return {AllOrders, totalOrders, page: pagination.page}
     })
 
     return orders;

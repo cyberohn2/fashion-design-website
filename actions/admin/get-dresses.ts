@@ -20,7 +20,7 @@ export async function getDresses({ pagination }: { pagination: { page: number } 
             });
 
             const totalDress = await tx.dresses.count()
-            return {dresses, totalDress}
+            return {dresses, totalDress, page: pagination.page}
           },    
         );
 

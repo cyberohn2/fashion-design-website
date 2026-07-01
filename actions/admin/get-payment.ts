@@ -27,7 +27,7 @@ export async function getPayments({ pagination }: { pagination: { page: number }
           amount: pmt.amount,
         }));
 
-        return {formattedPayment, totalPayment}
+        return {formattedPayment, totalPayment, page: pagination.page}
     })
     
     return { payment };

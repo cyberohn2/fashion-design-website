@@ -64,7 +64,7 @@ export async function getDresses({
         },
       });
 
-      return { AllDresses, totalDresses };
+      return { AllDresses, totalDresses, page: pagination.page };
     });
     return dresses;
   } catch (error) {

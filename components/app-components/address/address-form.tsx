@@ -124,7 +124,7 @@ const AddressForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6 ">
       <div className="mb-4 border-b pb-6 flex items-center justify-between">
         <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
-          New Measurement Profile
+          New Address
         </h1>
       </div>
       <p className="font-semibold text-red-500">

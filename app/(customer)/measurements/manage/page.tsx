@@ -7,7 +7,7 @@ const page = async () => {
   let measurements: measurement[];
   measurements = await getMeasurements();
   return (
-    <main className="pt-34 md:pt-24">
+    <main className="pt-24">
       <ManageMeasurements measurements={measurements} />
     </main>
   );

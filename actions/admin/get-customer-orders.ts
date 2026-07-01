@@ -31,7 +31,7 @@ export async function getCustomerOrders({pagination, userId}: {pagination:{page:
             }
         })
 
-        return {AllOrders: AllOrders || [], totalOrders, username: AllOrders[0]?.user?.full_name}
+        return {AllOrders: AllOrders || [], totalOrders, username: AllOrders[0]?.user?.full_name, page: pagination.page}
     })
 
     return orders;

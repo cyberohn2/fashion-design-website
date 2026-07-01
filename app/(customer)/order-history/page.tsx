@@ -44,7 +44,7 @@ export type userOrder = {
 const page = async () => {
   const orders: userOrder[] | undefined = await getUserOrders();
   return (
-    <main className="pt-34 md:pt-24">
+    <main className="pt-24">
       <OrderHistory orders={orders} />
     </main>
   );

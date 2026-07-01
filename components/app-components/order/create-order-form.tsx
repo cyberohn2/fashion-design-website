@@ -347,14 +347,6 @@ const CreateOrderForm = () => {
         >
           {isSubmitting ? "Submitting..." : "Create Order"}
         </Button>
-        <Button
-          disabled={isSubmitting}
-          type="button"
-          variant="outline"
-          size="lg"
-        >
-          Save as Draft
-        </Button>
       </div>
     </form>
   );

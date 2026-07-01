@@ -83,7 +83,7 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
   }
 
   return (
-    <section className="px-4 py-6 container mx-auto min-h-screen">
+    <section className="px-4 container mx-auto min-h-screen">
       <div className="mb-4">
         <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
           Order History
@@ -102,7 +102,7 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
               ongoingOrders.map((order) => (
                 <Card
                   key={order.id}
-                  className="flex-row items-start justify-between gap-4 p-3 rounded-lg border border-border hover:bg-accent transition-colors"
+                  className="flex-col md:flex-row items-start justify-between gap-4 p-3 rounded-lg border border-border hover:bg-accent transition-colors"
                 >
                   <div className="flex">
                     <Image

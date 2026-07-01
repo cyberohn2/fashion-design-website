@@ -18,16 +18,23 @@ const page = async ({
 }) => {
   const { searchTerm, category, type } = await searchParams;
   let dresses;
-  dresses = await getDresses({
-    query: { searchTerm, category, type },
-    pagination: { page: 1 },
-  });
+  if (searchTerm || category || type) {
+      dresses = await getDresses({
+        query: { searchTerm, category, type },
+        pagination: { page: 1 },
+      });
+  }else{
+    dresses = await getDresses({
+      pagination: { page: 1 },
+    });
+  }
+
   return (
-    <main className="pt-34 md:pt-24 container mx-auto px-4">
+    <main className="pt-24 container mx-auto px-4">
       <Catalog
         dresses={dresses.AllDresses}
         totalDresses={dresses.totalDresses}
-        page={1}
+        page={dresses.page}
       />
     </main>
   );

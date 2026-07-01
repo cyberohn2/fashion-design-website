@@ -116,7 +116,7 @@ const DressList = ({
         setFetchedDresses({
           Dresses: data.AllDresses,
           totalDress: data.totalDresses,
-          page: page,
+          page: data.page,
         });
         setIsFetching(false);
       });

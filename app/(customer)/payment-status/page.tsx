@@ -24,33 +24,33 @@ const page = async ({searchParams}: {searchParams: Promise<{reference?: string;}
         paidAt: res.data.data.paid_at,
       });
       return (
-        <main className="py-24 pt-34 md:pt-24 container mx-auto">
+        <main className="py-24 pt-24 container mx-auto">
           <div className="w-full max-w-sm md:max-w-4xl mx-auto">
             <PaymentStatusCard status={"success"} />
           </div>
         </main>
       );
     }
-    if(res.data.data.status === "failed"){
-        const updatePayment = await updatePaymentStatus({
-          ref: paymentData.Provider_Reference,
-          status: "FAILED",
-        });
-        return (
-          <main className="py-24 pt-34 md:pt-24 container mx-auto">
-            <div className="w-full max-w-sm md:max-w-4xl mx-auto">
-              <PaymentStatusCard status={"failed"} />
-            </div>
-          </main>
-        ); 
+    if (res.data.data.status === "failed") {
+      const updatePayment = await updatePaymentStatus({
+        ref: paymentData.Provider_Reference,
+        status: "FAILED",
+      });
+      return (
+        <main className="py-24 pt-24 container mx-auto">
+          <div className="w-full max-w-sm md:max-w-4xl mx-auto">
+            <PaymentStatusCard status={"failed"} />
+          </div>
+        </main>
+      );
     }
 
     return (
-        <main className="py-24 pt-34 md:pt-24 container mx-auto">
-            <div className="w-full max-w-sm md:max-w-4xl mx-auto">
-                <PaymentStatusCard status={"pending"} />
-            </div>
-        </main>
+      <main className="py-24 pt-24 container mx-auto">
+        <div className="w-full max-w-sm md:max-w-4xl mx-auto">
+          <PaymentStatusCard status={"pending"} />
+        </div>
+      </main>
     );
 
 };

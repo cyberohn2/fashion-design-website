@@ -79,7 +79,7 @@ const ReviewList = ({
         setFetchedReviews({
           Reviews: data.AllReviews,
           totalReview: data.totalReviews,
-          page: page,
+          page: data.page,
         });
         setIsFetching(false);
       });

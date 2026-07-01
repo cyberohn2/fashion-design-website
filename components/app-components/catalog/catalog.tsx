@@ -95,7 +95,7 @@ const Catalog = ({
         setFetchedDresses({
           dresses: data.AllDresses,
           totalDresses: data.totalDresses,
-          page: page,
+          page: data.page,
         });
         setIsFetching(false);
       });
@@ -131,7 +131,7 @@ const Catalog = ({
         </Select>
       </div>
       <div
-        className={`${sortedDresses && sortedDresses?.length > 0 && "grid"} gap-4 md:grid-cols-2 lg:grid-cols-4 p-4 mt-8 min-h-screen`}
+        className={`${sortedDresses && sortedDresses?.length > 0 && "grid"} gap-4 md:grid-cols-2 lg:grid-cols-4 mt-4 min-h-screen`}
       >
         {sortedDresses && sortedDresses?.length < 0 ? (
           <ItemSkeletonGrid />

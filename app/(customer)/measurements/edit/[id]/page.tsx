@@ -2,7 +2,7 @@ import MeasurementForm from "@/components/app-components/measurement/measurement
 
 const page = () => {
   return (
-    <main className="py-24 pt-34 md:pt-24 container mx-auto">
+    <main className="py-24 pt-24 container mx-auto">
       <MeasurementForm />
     </main>
   );

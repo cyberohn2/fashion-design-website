@@ -112,7 +112,7 @@ export function PaymentTable({
         setFetchedPayments({
           Payments: data.AllPayments,
           totalPayment: data.totalPayments,
-          page: page,
+          page: data.page,
         });
         setIsFetching(false);
       });

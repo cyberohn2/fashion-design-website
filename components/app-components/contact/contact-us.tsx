@@ -2,9 +2,9 @@
 import { ChangeEvent, SubmitEvent, useEffect } from "react";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { IconProps } from "../home-page/socials";
+import { useRouter } from "next/navigation";
 
 const Contact = () => {
   useEffect(() => {
@@ -15,6 +15,7 @@ const Contact = () => {
     name: "",
     message: "",
   });
+  const router = useRouter()
 
   const Icons = {
     whatsapp: (props: IconProps) => (
@@ -85,13 +86,11 @@ const Contact = () => {
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e.target);
-
-    const formErrors = validate();
+    router.push("https://wa.me/09010817543?text=")
   };
 
   return (
-    <section className="py-24 pt-34 md:pt-24 border-b">
+    <section className="py-24 border-b">
       <div
         id="contact"
         className="flex flex-col sm:flex-row justify-between gap-4 max-w-270 mx-auto px-8 "

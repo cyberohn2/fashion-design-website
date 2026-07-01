@@ -15,6 +15,8 @@ import Image from "next/image";
 import { registerUser } from "@/actions/auth/register"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/contexts/AuthContext"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
+import { Eye, EyeOff } from "lucide-react"
 
 
 
@@ -28,6 +30,7 @@ export function SignupForm({ className, ...props }: ComponentPropsWithoutRef<'di
     password: ''
   })
 
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -50,12 +53,14 @@ export function SignupForm({ className, ...props }: ComponentPropsWithoutRef<'di
       return;
     }
 
+    setLoading(true)
     try {
       const loggedIn = await registerUser(formData);
       if (loggedIn.success) {
         userDispatch({ type: "LOGIN", payload: { user: loggedIn.user } });
         router.push("/catalog");
       } else {
+        setLoading(false)
         setError("An error occured!");
       }
     } catch (err) {
@@ -120,23 +125,29 @@ export function SignupForm({ className, ...props }: ComponentPropsWithoutRef<'di
                 />
               </Field>
               <Field>
-                <Field className="grid grid-cols-2 gap-4">
+                <Field className="">
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      id="password"
-                      name="password"
-                      type="password"
-                      required
-                    />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="confirm-password">
-                      Confirm Password
-                    </FieldLabel>
-                    <Input id="confirm-password" type="password" required />
+                    <InputGroup>
+                      <InputGroupInput
+                        onChange={handleInputChange}
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        required
+                        value={formData.password}
+                      />
+                      <InputGroupAddon
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="cursor-pointer"
+                      >
+                        {showPassword ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </InputGroupAddon>
+                    </InputGroup>
                   </Field>
                 </Field>
                 <FieldDescription>

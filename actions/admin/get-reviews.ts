@@ -21,7 +21,7 @@ export async function getReviews({ pagination }: { pagination: { page: number } 
             });
 
             const totalReview = await tx.reviews.count()
-            return {reviews, totalReview}
+            return {reviews, totalReview, page: pagination.page}
           },    
         );
 

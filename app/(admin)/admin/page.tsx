@@ -18,7 +18,7 @@ const page = async () => {
             <SectionCards overViewData={dashboardOverview} />
             <div className="px-4 lg:px-6 space-y-6">
               <RevenueChart chartData={payments.payment.formattedPayment} />
-              <CustomerTable customers={customers.fetchedCustomers} totalCustomers={customers.totalCustomer} page={1}/>
+              <CustomerTable customers={customers.fetchedCustomers} totalCustomers={customers.totalCustomer} page={customers.page}/>
             </div>
           </div>
         </div>

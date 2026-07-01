@@ -2,7 +2,7 @@ import { SignupForm } from '@/components/app-components/auth/SignUpForm'
 
 function page() {
   return (
-    <main className="py-24 pt-34 md:pt-24 container mx-auto">
+    <main className="py-24 pt-24 container mx-auto">
       <div className="w-full max-w-sm md:max-w-4xl mx-auto">
         <SignupForm />
       </div>

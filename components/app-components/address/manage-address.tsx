@@ -54,7 +54,7 @@ export default function ManageAddresses({addresses}: {addresses: address[]}) {
   }
 
   return (
-    <div className="px-4 py-6 container mx-auto">
+    <div className="container mx-auto">
       <div className="mb-4 border-b pb-6 flex items-center justify-between">
         <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
           Manage Address
