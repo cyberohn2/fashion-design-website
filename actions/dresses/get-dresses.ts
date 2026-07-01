@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { TransactionClient } from "@/app/generated/prisma/internal/prismaNamespace";
+import { Prisma } from "@/app/generated/prisma/client";
 
 export async function getDresses({
   query,
@@ -21,26 +22,38 @@ export async function getDresses({
   pagination: { page: number };
 }) {
   try {
+    const orConditions: Prisma.DressesWhereInput[] = [];
+
+    if (query?.searchTerm) {
+      orConditions.push({
+        title: {
+          contains: query.searchTerm,
+          mode: "insensitive",
+        },
+      });
+    }
+
+    if (query?.category) {
+      orConditions.push({
+        category: query.category,
+      });
+    }
+
+    if (query?.type) {
+      orConditions.push({
+        type: query.type,
+      });
+    }
+
+    const where = {
+      isPublished: true,
+      ...(orConditions.length > 0 && { OR: orConditions }),
+    };
+
+
     const dresses = await prisma.$transaction(async (tx: TransactionClient) => {
       const AllDresses = await tx.dresses.findMany({
-        where: {
-          OR: [
-            {
-              title: {
-                contains: query?.searchTerm,
-                mode: "insensitive",
-              },
-            },
-            {
-              category: query?.category,
-            },
-            {
-              type: query?.type,
-            },
-          ],
-          isPublished: true,
-        },
-
+        where,
         take: 20,
         skip: (pagination.page - 1) * 20,
         include: {
@@ -50,18 +63,7 @@ export async function getDresses({
       });
 
       const totalDresses = await tx.dresses.count({
-        where: {
-          OR: [
-            {
-              title: {
-                contains: query?.searchTerm,
-                mode: "insensitive",
-              },
-              category: query?.category,
-            },
-          ],
-          isPublished: true,
-        },
+        where,
       });
 
       return { AllDresses, totalDresses, page: pagination.page };
