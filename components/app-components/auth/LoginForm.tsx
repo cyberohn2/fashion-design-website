@@ -13,27 +13,26 @@ import { useState, type ComponentPropsWithoutRef, type ChangeEvent, type SubmitE
 import Link from "next/link"
 import Image from "next/image"
 import { loginUser } from "@/actions/auth/login"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/contexts/AuthContext"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import { Eye, EyeOff } from "lucide-react"
 
-export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
+type LoginFormProps = {
+  from?: string;
+} & ComponentPropsWithoutRef<"div">;
+
+export function LoginForm({ from = "/catalog", className, ...props }: LoginFormProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const fromParam = searchParams.get("from");
-
-  const from = fromParam && fromParam.startsWith("/") ? fromParam : "/catalog";
-  const {userDispatch} = useAuthContext()
+  const { userDispatch } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
-  })
+    password: "",
+  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -43,10 +42,10 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div
   };
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
     if (formData.email === "" && formData.password === "") {
-      setError("All fields are required!")
+      setError("All fields are required!");
       return;
     }
 
@@ -55,17 +54,18 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div
       if (loggedIn.success) {
         userDispatch({ type: "LOGIN", payload: { user: loggedIn.user } });
         router.replace(from);
-        setLoading(false)
-      }else{
-        setLoading(false)
-        setError("An error occured!")
+        setLoading(false);
+      } else {
+        setLoading(false);
+        setError("An error occured!");
       }
     } catch (err) {
-      setError(`An error occured!: ${err instanceof Error ? err.message : String(err)}`);
+      setError(
+        `An error occured!: ${err instanceof Error ? err.message : String(err)}`,
+      );
       console.error("Login error:", err);
     }
-  }
-
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
