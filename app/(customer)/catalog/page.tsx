@@ -13,11 +13,15 @@ const page = async ({
       | "CORPORATE_FEMALE"
       | "CASUAL"
       | "STREET_WEAR";
+    type?: "BESPOKE" | "KAFTAN" | "MONOGRAM" | "NATIVE" | "READYMADE";
   }>;
 }) => {
-  const { searchTerm, category } = await searchParams;
+  const { searchTerm, category, type } = await searchParams;
   let dresses;
-  dresses = await getDresses({ query: { searchTerm, category }, pagination: {page: 1} });
+  dresses = await getDresses({
+    query: { searchTerm, category, type },
+    pagination: { page: 1 },
+  });
   return (
     <main className="pt-34 md:pt-24 container mx-auto px-4">
       <Catalog
