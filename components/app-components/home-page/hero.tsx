@@ -75,9 +75,9 @@ const Hero = () => {
 
 
   return (
-    <section className="hero py-24 pt-24 relative h-screen flex items-center justify-center isolate border-b">
+    <section className="hero py-24 relative h-screen flex items-center justify-center isolate border-b">
       <Spotlight
-        className="-top-40 left-0 md:-top-20 md:left-60"
+        className="-bottom-40 left-0 md:-bottom-20 md:left-60"
         fill="black"
       />
       <div
@@ -91,7 +91,7 @@ const Hero = () => {
 
       <div className=" grid grid-rows-2 gap-8 md:gap-0 md:grid-cols-2 md:grid-rows-1 container mx-auto px-4 relative ">
         <div className="pt-60 md:pt-20 md:row-start-auto text-center md:text-left flex flex-col align-center">
-          <h1 className="lg:text-7xl md:text-5xl text-2xl lg:leading-24 md:leading-14 font-bold">
+          <h1 className="lg:text-7xl md:text-5xl text-3xl lg:leading-24 md:leading-14 font-bold">
             <TextGenerateEffect
               className="lg:text-7xl md:text-5xl text-3xl lg:leading-24 md:leading-14 font-bold"
               duration={1}
