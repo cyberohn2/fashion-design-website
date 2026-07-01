@@ -16,7 +16,7 @@ const Categories = () => {
         category: "FEMALE_NATIVE",
         description:
           "Explore our latest collection of women's clothing and accessories.",
-        imageUrl: "/three-men.webp",
+        imageUrl: "/female.webp", 
       },
       {
         title: "Male Native",
@@ -28,20 +28,20 @@ const Categories = () => {
         title: "Corporate Male",
         category: "CORPORATE_MALE",
         description: "Find the perfect corporate attire for men.",
-        imageUrl: "/three-men.webp",
+        imageUrl: "/bespoke.webp",
       },
       {
         title: "Corporate Female",
         category: "CORPORATE_FEMALE",
         description: "Find the perfect corporate attire for women.",
-        imageUrl: "/three-men.webp",
+        imageUrl: "/bespoke-female.webp",
       },
       {
         title: "Street Wears",
         category: "STREET_WEAR",
         description:
           "Explore our latest collection of streetwear clothing and accessories.",
-        imageUrl: "/three-men.webp",
+        imageUrl: "/street-wear.webp",
       },
     ];
 
