@@ -13,13 +13,18 @@ import { useState, type ComponentPropsWithoutRef, type ChangeEvent, type SubmitE
 import Link from "next/link"
 import Image from "next/image"
 import { loginUser } from "@/actions/auth/login"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/contexts/AuthContext"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import { Eye, EyeOff } from "lucide-react"
 
 export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div'>) {
-  const router = useRouter()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const fromParam = searchParams.get("from");
+
+  const from = fromParam && fromParam.startsWith("/") ? fromParam : "/catalog";
   const {userDispatch} = useAuthContext()
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false)
@@ -49,7 +54,7 @@ export function LoginForm({ className, ...props }: ComponentPropsWithoutRef<'div
       const loggedIn = await loginUser(formData);
       if (loggedIn.success) {
         userDispatch({ type: "LOGIN", payload: { user: loggedIn.user } });
-        router.push("/catalog")
+        router.replace(from);
         setLoading(false)
       }else{
         setLoading(false)
