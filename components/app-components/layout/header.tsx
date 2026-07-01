@@ -31,8 +31,8 @@ const Header = () => {
     e.preventDefault()
     if(searchTerm !== "") {
       pathname === "/catalog"
-        ? router.push(`/catalog?searchTerm=${searchTerm}`)
-        : ( typeof window !== undefined && window.location.assign(`/catalog?searchTerm=${searchTerm}`)); //for full page reload
+        ? ( typeof window !== undefined && window.location.assign(`/catalog?searchTerm=${searchTerm}`)) //for full page reload
+        : router.push(`/catalog?searchTerm=${searchTerm}`);
 
     };
   }
