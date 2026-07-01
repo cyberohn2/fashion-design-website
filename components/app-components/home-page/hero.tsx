@@ -110,7 +110,7 @@ const Hero = () => {
               <Link href="/catalog">Browse Catalog</Link>
             </Button>
             <Button className="py-6 bg-transparent text-black rounded-sm border border-black">
-              <Link href="/new-order">Custom Order</Link>
+              <Link href="/create-order">Custom Order</Link>
             </Button>
           </div>
         </div>

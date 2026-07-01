@@ -95,6 +95,7 @@ model Dresses {
   slug         String   @unique
   description String
   category    DressCategory
+  type        DressType
   gender      Gender
   base_price   Float
   stock       Int
@@ -118,6 +119,14 @@ enum DressCategory {
   STREET_WEAR
 
   // @@schema("public")
+}
+
+enum DressType {
+  BESPOKE
+  KAFTAN
+  MONOGRAM
+  NATIVE
+  READYMADE
 }
 
 enum Gender {

@@ -24,7 +24,7 @@ const Features = () => {
               crafted to boost your confidence, elegance, and individuality.
             </p>
             <Button className="bg-black py-6 rounded-sm mr-4">
-              <Link href={"/browse"}>Browse Catalog</Link>
+              <Link href={"/catalog"}>Browse Catalog</Link>
             </Button>
           </motion.div>
         </div>

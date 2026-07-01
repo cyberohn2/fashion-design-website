@@ -14,11 +14,13 @@ export type dressCategory =
   | "CORPORATE_FEMALE"
   | "CASUAL"
   | "STREET_WEAR";
+export type dressType = "BESPOKE" | "KAFTAN" | "MONOGRAM" | "NATIVE" | "READYMADE";
  
 export type CreateDressData = {
   title: string;
   description: string;
   category: dressCategory | string;
+  type: dressType | string;
   gender: gender | string;
   basePrice: number;
   stockQuantity: number;
@@ -69,6 +71,7 @@ export async function createDress(data: CreateDressData) {
           slug,
           description: data.description,
           category: data.category as dressCategory,
+          type: data.type as dressType,
           gender: data.gender as gender,
           base_price: data.basePrice,
           stock: data.stockQuantity,

@@ -38,7 +38,7 @@ const CustomOrderCTA = () => {
             designed for modern individuals.
           </p>
           <Button className="bg-black py-6 rounded-sm mr-4">
-            <Link href={"/browse"}>Create Order</Link>
+            <Link href={"/create-order"}>Create Order</Link>
           </Button>
         </motion.div>
       </div>

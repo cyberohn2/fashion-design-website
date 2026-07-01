@@ -626,7 +626,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
               <SelectContent>
                 <SelectItem value="ACCEPTED">Accept</SelectItem>
                 <SelectItem value="REJECTED">Reject</SelectItem>
-                <SelectItem value="IN_PRODUCTION">In Production</SelectItem>
+                <SelectItem value="IN_PRODUCTION">In Dression</SelectItem>
                 <SelectItem value="COMPLETED">Completed</SelectItem>
                 <SelectItem value="READY_FOR_DELIVERY">
                   Ready for Delivery

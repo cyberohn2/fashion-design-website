@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { User2 } from "lucide-react"
 import Image from "next/image"
 import { Order } from "../order/order-details";
-import { ProductType } from "@/components/app-components/catalog/product-card";
+import { DressType } from "@/components/app-components/catalog/dress-card";
 import { formatDate } from "@/lib/format-table";
 
 export type Review = {
@@ -22,7 +22,7 @@ export type Review = {
     phone: string;
     role: "USER" | "ADMIN";
   };
-  dress: ProductType;
+  dress: DressType;
 };
 
 const ReviewCard = ({review}: {review: Review}) => {

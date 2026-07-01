@@ -116,7 +116,7 @@ export default function OrderAcceptedEmail({
                 </Section>
 
                 <Text>
-                  Your order will move into production once payment has been
+                  Your order will move into dression once payment has been
                   confirmed.
                 </Text>
               </>

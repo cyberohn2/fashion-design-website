@@ -1,13 +1,11 @@
 "use client";
-import { type CreateAddressData } from "@/actions/addresses/create-address";
 import { type SubmitEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { CreateDressData } from "@/actions/admin/create-dress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ImageUploader from "@/components/ui/image-uploader";
@@ -37,6 +35,7 @@ const CreateDressForm = ({
       title: "",
       description: "",
       category: "",
+      type: "",
       gender: "",
       basePrice: 0,
       stockQuantity: 0,
@@ -94,36 +93,40 @@ const CreateDressForm = ({
             title: formData.title,
             description: formData.description,
             category: formData.category,
+            type: formData.type,
             gender: formData.gender,
             base_price: formData.basePrice,
             stock: formData.stockQuantity,
             isPublished: formData.isPublished,
           }),
         });
-        
+
         // check request is okay
         if (req.ok) {
           setIsSubmitting(false);
-          toast.success("Updated Successfully!")
-          router.push("/admin/products");
+          toast.success("Updated Successfully!");
+          router.push("/admin/dresses");
         } else {
           const errorData = await req.json();
           setFormError(errorData.error || "Failed to update address");
           setIsSubmitting(false);
         }
-
-
       } else {
-        // else we create a new one 
+        // else we create a new one
         // but first we put formdata inside a new FormData
-        const formDataToSend = new FormData()
-        formDataToSend.append('title', formData.title)
-        formDataToSend.append('description', formData.description)
-        formDataToSend.append('category', formData.category)
-        formDataToSend.append('gender', formData.gender)
-        formDataToSend.append('basePrice', String(formData.basePrice))
-        formDataToSend.append('stock', String(formData.stockQuantity))
-        formData.images?.map( (_, i) => formData.images && formDataToSend.append('images', formData.images[i]))
+        const formDataToSend = new FormData();
+        formDataToSend.append("title", formData.title);
+        formDataToSend.append("description", formData.description);
+        formDataToSend.append("category", formData.category);
+        formDataToSend.append("type", formData.type);
+        formDataToSend.append("gender", formData.gender);
+        formDataToSend.append("basePrice", String(formData.basePrice));
+        formDataToSend.append("stock", String(formData.stockQuantity));
+        formData.images?.map(
+          (_, i) =>
+            formData.images &&
+            formDataToSend.append("images", formData.images[i]),
+        );
 
         const req = await fetch("/api/admin/dress/create", {
           method: "POST",
@@ -131,7 +134,7 @@ const CreateDressForm = ({
         });
         if (req.ok) {
           setIsSubmitting(false);
-          router.push("/admin/products");
+          router.push("/admin/dresses");
         } else {
           const errorData = await req.json();
           setIsSubmitting(false);
@@ -192,7 +195,9 @@ const CreateDressForm = ({
                 <RotateCcw className="h-4 w-4 text-white" />
               </label>
               <input
-                onChange={(e) => handleImageChange(Array.from(e.target.files as FileList))}
+                onChange={(e) =>
+                  handleImageChange(Array.from(e.target.files as FileList))
+                }
                 id="image-input"
                 type="file"
                 multiple
@@ -303,6 +308,31 @@ const CreateDressForm = ({
               </SelectContent>
             </Select>
           </div>
+
+          <div className="">
+            <Label htmlFor="type">Type *</Label>
+            <Select
+              required
+              value={formData.type}
+              onValueChange={(value) =>
+                setFormData((prev: dressDataType) => ({
+                  ...prev,
+                  type: value,
+                }))
+              }
+            >
+              <SelectTrigger id="type" className="mt-2">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="BESPOKE">Bespoke</SelectItem>
+                <SelectItem value="KAFTAN">Kaftan</SelectItem>
+                <SelectItem value="MONOGRAM">Monogram</SelectItem>
+                <SelectItem value="NATIVE">Native</SelectItem>
+                <SelectItem value="READYMADE">Ready Made</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </CardContent>
       </Card>
 
@@ -354,7 +384,13 @@ const CreateDressForm = ({
           className="bg-primary text-primary-foreground hover:bg-primary/90"
           size="lg"
         >
-          {isSubmitting ? (dressData ? "Updating" :"Creating...") : (dressData ? "Update Dress" : "Create Dress")}
+          {isSubmitting
+            ? dressData
+              ? "Updating"
+              : "Creating..."
+            : dressData
+              ? "Update Dress"
+              : "Create Dress"}
         </Button>
       </div>
     </form>

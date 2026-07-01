@@ -10,8 +10,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { ProductType } from '@/components/app-components/catalog/product-card';
-import DressCard from './dress-card';
+import { DressType } from "@/components/app-components/catalog/dress-card";
+import DressCard from "./dress-card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,30 +27,37 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { ArrowUpRightIcon, SearchSlash } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { ArrowUpRightIcon, SearchSlash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { toast } from "sonner";
-import { dressCategory } from '@/lib/lib';
-import { getPaginationItems } from '@/lib/getPaginationItems';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { dressCategory } from "@/lib/lib";
+import { getPaginationItems } from "@/lib/getPaginationItems";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const DressList = ({
   Dresses,
   totalDress,
   page,
 }: {
-  Dresses?: ProductType[];
+  Dresses?: DressType[];
   totalDress: number;
   page: number;
 }) => {
-
   const [fetchedDresses, setFetchedDresses] = useState({
     Dresses,
     totalDress,
     page,
   });
-  
+
   // filter fn
   const [filters, setFilters] = useState<string[]>([]);
   const toggleFilter = (value: string) => {
@@ -73,14 +80,13 @@ const DressList = ({
   }, [fetchedDresses.Dresses, filters]);
 
   // sort fn
-  const [ sortBy, setSortBy ] = useState("relevance")
+  const [sortBy, setSortBy] = useState("relevance");
   const sortedDresses = useMemo(() => {
     if (sortBy === "relevance") return filteredDresses;
 
     const sorted = filteredDresses && [...filteredDresses];
 
     switch (sortBy) {
-
       case "sales-low":
         return sorted?.sort((a, b) => a.soldCount - b.soldCount);
 
@@ -94,9 +100,7 @@ const DressList = ({
 
   // pagination fn
   const ITEMS_PER_PAGE = 20;
-  const totalPages = Math.ceil(
-    fetchedDresses.totalDress / ITEMS_PER_PAGE,
-  );
+  const totalPages = Math.ceil(fetchedDresses.totalDress / ITEMS_PER_PAGE);
   const paginationItems = getPaginationItems(fetchedDresses.page, totalPages);
 
   // fetch new page data
@@ -181,9 +185,7 @@ const DressList = ({
                 <SearchSlash />
               </EmptyMedia>
               <EmptyTitle>Nothing here!</EmptyTitle>
-              <EmptyDescription>
-                You haven't listed any product.
-              </EmptyDescription>
+              <EmptyDescription>You haven't listed any dress.</EmptyDescription>
               <Button
                 variant="link"
                 asChild
@@ -240,6 +242,6 @@ const DressList = ({
       </CardFooter>
     </Card>
   );
-}
+};
 
 export default DressList

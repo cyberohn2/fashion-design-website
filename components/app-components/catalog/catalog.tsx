@@ -28,79 +28,85 @@ import {
 } from "@/components/ui/select";
 import { SearchSlash } from "lucide-react";
 import { useMemo, useState } from "react";
-import ProductCard, { ProductType } from "./product-card";
+import DressCard, { DressType } from "./dress-card";
 import { toast } from "sonner";
 import { getPaginationItems } from "@/lib/getPaginationItems";
 
-const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | undefined, totalProducts: number, page: number }) => {
-    const [fetchedProducts, setFetchedProducts] = useState({
-      products,
-      totalProducts,
-      page,
-    });
-    
-    const [sortBy, setSortBy] = useState<string>("relevant");
+const Catalog = ({
+  dresses,
+  totalDresses,
+  page,
+}: {
+  dresses: DressType[] | undefined;
+  totalDresses: number;
+  page: number;
+}) => {
+  const [fetchedDresses, setFetchedDresses] = useState({
+    dresses,
+    totalDresses,
+    page,
+  });
 
-    const sortedProducts = useMemo(() => {
-      if (sortBy === "relevant") return fetchedProducts.products;
+  const [sortBy, setSortBy] = useState<string>("relevant");
 
-      const sorted = fetchedProducts.products && [...fetchedProducts.products];
+  const sortedDresses = useMemo(() => {
+    if (sortBy === "relevant") return fetchedDresses.dresses;
 
-      switch (sortBy) {
-        case "trending":
-          return sorted?.sort((a, b) => (b.reviews?.length as number - (a.reviews?.length as number) ));
+    const sorted = fetchedDresses.dresses && [...fetchedDresses.dresses];
 
-        case "latest":
-          return sorted?.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          );
+    switch (sortBy) {
+      case "trending":
+        return sorted?.sort(
+          (a, b) =>
+            (b.reviews?.length as number) - (a.reviews?.length as number),
+        );
 
-        case "price-low":
-          return sorted?.sort((a, b) => a.base_price - b.base_price);
+      case "latest":
+        return sorted?.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
 
-        case "price-high":
-          return sorted?.sort((a, b) => b.base_price - a.base_price);
+      case "price-low":
+        return sorted?.sort((a, b) => a.base_price - b.base_price);
 
-        default:
-          return fetchedProducts.products;
-      }
-    }, [fetchedProducts.products, sortBy]);
+      case "price-high":
+        return sorted?.sort((a, b) => b.base_price - a.base_price);
 
+      default:
+        return fetchedDresses.dresses;
+    }
+  }, [fetchedDresses.dresses, sortBy]);
 
-    const ITEMS_PER_PAGE = 20;
-    const totalPages = Math.ceil(fetchedProducts.totalProducts / ITEMS_PER_PAGE);
-    const paginationItems = getPaginationItems(
-      fetchedProducts.page,
-      totalPages,
-    );
+  const ITEMS_PER_PAGE = 20;
+  const totalPages = Math.ceil(fetchedDresses.totalDresses / ITEMS_PER_PAGE);
+  const paginationItems = getPaginationItems(fetchedDresses.page, totalPages);
 
-    const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
-    const handleFetchedProducts = async (page: number) => {
-      if (isFetching) {
-        return;
-      }
-      setIsFetching(true);
-      const newProducts = await fetch(`/api/dresses?page=${page}`);
-      if (newProducts.ok) {
-        newProducts.json().then((data) => {
-          setFetchedProducts({
-            products: data.AllProducts,
-            totalProducts: data.totalProducts,
-            page: page,
-          });
-          setIsFetching(false);
-        });
-      } else {
-        setFetchedProducts((prev) => prev);
-        toast.error("Error fetching dresses.", {
-          position: "top-right",
+  const handleFetchedDresses = async (page: number) => {
+    if (isFetching) {
+      return;
+    }
+    setIsFetching(true);
+    const newDresses = await fetch(`/api/dresses?page=${page}`);
+    if (newDresses.ok) {
+      newDresses.json().then((data) => {
+        setFetchedDresses({
+          dresses: data.AllDresses,
+          totalDresses: data.totalDresses,
+          page: page,
         });
         setIsFetching(false);
-      }
-    };
-
+      });
+    } else {
+      setFetchedDresses((prev) => prev);
+      toast.error("Error fetching dresses.", {
+        position: "top-right",
+      });
+      setIsFetching(false);
+    }
+  };
 
   return (
     <section className="">
@@ -125,11 +131,11 @@ const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | 
         </Select>
       </div>
       <div
-        className={`${sortedProducts && sortedProducts?.length > 0 && "grid"} gap-4 md:grid-cols-2 lg:grid-cols-4 p-4 mt-8 min-h-screen`}
+        className={`${sortedDresses && sortedDresses?.length > 0 && "grid"} gap-4 md:grid-cols-2 lg:grid-cols-4 p-4 mt-8 min-h-screen`}
       >
-        {sortedProducts && sortedProducts?.length < 0 ? (
+        {sortedDresses && sortedDresses?.length < 0 ? (
           <ItemSkeletonGrid />
-        ) : sortedProducts?.length === 0 ? (
+        ) : sortedDresses?.length === 0 ? (
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant="icon">
@@ -140,8 +146,8 @@ const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | 
             </EmptyHeader>
           </Empty>
         ) : (
-          sortedProducts?.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          sortedDresses?.map((dress) => (
+            <DressCard key={dress.id} dress={dress} />
           ))
         )}
       </div>
@@ -149,7 +155,7 @@ const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | 
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              onClick={() => handleFetchedProducts(page - 1)}
+              onClick={() => handleFetchedDresses(page - 1)}
               aria-disabled={page === 1}
               className={page === 1 ? "pointer-events-none opacity-50" : ""}
             />
@@ -161,7 +167,7 @@ const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | 
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
-                  onClick={() => handleFetchedProducts(page)}
+                  onClick={() => handleFetchedDresses(page)}
                   isActive={item === page}
                 >
                   {item}
@@ -172,7 +178,7 @@ const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | 
 
           <PaginationItem>
             <PaginationNext
-              onClick={() => handleFetchedProducts(page + 1)}
+              onClick={() => handleFetchedDresses(page + 1)}
               aria-disabled={page === totalPages}
               className={
                 page === totalPages ? "pointer-events-none opacity-50" : ""
@@ -183,6 +189,6 @@ const Catalog = ({ products, totalProducts, page }: { products: ProductType[] | 
       </Pagination>
     </section>
   );
-}
+};
 
 export default Catalog

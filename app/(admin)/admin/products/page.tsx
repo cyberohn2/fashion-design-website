@@ -1,5 +1,5 @@
 import { getDresses } from '@/actions/admin/get-dresses';
-import DressList from '@/components/admin-components/product/dress-list';
+import DressList from '@/components/admin-components/dress/dress-list';
 
 const page = async () => {
     const dresses = await getDresses({ pagination: { page: 1 } });

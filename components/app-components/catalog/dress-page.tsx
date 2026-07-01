@@ -11,16 +11,17 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
-import { ProductType } from "./product-card";
+import { DressType } from "./dress-card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { NewOrderDialog } from "./new-order-dialog";
 
-const ProductPage = ({ product }: { product: ProductType | null }) => {
+const DressPage = ({ dress }: { dress: DressType | null }) => {
   const [quantity, setQuantity] = useState(1);
 
-  const averageRating = product?.reviews && 
-    product?.reviews?.reduce((sum, review) => sum + review?.rating, 0) /
-    product?.reviews?.length;
+  const averageRating =
+    dress?.reviews &&
+    dress?.reviews?.reduce((sum, review) => sum + review?.rating, 0) /
+      dress?.reviews?.length;
 
   const getCategoryLabel = (category: string) => {
     const labels: { [key: string]: string } = {
@@ -39,25 +40,23 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
       {/* Header */}
       <header className="border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-2xl font-light tracking-wide">
-            {product?.title}
-          </h1>
+          <h1 className="text-2xl font-light tracking-wide">{dress?.title}</h1>
         </div>
       </header>
 
-      {/* Main Product Section */}
+      {/* Main Dress Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Gallery */}
           <div className="space-y-4">
             <Carousel className="w-full">
               <CarouselContent>
-                {product?.images?.map((image, index) => (
+                {dress?.images?.map((image, index) => (
                   <CarouselItem key={index}>
                     <div className="aspect-square bg-gray-50 overflow-hidden rounded-lg">
                       <img
                         src={image.url}
-                        alt={`${product?.title} ${index + 1}`}
+                        alt={`${dress?.title} ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -70,14 +69,14 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
 
             {/* Thumbnail Gallery */}
             <div className="grid grid-cols-4 gap-2">
-              {product?.images?.map((image, index) => (
+              {dress?.images?.map((image, index) => (
                 <button
                   key={index}
                   className="aspect-square overflow-hidden rounded-lg opacity-60 hover:opacity-100 transition-all ring-offset-0 hover:ring-2 hover:ring-black"
                 >
                   <img
                     src={image.url}
-                    alt={`Product ${index + 1}`}
+                    alt={`Dress ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </button>
@@ -85,14 +84,14 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
             </div>
           </div>
 
-          {/* Product Details */}
+          {/* Dress Details */}
           <div className="flex flex-col justify-start space-y-6">
             {/* Category and Title */}
             <div>
               <p className="text-sm font-light text-gray-600 uppercase tracking-widest">
-                {getCategoryLabel(product?.category as string)}
+                {getCategoryLabel(dress?.category as string)}
               </p>
-              <h1 className="text-4xl font-light mt-2">{product?.title}</h1>
+              <h1 className="text-4xl font-light mt-2">{dress?.title}</h1>
             </div>
 
             {/* Rating */}
@@ -110,7 +109,7 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
                 ))}
               </div>
               <span className="text-sm text-gray-600">
-                {averageRating?.toFixed(1)} ({product?.reviews?.length} reviews)
+                {averageRating?.toFixed(1)} ({dress?.reviews?.length} reviews)
               </span>
             </div>
 
@@ -118,14 +117,14 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
             <div className="space-y-2">
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl font-light">
-                  ₦{product?.base_price}
+                  ₦{dress?.base_price}
                 </span>
                 <span className="text-sm text-gray-500">NGN</span>
               </div>
               <p className="text-sm text-gray-600">
-                {product?.stock && product?.stock > 0 ? (
+                {dress?.stock && dress?.stock > 0 ? (
                   <span className="text-green-700">
-                    In stock ({product?.stock} available)
+                    In stock ({dress?.stock} available)
                   </span>
                 ) : (
                   <span className="text-red-600">Out of stock</span>
@@ -135,10 +134,10 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
 
             {/* Description */}
             <p className="text-gray-700 leading-relaxed">
-              {product?.description}
+              {dress?.description}
             </p>
 
-            {/* Product Info */}
+            {/* Dress Info */}
             <div className="space-y-4">
               <Separator />
               <div className="grid grid-cols-2 gap-4">
@@ -146,14 +145,14 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
                   <p className="text-xs uppercase tracking-widest text-gray-600 mb-1">
                     Gender
                   </p>
-                  <p className="font-light">{product?.gender}</p>
+                  <p className="font-light">{dress?.gender}</p>
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-widest text-gray-600 mb-1">
                     Category
                   </p>
                   <p className="font-light">
-                    {getCategoryLabel(product?.category as string)}
+                    {getCategoryLabel(dress?.category as string)}
                   </p>
                 </div>
               </div>
@@ -181,11 +180,11 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
                     }
                     className="w-12 text-center font-light bg-transparent border-none outline-none"
                     min="1"
-                    max={product?.stock}
+                    max={dress?.stock}
                   />
                   <button
                     onClick={() =>
-                      setQuantity(Math.min(product?.stock || 1, quantity + 1))
+                      setQuantity(Math.min(dress?.stock || 1, quantity + 1))
                     }
                     className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
                   >
@@ -199,17 +198,17 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
                   <DialogTrigger>
                     <Button
                       className="flex-1 bg-black text-white hover:bg-gray-800 py-3 font-light tracking-wide"
-                      disabled={product?.stock === 0}
+                      disabled={dress?.stock === 0}
                     >
                       Buy Now
                     </Button>
                   </DialogTrigger>
-                  <NewOrderDialog product={product as ProductType}/>
+                  <NewOrderDialog dress={dress as DressType} />
                 </Dialog>
                 <Button
                   variant="outline"
                   className="flex-1 py-3 font-light tracking-wide"
-                  disabled={product?.stock === 0}
+                  disabled={dress?.stock === 0}
                 >
                   Custom Order
                 </Button>
@@ -227,33 +226,37 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
           <h2 className="text-2xl font-light mb-8">Customer Reviews</h2>
 
           <div className="space-y-6">
-            {product?.reviews?.length === 0 ? <p>There are no reviews for this product yet!.</p> : product?.reviews?.map((review) => (
-              <Card key={review.id} className="border-0 bg-gray-50">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="flex items-center gap-1 mt-2">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-3 h-3 ${
-                              i < review.rating
-                                ? "fill-black text-black"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
+            {dress?.reviews?.length === 0 ? (
+              <p>There are no reviews for this dress yet!.</p>
+            ) : (
+              dress?.reviews?.map((review) => (
+                <Card key={review.id} className="border-0 bg-gray-50">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="flex items-center gap-1 mt-2">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-3 h-3 ${
+                                i < review.rating
+                                  ? "fill-black text-black"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 leading-relaxed">
-                    {review.comment}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-700 leading-relaxed">
+                      {review.comment}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         </div>
       </main>
@@ -261,4 +264,4 @@ const ProductPage = ({ product }: { product: ProductType | null }) => {
   );
 };
 
-export default ProductPage;
+export default DressPage;

@@ -1,5 +1,5 @@
 import { getDress } from "@/actions/dresses/get-dress";
-import CreateDressForm from "@/components/admin-components/product/create-dress-form";
+import CreateDressForm from "@/components/admin-components/dress/create-dress-form";
 
 const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const param = await params;
@@ -14,6 +14,7 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     title: dressDetails.title,
     description: dressDetails.description,
     category: dressDetails.category,
+    type: dressDetails.type,
     gender: dressDetails.gender,
     basePrice: dressDetails.base_price,
     stockQuantity: dressDetails.stock,

@@ -20,7 +20,11 @@ const page = async ({
   dresses = await getDresses({ query: { searchTerm, category }, pagination: {page: 1} });
   return (
     <main className="pt-34 md:pt-24 container mx-auto px-4">
-      <Catalog products={dresses.AllProducts} totalProducts={dresses.totalProducts} page={1} />
+      <Catalog
+        dresses={dresses.AllDresses}
+        totalDresses={dresses.totalDresses}
+        page={1}
+      />
     </main>
   );
 };

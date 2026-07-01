@@ -69,7 +69,7 @@ export default function OrderRejectedEmail({
           >
             <Text>Hello {customerName},</Text>
 
-            <Text>Thank you for your interest in our products.</Text>
+            <Text>Thank you for your interest in our dresses.</Text>
 
             <Text>
               After reviewing your request, we're unfortunately unable to
@@ -93,7 +93,6 @@ export default function OrderRejectedEmail({
             <Text style={{ marginTop: "32px" }}>
               Thank you for your understanding.
             </Text>
-
           </Section>
         </Container>
       </Body>

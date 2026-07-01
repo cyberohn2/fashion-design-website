@@ -85,7 +85,7 @@ export default function ReadyMadeEmail({
             <Hr />
 
             <Text>
-              Once your payment has been confirmed, we'll move on to production.
+              Once your payment has been confirmed, we'll move on to dression.
             </Text>
 
             <Text>

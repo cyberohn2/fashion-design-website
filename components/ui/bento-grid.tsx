@@ -1,4 +1,7 @@
 import { cn } from "@/lib/utils";
+import { Button } from "./button";
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 export const BentoGrid = ({
   className,
@@ -48,6 +51,7 @@ export const BentoGridItem = ({
         <div className="font-sans text-xs font-normal text-neutral-600 dark:text-neutral-300">
           {description}
         </div>
+        <Button variant={"link"}><Link href={`/catalog?type=${title}`}>Browse <ArrowUpRight/></Link></Button>
       </div>
     </div>
   );

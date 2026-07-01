@@ -42,8 +42,8 @@ export async function AdminSidebar({ ...props }: React.ComponentProps<typeof Sid
         icon: CreditCard,
       },
       {
-        title: "Products",
-        url: "/admin/products",
+        title: "Dresses",
+        url: "/admin/dresses",
         icon: Store,
       },
       {

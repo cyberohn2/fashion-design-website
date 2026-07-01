@@ -16,7 +16,8 @@ type UpdateDressData = {
     | "CORPORATE_FEMALE"
     | "CASUAL"
     | "STREET_WEAR";
-  gender: gender,
+  type: "BESPOKE" | "KAFTAN" | "MONOGRAM" | "NATIVE" | "READYMADE";
+  gender: gender;
   base_price?: number;
   stock?: number;
   isPublished?: boolean;

@@ -175,10 +175,10 @@ const CreateOrderForm = () => {
       {/* Images Section */}
       <section>
         <Label className="text-base font-semibold text-foreground">
-          Product Images
+          Dress Images
         </Label>
         <div className="mt-4">
-          {params.slug? (
+          {params.slug ? (
             <Image
               width={200}
               height={200}
@@ -243,9 +243,7 @@ const CreateOrderForm = () => {
               </SelectTrigger>
               <SelectContent>
                 {addresses?.map((address) => (
-                  <SelectItem value={address.id}>
-                    {address.address}
-                  </SelectItem>
+                  <SelectItem value={address.id}>{address.address}</SelectItem>
                 ))}
                 <Link href={"/address/new"}>Add New Address</Link>
               </SelectContent>

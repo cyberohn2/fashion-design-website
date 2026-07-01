@@ -13,10 +13,16 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitEvent, useEffect, useState } from "react";
-import { ProductType } from "./product-card";
+import { DressType } from "./dress-card";
 import { Textarea } from "@/components/ui/textarea";
 import { type address } from "../address/manage-address";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Link from "next/link";
 import { toast } from "sonner";
 import { userOrder } from "@/app/(customer)/order-history/page";
@@ -24,18 +30,18 @@ import { useRouter } from "next/navigation";
 import PaystackPop from "@paystack/inline-js";
 const popup = new PaystackPop();
 
-export function NewOrderDialog({product}: {product: ProductType}) {
+export function NewOrderDialog({ dress }: { dress: DressType }) {
   const [formData, setFormData] = useState({
-    dressId: product.id,
+    dressId: dress.id,
     quantity: 1,
     notes: "",
     deliveryMethod: "PICKUP",
     deliveryAddressId: "",
   });
-  const router = useRouter()
+  const router = useRouter();
 
   const [addresses, setAddresses] = useState<address[]>();
-  useEffect(()=>{
+  useEffect(() => {
     const fetchAddresses = async () => {
       const req = await fetch(`/api/address/get-address`);
       if (req.ok) {
@@ -44,10 +50,9 @@ export function NewOrderDialog({product}: {product: ProductType}) {
     };
 
     fetchAddresses();
-  }, [])
+  }, []);
 
   const [isLoading, setIsLoading] = useState(false);
-
 
   const handleBuy = async () => {
     if (isLoading) return;
@@ -55,46 +60,51 @@ export function NewOrderDialog({product}: {product: ProductType}) {
     setIsLoading(true);
 
     try {
-      const createdOrder = await toast.promise(
-        fetch("/api/new-order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: formData }),
-        }).then(async (res) => {
-          if (!res.ok) throw new Error("Failed to create order");
-          return res.json() as Promise<userOrder>;
-        }),
-        {
-          loading: "Creating order...",
-          success: (data) => `Order created with Number ${data.order_number}!`,
-          error: (err) => err.message,
-        },
-      ).unwrap();
-
-      const payment = await toast.promise(
-        fetch("/api/payment/initialize", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderId: createdOrder.id,
+      const createdOrder = await toast
+        .promise(
+          fetch("/api/new-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ data: formData }),
+          }).then(async (res) => {
+            if (!res.ok) throw new Error("Failed to create order");
+            return res.json() as Promise<userOrder>;
           }),
-        }).then(async (res) => {
-          if (!res.ok) throw new Error("Failed to initialise payment");
-          return res.json();
-        }),
-        {
-          loading: "Initializing payment...",
-          success: (data) => {
-            router.push(data.authorization_url);
-            return "Payment initialized"
+          {
+            loading: "Creating order...",
+            success: (data) =>
+              `Order created with Number ${data.order_number}!`,
+            error: (err) => err.message,
           },
-          error: "Error while initializing payment!",
-        },
-      ).unwrap();
+        )
+        .unwrap();
+
+      const payment = await toast
+        .promise(
+          fetch("/api/payment/initialize", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderId: createdOrder.id,
+            }),
+          }).then(async (res) => {
+            if (!res.ok) throw new Error("Failed to initialise payment");
+            return res.json();
+          }),
+          {
+            loading: "Initializing payment...",
+            success: (data) => {
+              router.push(data.authorization_url);
+              return "Payment initialized";
+            },
+            error: "Error while initializing payment!",
+          },
+        )
+        .unwrap();
 
       // router.push(payment.authorization_url);
     } catch (error) {
@@ -110,7 +120,7 @@ export function NewOrderDialog({product}: {product: ProductType}) {
         <DialogHeader>
           <DialogTitle>New Order</DialogTitle>
           <DialogDescription>
-            Create new order for this product.
+            Create new order for this dress.
           </DialogDescription>
         </DialogHeader>
         <FieldGroup>
@@ -142,14 +152,14 @@ export function NewOrderDialog({product}: {product: ProductType}) {
                 }
                 className="w-12 text-center font-light bg-transparent border-none outline-none"
                 min="1"
-                max={product?.stock}
+                max={dress?.stock}
               />
               <Button
                 size={"icon-sm"}
                 onClick={() =>
                   setFormData((prev) => ({
                     ...prev,
-                    quantity: Math.min(product?.stock || 1, prev.quantity + 1),
+                    quantity: Math.min(dress?.stock || 1, prev.quantity + 1),
                   }))
                 }
                 className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-colors"

@@ -27,7 +27,10 @@ export function NavMain({
               tooltip="Quick Create"
               className="min-w-8 bg-black text-primary-foreground duration-200 ease-linear hover:bg-black/90 hover:text-primary-foreground active:bg-black/90 active:text-primary-foreground"
             >
-              <Link className="flex items-center gap-2" href={"/admin/products/create"}>
+              <Link
+                className="flex items-center gap-2"
+                href={"/admin/dresses/create"}
+              >
                 <CirclePlusIcon />
                 <span>New Dress</span>
               </Link>
@@ -39,8 +42,8 @@ export function NavMain({
             <SidebarMenuItem key={item.title}>
               <NavLink href={item.url}>
                 <SidebarMenuButton tooltip={item.title}>
-                    {item.icon && <item.icon />}
-                    <span>{item.title}</span>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
                 </SidebarMenuButton>
               </NavLink>
             </SidebarMenuItem>

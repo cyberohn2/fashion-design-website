@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const ItemSkeleton = () => {
   return (
     <div className="w-full rounded-xl border p-3">
-      {/* Product Image */}
+      {/* Dress Image */}
       <Skeleton className="relative min-h-75 flex flex-col justify-between pt-0 pb-1 w-full rounded-lg shimmer" />
 
       {/* Author Section */}
@@ -12,7 +12,7 @@ const ItemSkeleton = () => {
         <Skeleton className="h-4 w-24 rounded-md shimmer" />
       </div>
 
-      {/* Product Title */}
+      {/* Dress Title */}
       <Skeleton className="mt-3 h-4 w-3/4 rounded-md shimmer" />
     </div>
   );

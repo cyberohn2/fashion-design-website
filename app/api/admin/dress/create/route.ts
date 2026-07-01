@@ -12,6 +12,7 @@ export async function POST(req: Request) {
           title: dressData.get("title") as string,
           description: dressData.get("description") as string,
           category: dressData.get("category") as string,
+          type: dressData.get("type") as string,
           gender: dressData.get("gender") as string,
           basePrice: Number(dressData.get("basePrice")),
           stockQuantity: Number(dressData.get("stock")),
