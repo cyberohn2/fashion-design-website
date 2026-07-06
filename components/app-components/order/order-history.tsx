@@ -311,9 +311,9 @@ const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | und
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => page > 1 && handleFetchedOrders(page - 1)}
-                aria-disabled={page === 1}
-                className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                onClick={() => fetchedOrders.page > 1 && handleFetchedOrders(fetchedOrders.page - 1)}
+                aria-disabled={fetchedOrders.page === 1}
+                className={fetchedOrders.page === 1 ? "pointer-events-none opacity-50" : ""}
               />
             </PaginationItem>
 
@@ -323,8 +323,8 @@ const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | und
                   <PaginationEllipsis />
                 ) : (
                   <PaginationLink
-                    onClick={() => handleFetchedOrders(page)}
-                    isActive={item === page}
+                    onClick={() => handleFetchedOrders(fetchedOrders.page)}
+                    isActive={item === fetchedOrders.page}
                   >
                     {item}
                   </PaginationLink>
@@ -334,10 +334,10 @@ const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | und
 
             <PaginationItem>
               <PaginationNext
-                onClick={() => handleFetchedOrders(page + 1)}
-                aria-disabled={page === totalPages}
+                onClick={() => handleFetchedOrders(fetchedOrders.page + 1)}
+                aria-disabled={fetchedOrders.page === totalPages}
                 className={
-                  page === totalPages ? "pointer-events-none opacity-50" : ""
+                  fetchedOrders.page === totalPages ? "pointer-events-none opacity-50" : ""
                 }
               />
             </PaginationItem>

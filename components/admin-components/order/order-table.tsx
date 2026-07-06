@@ -216,9 +216,9 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => handleFetchedOrdersDetails(page - 1)}
-                aria-disabled={page === 1}
-                className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                onClick={() => fetchedOrderDetails.page > 1 && handleFetchedOrdersDetails(fetchedOrderDetails.page - 1)}
+                aria-disabled={fetchedOrderDetails.page === 1}
+                className={fetchedOrderDetails.page === 1 ? "pointer-events-none opacity-50" : ""}
               />
             </PaginationItem>
 
@@ -228,8 +228,8 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
                   <PaginationEllipsis />
                 ) : (
                   <PaginationLink
-                    onClick={() => handleFetchedOrdersDetails(page)}
-                    isActive={item === page}
+                    onClick={() => handleFetchedOrdersDetails(fetchedOrderDetails.page)}
+                    isActive={item === fetchedOrderDetails.page}
                   >
                     {item}
                   </PaginationLink>
@@ -239,10 +239,10 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
 
             <PaginationItem>
               <PaginationNext
-                onClick={() => handleFetchedOrdersDetails(page + 1)}
-                aria-disabled={page === totalPages}
+                onClick={() => handleFetchedOrdersDetails(fetchedOrderDetails.page + 1)}
+                aria-disabled={fetchedOrderDetails.page === totalPages}
                 className={
-                  page === totalPages ? "pointer-events-none opacity-50" : ""
+                  fetchedOrderDetails.page === totalPages ? "pointer-events-none opacity-50" : ""
                 }
               />
             </PaginationItem>

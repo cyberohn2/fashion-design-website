@@ -141,6 +141,13 @@ export function CustomerDetails({ user }: UserDetailsProps) {
                       <TableCell>
                         <Badge variant="secondary">{order.status}</Badge>
                       </TableCell>
+                      <TableCell className="text-right">
+                            <Button>
+                            <Link href={`/admin/orders/${order.order_number}`}>
+                                View Order
+                            </Link>
+                            </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

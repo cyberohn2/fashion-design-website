@@ -140,9 +140,9 @@ const ReviewList = ({
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => handleFetchedReviewsDetails(page - 1)}
-                aria-disabled={page === 1}
-                className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                onClick={() => fetchedReviews.page > 1 && handleFetchedReviewsDetails(fetchedReviews.page - 1)}
+                aria-disabled={fetchedReviews.page === 1}
+                className={fetchedReviews.page === 1 ? "pointer-events-none opacity-50" : ""}
               />
             </PaginationItem>
 
@@ -152,8 +152,8 @@ const ReviewList = ({
                   <PaginationEllipsis />
                 ) : (
                   <PaginationLink
-                    onClick={() => handleFetchedReviewsDetails(page)}
-                    isActive={item === page}
+                    onClick={() => fetchedReviews.page > 1 && handleFetchedReviewsDetails(fetchedReviews.page)}
+                    isActive={item === fetchedReviews.page}
                   >
                     {item}
                   </PaginationLink>
@@ -163,10 +163,10 @@ const ReviewList = ({
 
             <PaginationItem>
               <PaginationNext
-                onClick={() => handleFetchedReviewsDetails(page + 1)}
-                aria-disabled={page === totalPages}
+                onClick={() => handleFetchedReviewsDetails(fetchedReviews.page + 1)}
+                aria-disabled={fetchedReviews.page === totalPages}
                 className={
-                  page === totalPages ? "pointer-events-none opacity-50" : ""
+                  fetchedReviews.page === totalPages ? "pointer-events-none opacity-50" : ""
                 }
               />
             </PaginationItem>

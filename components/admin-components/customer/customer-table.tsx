@@ -94,14 +94,14 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
             </TableRow>
           </TableHeader>
           <TableBody>
-            {customers.length === 0 ? (
+            {fetchedCustomers.customers.length === 0 ? (
               <TableRow>
                 <TableCell className="text-center" colSpan={4}>
                   No customers yet!
                 </TableCell>
               </TableRow>
             ) : (
-              customers.map((customer) => (
+              fetchedCustomers.customers.map((customer) => (
                 <TableRow key={customer.id}>
                   <TableCell className="font-medium">
                     {customer.full_name}
@@ -137,9 +137,16 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={() => handleFetchedCustomers(page - 1)}
-                  aria-disabled={page === 1}
-                  className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                  onClick={() =>
+                    fetchedCustomers.page > 1 &&
+                    handleFetchedCustomers(fetchedCustomers.page - 1)
+                  }
+                  aria-disabled={fetchedCustomers.page === 1}
+                  className={
+                    fetchedCustomers.page === 1
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
                 />
               </PaginationItem>
 
@@ -149,8 +156,8 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
                     <PaginationEllipsis />
                   ) : (
                     <PaginationLink
-                      onClick={() => handleFetchedCustomers(page)}
-                      isActive={item === page}
+                      onClick={() => handleFetchedCustomers(item as number)}
+                      isActive={item === fetchedCustomers.page}
                     >
                       {item}
                     </PaginationLink>
@@ -160,10 +167,14 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
 
               <PaginationItem>
                 <PaginationNext
-                  onClick={() => handleFetchedCustomers(page + 1)}
-                  aria-disabled={page === totalPages}
+                  onClick={() =>
+                    handleFetchedCustomers(fetchedCustomers.page + 1)
+                  }
+                  aria-disabled={fetchedCustomers.page === totalPages}
                   className={
-                    page === totalPages ? "pointer-events-none opacity-50" : ""
+                    fetchedCustomers.page === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : ""
                   }
                 />
               </PaginationItem>

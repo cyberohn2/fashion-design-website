@@ -155,9 +155,9 @@ const Catalog = ({
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              onClick={() => handleFetchedDresses(page - 1)}
-              aria-disabled={page === 1}
-              className={page === 1 ? "pointer-events-none opacity-50" : ""}
+              onClick={() => handleFetchedDresses(fetchedDresses.page - 1)}
+              aria-disabled={fetchedDresses.page === 1}
+              className={fetchedDresses.page === 1 ? "pointer-events-none opacity-50" : ""}
             />
           </PaginationItem>
 
@@ -167,8 +167,8 @@ const Catalog = ({
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
-                  onClick={() => handleFetchedDresses(page)}
-                  isActive={item === page}
+                  onClick={() => handleFetchedDresses(fetchedDresses.page)}
+                  isActive={item === fetchedDresses.page}
                 >
                   {item}
                 </PaginationLink>
@@ -178,10 +178,10 @@ const Catalog = ({
 
           <PaginationItem>
             <PaginationNext
-              onClick={() => handleFetchedDresses(page + 1)}
-              aria-disabled={page === totalPages}
+              onClick={() => handleFetchedDresses(fetchedDresses.page + 1)}
+              aria-disabled={fetchedDresses.page === totalPages}
               className={
-                page === totalPages ? "pointer-events-none opacity-50" : ""
+                fetchedDresses.page === totalPages ? "pointer-events-none opacity-50" : ""
               }
             />
           </PaginationItem>

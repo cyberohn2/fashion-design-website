@@ -209,9 +209,9 @@ export function PaymentTable({
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => handleFetchedPaymentsDetails(page - 1)}
-                aria-disabled={page === 1}
-                className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                onClick={() => fetchedPayments.page > 1 && handleFetchedPaymentsDetails(fetchedPayments.page - 1)}
+                aria-disabled={fetchedPayments.page === 1}
+                className={fetchedPayments.page === 1 ? "pointer-events-none opacity-50" : ""}
               />
             </PaginationItem>
 
@@ -221,8 +221,8 @@ export function PaymentTable({
                   <PaginationEllipsis />
                 ) : (
                   <PaginationLink
-                    onClick={() => handleFetchedPaymentsDetails(page)}
-                    isActive={item === page}
+                    onClick={() => handleFetchedPaymentsDetails(fetchedPayments.page)}
+                    isActive={item === fetchedPayments.page}
                   >
                     {item}
                   </PaginationLink>
@@ -232,10 +232,10 @@ export function PaymentTable({
 
             <PaginationItem>
               <PaginationNext
-                onClick={() => handleFetchedPaymentsDetails(page + 1)}
-                aria-disabled={page === totalPages}
+                onClick={() => handleFetchedPaymentsDetails(fetchedPayments.page + 1)}
+                aria-disabled={fetchedPayments.page === totalPages}
                 className={
-                  page === totalPages ? "pointer-events-none opacity-50" : ""
+                  fetchedPayments.page === totalPages ? "pointer-events-none opacity-50" : ""
                 }
               />
             </PaginationItem>

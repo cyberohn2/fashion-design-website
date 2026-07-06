@@ -207,9 +207,9 @@ const DressList = ({
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => handleFetchedDressesDetails(page - 1)}
-                aria-disabled={page === 1}
-                className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                onClick={() => fetchedDresses.page > 1 &&  handleFetchedDressesDetails(fetchedDresses.page - 1)}
+                aria-disabled={fetchedDresses.page === 1}
+                className={fetchedDresses.page === 1 ? "pointer-events-none opacity-50" : ""}
               />
             </PaginationItem>
 
@@ -219,8 +219,8 @@ const DressList = ({
                   <PaginationEllipsis />
                 ) : (
                   <PaginationLink
-                    onClick={() => handleFetchedDressesDetails(page)}
-                    isActive={item === page}
+                    onClick={() => handleFetchedDressesDetails(fetchedDresses.page)}
+                    isActive={item === fetchedDresses.page}
                   >
                     {item}
                   </PaginationLink>
@@ -230,10 +230,10 @@ const DressList = ({
 
             <PaginationItem>
               <PaginationNext
-                onClick={() => handleFetchedDressesDetails(page + 1)}
-                aria-disabled={page === totalPages}
+                onClick={() => handleFetchedDressesDetails(fetchedDresses.page + 1)}
+                aria-disabled={fetchedDresses.page === totalPages}
                 className={
-                  page === totalPages ? "pointer-events-none opacity-50" : ""
+                  fetchedDresses.page === totalPages ? "pointer-events-none opacity-50" : ""
                 }
               />
             </PaginationItem>
