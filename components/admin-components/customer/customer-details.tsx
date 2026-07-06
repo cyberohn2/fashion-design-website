@@ -199,7 +199,7 @@ export function CustomerDetails({ user }: UserDetailsProps) {
               </Table>
               {user.payments.length > 5 && (
                 <Button variant="outline" className="w-full">
-                  <Link href={`/admin/customers/payments/${user.id}`}>
+                  <Link href={`/admin/customers/payment/${user.id}`}>
                     See All Payments
                   </Link>
                 </Button>
