@@ -113,13 +113,15 @@ export function RevenueChart({ chartData }: {chartData: Payment[]}) {
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         {filteredData.length === 0 ? (
-          <p className="aspect-auto h-62.5 w-full" >No revenue data yet.</p>
+          <p className="aspect-auto h-62.5 w-full">No revenue data yet.</p>
         ) : (
           <ChartContainer
             config={chartConfig}
             className="aspect-auto h-62.5 w-full"
           >
-            <AreaChart data={filteredData.filter(item => item.status === "PAID")}>
+            <AreaChart
+              data={filteredData.filter((item) => item.status === "PAID")}
+            >
               <defs>
                 <linearGradient id="fillStatus" x1="0" y1="0" x2="0" y2="1">
                   <stop
@@ -165,6 +167,7 @@ export function RevenueChart({ chartData }: {chartData: Payment[]}) {
                 cursor={false}
                 content={
                   <ChartTooltipContent
+                    labelKey="paidAt"
                     labelFormatter={(value) => {
                       console.log(value);
                       return new Date(value).toLocaleDateString("en-US", {
