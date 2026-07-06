@@ -22,6 +22,7 @@ import { customer } from "./customer-table";
 import { measurement } from "@/components/app-components/measurement/manage-measurements";
 import { userOrder } from "@/app/(customer)/order-history/page";
 import { Payment } from "../order/order-details";
+import Link from "next/link";
 
 interface UserDetailsProps {
   user: customer & {
@@ -146,12 +147,16 @@ export function CustomerDetails({ user }: UserDetailsProps) {
               </Table>
               {user.orders.length > 5 && (
                 <Button variant="outline" className="w-full">
-                  See All Orders
+                  <Link href={`/admin/customers/orders/${user.id}`}>
+                    See All orders
+                  </Link>
                 </Button>
               )}
             </div>
           ) : (
-            <p className="text-muted-foreground">No orders found for {user.full_name}</p>
+            <p className="text-muted-foreground">
+              No orders found for {user.full_name}
+            </p>
           )}
         </CardContent>
       </Card>
@@ -194,12 +199,16 @@ export function CustomerDetails({ user }: UserDetailsProps) {
               </Table>
               {user.payments.length > 5 && (
                 <Button variant="outline" className="w-full">
-                  See All Payments
+                  <Link href={`/admin/customers/payments/${user.id}`}>
+                    See All Payments
+                  </Link>
                 </Button>
               )}
             </div>
           ) : (
-            <p className="text-muted-foreground">No payments found for {user.full_name}</p>
+            <p className="text-muted-foreground">
+              No payments found for {user.full_name}
+            </p>
           )}
         </CardContent>
       </Card>
@@ -237,19 +246,25 @@ export function CustomerDetails({ user }: UserDetailsProps) {
                 <p className="text-sm font-medium text-muted-foreground">
                   Chest
                 </p>
-                <p className="font-semibold">{selectedMeasurement.chest} inch(es)</p>
+                <p className="font-semibold">
+                  {selectedMeasurement.chest} inch(es)
+                </p>
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
                   Waist
                 </p>
-                <p className="font-semibold">{selectedMeasurement.waist} inch(es)</p>
+                <p className="font-semibold">
+                  {selectedMeasurement.waist} inch(es)
+                </p>
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
                   Hips
                 </p>
-                <p className="font-semibold">{selectedMeasurement.hips} inch(es)</p>
+                <p className="font-semibold">
+                  {selectedMeasurement.hips} inch(es)
+                </p>
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
@@ -299,7 +314,9 @@ export function CustomerDetails({ user }: UserDetailsProps) {
                 <p className="text-sm font-medium text-muted-foreground">
                   Thigh
                 </p>
-                <p className="font-semibold">{selectedMeasurement.thigh} inch(es)</p>
+                <p className="font-semibold">
+                  {selectedMeasurement.thigh} inch(es)
+                </p>
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
@@ -313,7 +330,9 @@ export function CustomerDetails({ user }: UserDetailsProps) {
                 <p className="text-sm font-medium text-muted-foreground">
                   Ankle
                 </p>
-                <p className="font-semibold">{selectedMeasurement.ankle} inch(es)</p>
+                <p className="font-semibold">
+                  {selectedMeasurement.ankle} inch(es)
+                </p>
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
@@ -353,7 +372,9 @@ export function CustomerDetails({ user }: UserDetailsProps) {
                 <p className="text-sm font-medium text-muted-foreground">
                   Neck
                 </p>
-                <p className="font-semibold">{selectedMeasurement.neck} inch(es)</p>
+                <p className="font-semibold">
+                  {selectedMeasurement.neck} inch(es)
+                </p>
               </div>
               {selectedMeasurement.notes && (
                 <div className="col-span-2">

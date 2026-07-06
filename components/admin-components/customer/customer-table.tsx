@@ -113,8 +113,8 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
                     {customer.phone}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Link href={`/admin/customers/orders/${customer.id}`}>
-                      View orders
+                    <Link href={`/admin/customers/customer/${customer.id}`}>
+                      View Details
                     </Link>
                   </TableCell>
                 </TableRow>
