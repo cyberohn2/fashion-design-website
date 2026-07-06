@@ -21,13 +21,13 @@ export type userOrder = {
     | "DELIVERED"
     | "COMPLETED"
     | "CANCELLED";
-  statusHistory: OrderStatusHistoryItem[];
+  statusHistory?: OrderStatusHistoryItem[];
   delivery_method: "PICKUP" | "LOCAL_DELIVERY" | "SHIPPING";
   delivery_address_id: string;
   estimated_delivery: Date | null;
   notes: string | null;
   total: number;
-  payment: Payment[] | null;
+  payment?: Payment[] | null;
   payment_status:
     | "UNPAID"
     | "PARTIALLY_PAID"

@@ -1,5 +1,5 @@
 import { getCustomers } from "@/actions/admin/get-customers";
-import { CustomerTable } from "@/components/admin-components/dashboard/customer-table";
+import { CustomerTable } from "@/components/admin-components/customer/customer-table";
 
 
 const page = async () => {
