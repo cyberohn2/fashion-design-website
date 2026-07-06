@@ -10,7 +10,7 @@ export async function getCustomer(userId: string) {
     const customer = await prisma.user.findUnique({
         where: {
           id: userId,
-          role: "USER",
+        //   role: "USER",
         },
         include: {
             addresses: true,
