@@ -92,7 +92,7 @@ const DressCard = ({ dress }: { dress: DressType }) => {
   );
 
   return (
-    <Card className="relative flex flex-col gap-2 pt-0 pb-1">
+    <Card className="relative flex flex-col gap-2 pt-0 pb-1 h-fit">
       <Badge variant={"secondary"} className="absolute top-2 right-2 z-20">
         {dress?.category}
       </Badge>
