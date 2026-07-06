@@ -86,7 +86,7 @@ const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | und
       if (newOrders.ok) {
         newOrders.json().then((data) => {
           setFetchedOrders({
-            orders: data.AllOrders,
+            orders: data.orders,
             totalOrders: data.totalOrders,
             page: data.page,
           });
@@ -311,7 +311,7 @@ const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | und
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => handleFetchedOrders(page - 1)}
+                onClick={() => page > 1 && handleFetchedOrders(page - 1)}
                 aria-disabled={page === 1}
                 className={page === 1 ? "pointer-events-none opacity-50" : ""}
               />
