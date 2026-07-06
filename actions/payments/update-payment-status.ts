@@ -3,7 +3,11 @@
 import { TransactionClient } from "@/app/generated/prisma/internal/prismaNamespace";
 import { PaymentStatus } from "@/components/admin-components/order/order-details";
 import { requireAuth } from "@/lib/auth/require-auth";
+import PaymentReceivedEmail from "@/lib/email-templates/payment-received";
 import prisma from "@/lib/prisma";
+import { sendEmail } from "@/lib/send-mail";
+import { render } from "@react-email/render";
+import { createElement } from "react";
 
 export async function updatePaymentStatus({ref, status, paidAt}:{ref: string, status: PaymentStatus, paidAt?: string}) {
   const user = await requireAuth();
@@ -41,12 +45,27 @@ export async function updatePaymentStatus({ref, status, paidAt}:{ref: string, st
               },
             },
             include: {
+              user: true,
               items: {
                 include: {
                   dress: true,
                 },
               },
             },
+          });
+
+          // Send email to customer
+          const html = await render(
+            createElement(PaymentReceivedEmail, {
+              customerName: order.user.full_name,
+              orderNumber: order.order_number,
+            }),
+          );
+
+          await sendEmail({
+            to: order.user.email,
+            subject: "Payment Received!",
+            html,
           });
 
           // Update stock for every dress in the order
