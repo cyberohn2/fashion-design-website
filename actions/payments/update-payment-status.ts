@@ -32,6 +32,13 @@ export async function updatePaymentStatus({ref, status, paidAt}:{ref: string, st
             data: {
               status,
               payment_status: "PAID",
+              statusHistory: {
+                create: {
+                  oldStatus: payment.order.status,
+                  newStatus: "PAID",
+                  changedById: user.id,
+                },
+              },
             },
             include: {
               items: {

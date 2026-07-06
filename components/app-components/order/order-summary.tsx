@@ -65,9 +65,14 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
               {order?.items?.map((item) => (
                 <div key={item.id}>
                   {/* Status Badge */}
-                  <div className="px-6 pt-6 pb-3">
+                  <div className="px-6 pt-6 pb-3 flex items-center gap-3">
                     <img src={item.dress?.thumbnail || "/logo"} alt={item.dress?.title} />
-                    <p>{item.dress?.title}</p>
+                    <div>
+                      <p className="font-bold">{item.dress?.title}</p>
+                      <p className="text-sm text-gray-600">
+                        Quantity: {item.quantity}
+                      </p>
+                    </div>
                   </div>
 
                   <Separator className="my-0" />
