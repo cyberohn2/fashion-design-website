@@ -52,11 +52,7 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
             </p>
             <p>
               Total: ₦{" "}
-              {order?.order_type === "READY_MADE"
-                ? order?.total.toLocaleString()
-                : order?.custom_order?.admin_final_price
-                  ? "0"
-                  : order?.custom_order?.admin_final_price?.toLocaleString()}
+              {order?.payment?.some((pay) => pay.status === "PAID") ? order?.payment?.find((pay) => pay.status === "PAID")?.amount : 0}
             </p>
           </div>
         </div>
