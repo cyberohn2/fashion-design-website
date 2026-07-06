@@ -67,14 +67,6 @@ export default function SectionCards(
             <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
               {section.value}
             </CardTitle>
-            <CardAction>
-              <Link href={section.action.url}>
-                  <Badge variant="outline">
-                    <Link2 />
-                    {section.action.title}
-                  </Badge>
-              </Link>
-            </CardAction>
           </CardHeader>
           <CardFooter className="flex-col items-start gap-1.5 text-sm">
             <div className="text-muted-foreground">
