@@ -22,7 +22,6 @@ export async function getPayments({ pagination }: { pagination: { page: number }
 
         const formattedPayment = fetchedPayment.map((pmt) => ({
             ...pmt,
-            date: pmt.paidAt,
           status: pmt.status,
           amount: pmt.amount,
         }));
