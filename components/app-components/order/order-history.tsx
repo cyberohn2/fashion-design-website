@@ -17,8 +17,19 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+import { useState } from "react";
+import { getPaginationItems } from "@/lib/getPaginationItems";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
-const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
+const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | undefined; totalOrders: number; page: number }) => {
   const orderStatusColors = {
     PENDING_REVIEW: "bg-gray-100 text-gray-800",
     ACCEPTED: "bg-blue-100 text-blue-800",
@@ -33,7 +44,13 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
     CANCELLED: "bg-rose-100 text-rose-800",
   };
 
-  const ongoingOrders = orders?.filter((order) =>
+  const [fetchedOrders, setFetchedOrders] = useState({
+    orders,
+    totalOrders,
+    page,
+  });
+
+  const ongoingOrders = fetchedOrders?.orders?.filter((order) =>
     [
       "ACCEPTED",
       "AWAITING_PAYMENT",
@@ -46,13 +63,43 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
     ].includes(order.status),
   );
 
-  const pendingOrders = orders?.filter((order) =>
+  const pendingOrders = fetchedOrders?.orders?.filter((order) =>
     ["AWAITING", "PENDING_REVIEW"].includes(order.status),
   );
 
-  const cancelledOrders = orders?.filter((order) =>
+  const cancelledOrders = fetchedOrders?.orders?.filter((order) =>
     ["REJECTED", "CANCELLED"].includes(order.status),
   );
+
+  const ITEMS_PER_PAGE = 20;
+  const totalPages = Math.ceil(fetchedOrders.totalOrders / ITEMS_PER_PAGE);
+  const paginationItems = getPaginationItems(fetchedOrders.page, totalPages);
+
+  const [isFetching, setIsFetching] = useState(false);
+  
+    const handleFetchedOrders = async (page: number) => {
+      if (isFetching) {
+        return;
+      }
+      setIsFetching(true);
+      const newOrders = await fetch(`/api/orders?page=${page}`);
+      if (newOrders.ok) {
+        newOrders.json().then((data) => {
+          setFetchedOrders({
+            orders: data.AllOrders,
+            totalOrders: data.totalOrders,
+            page: data.page,
+          });
+          setIsFetching(false);
+        });
+      } else {
+        setFetchedOrders((prev) => prev);
+        toast.error("Error fetching orders.", {
+          position: "top-right",
+        });
+        setIsFetching(false);
+      }
+    };
 
   const router = useRouter()
   const handlePayment = async (order: userOrder) => {
@@ -120,13 +167,9 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
                         {order.status}
                       </Badge>
                       {order.payment?.some((pay) => pay.status === "PAID") ? (
-                        <Badge >
-                          PAID
-                        </Badge>
+                        <Badge>PAID</Badge>
                       ) : (
-                        <Badge >
-                          UNPAID
-                        </Badge>
+                        <Badge>UNPAID</Badge>
                       )}
                       <p>
                         On:{" "}
@@ -264,6 +307,42 @@ const OrderHistory = ({ orders }: { orders: userOrder[] | undefined }) => {
             )}
           </TabsContent>
         </Tabs>
+        <Pagination className="py-5 mt-auto">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => handleFetchedOrders(page - 1)}
+                aria-disabled={page === 1}
+                className={page === 1 ? "pointer-events-none opacity-50" : ""}
+              />
+            </PaginationItem>
+
+            {paginationItems.map((item, index) => (
+              <PaginationItem key={`${item}-${index}`}>
+                {item === "ellipsis" ? (
+                  <PaginationEllipsis />
+                ) : (
+                  <PaginationLink
+                    onClick={() => handleFetchedOrders(page)}
+                    isActive={item === page}
+                  >
+                    {item}
+                  </PaginationLink>
+                )}
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => handleFetchedOrders(page + 1)}
+                aria-disabled={page === totalPages}
+                className={
+                  page === totalPages ? "pointer-events-none opacity-50" : ""
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </section>
   );

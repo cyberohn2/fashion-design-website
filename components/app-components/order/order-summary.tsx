@@ -50,7 +50,14 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                 day: "2-digit",
               })}
             </p>
-            <p>Total: ₦ {order?.total.toLocaleString()}</p>
+            <p>
+              Total: ₦{" "}
+              {order?.order_type === "READY_MADE"
+                ? order?.total.toLocaleString()
+                : order?.custom_order?.admin_final_price
+                  ? "0"
+                  : order?.custom_order?.admin_final_price?.toLocaleString()}
+            </p>
           </div>
         </div>
 
@@ -65,10 +72,10 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
               {order?.items?.map((item) => (
                 <div key={item.id}>
                   {/* Status Badge */}
-                  <div className="px-6 pt-6 pb-3 flex items-center gap-3">
+                  <div className="px-6 pt-6 pb-3 flex items-start gap-3">
                     <img
-                      width={100}
-                      height={100}
+                      width={50}
+                      height={50}
                       src={item.dress?.thumbnail || "/logo"}
                       alt={item.dress?.title}
                     />
