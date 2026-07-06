@@ -28,6 +28,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ReusablePagination } from "@/components/ui/reusable-pagination";
 
 const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | undefined; totalOrders: number; page: number }) => {
   const orderStatusColors = {
@@ -307,42 +308,13 @@ const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | und
             )}
           </TabsContent>
         </Tabs>
-        <Pagination className="py-5 mt-auto">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => fetchedOrders.page > 1 && handleFetchedOrders(fetchedOrders.page - 1)}
-                aria-disabled={fetchedOrders.page === 1}
-                className={fetchedOrders.page === 1 ? "pointer-events-none opacity-50" : ""}
-              />
-            </PaginationItem>
-
-            {paginationItems.map((item, index) => (
-              <PaginationItem key={`${item}-${index}`}>
-                {item === "ellipsis" ? (
-                  <PaginationEllipsis />
-                ) : (
-                  <PaginationLink
-                    onClick={() => handleFetchedOrders(fetchedOrders.page)}
-                    isActive={item === fetchedOrders.page}
-                  >
-                    {item}
-                  </PaginationLink>
-                )}
-              </PaginationItem>
-            ))}
-
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handleFetchedOrders(fetchedOrders.page + 1)}
-                aria-disabled={fetchedOrders.page === totalPages}
-                className={
-                  fetchedOrders.page === totalPages ? "pointer-events-none opacity-50" : ""
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ReusablePagination
+          className="py-5 mt-auto"
+          page={fetchedOrders.page}
+          totalPages={totalPages}
+          paginationItems={paginationItems}
+          onPageChange={handleFetchedOrders}
+        />
       </div>
     </section>
   );

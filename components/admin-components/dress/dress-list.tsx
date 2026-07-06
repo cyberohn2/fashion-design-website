@@ -42,6 +42,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ReusablePagination } from '@/components/ui/reusable-pagination';
 
 const DressList = ({
   Dresses,
@@ -203,42 +204,13 @@ const DressList = ({
         )}
       </CardContent>
       <CardFooter>
-        <Pagination className="py-5 mt-auto">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => fetchedDresses.page > 1 &&  handleFetchedDressesDetails(fetchedDresses.page - 1)}
-                aria-disabled={fetchedDresses.page === 1}
-                className={fetchedDresses.page === 1 ? "pointer-events-none opacity-50" : ""}
-              />
-            </PaginationItem>
-
-            {paginationItems.map((item, index) => (
-              <PaginationItem key={`${item}-${index}`}>
-                {item === "ellipsis" ? (
-                  <PaginationEllipsis />
-                ) : (
-                  <PaginationLink
-                    onClick={() => handleFetchedDressesDetails(fetchedDresses.page)}
-                    isActive={item === fetchedDresses.page}
-                  >
-                    {item}
-                  </PaginationLink>
-                )}
-              </PaginationItem>
-            ))}
-
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handleFetchedDressesDetails(fetchedDresses.page + 1)}
-                aria-disabled={fetchedDresses.page === totalPages}
-                className={
-                  fetchedDresses.page === totalPages ? "pointer-events-none opacity-50" : ""
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ReusablePagination
+          className="py-5 mt-auto"
+          page={fetchedDresses.page}
+          totalPages={totalPages}
+          paginationItems={paginationItems}
+          onPageChange={handleFetchedDressesDetails}
+        />
       </CardFooter>
     </Card>
   );

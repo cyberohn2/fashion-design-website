@@ -36,6 +36,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getPaginationItems } from "@/lib/getPaginationItems";
 import { orderStatus } from "@/lib/lib";
+import { ReusablePagination } from "@/components/ui/reusable-pagination";
 
 export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], totalOrder: number, page: number}) {
   const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
@@ -189,9 +190,7 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
                       {order.payment_status.toLowerCase().replace(/_/g, " ")}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    ₦{order.total || 0}
-                  </TableCell>
+                  <TableCell>₦{order.total || 0}</TableCell>
                   <TableCell className="text-right">
                     <Button>
                       <Link href={`/admin/orders/${order.order_number}`}>
@@ -212,42 +211,13 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
         </Table>
       </CardContent>
       <CardFooter>
-        <Pagination className="py-5 mt-auto">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => fetchedOrderDetails.page > 1 && handleFetchedOrdersDetails(fetchedOrderDetails.page - 1)}
-                aria-disabled={fetchedOrderDetails.page === 1}
-                className={fetchedOrderDetails.page === 1 ? "pointer-events-none opacity-50" : ""}
-              />
-            </PaginationItem>
-
-            {paginationItems.map((item, index) => (
-              <PaginationItem key={`${item}-${index}`}>
-                {item === "ellipsis" ? (
-                  <PaginationEllipsis />
-                ) : (
-                  <PaginationLink
-                    onClick={() => handleFetchedOrdersDetails(fetchedOrderDetails.page)}
-                    isActive={item === fetchedOrderDetails.page}
-                  >
-                    {item}
-                  </PaginationLink>
-                )}
-              </PaginationItem>
-            ))}
-
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handleFetchedOrdersDetails(fetchedOrderDetails.page + 1)}
-                aria-disabled={fetchedOrderDetails.page === totalPages}
-                className={
-                  fetchedOrderDetails.page === totalPages ? "pointer-events-none opacity-50" : ""
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ReusablePagination
+          className="py-5 mt-auto"
+          page={fetchedOrderDetails.page}
+          totalPages={totalPages}
+          paginationItems={paginationItems}
+          onPageChange={handleFetchedOrdersDetails}
+        />
       </CardFooter>
     </Card>
   );

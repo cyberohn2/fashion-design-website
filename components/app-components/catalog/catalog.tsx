@@ -31,6 +31,7 @@ import { useMemo, useState } from "react";
 import DressCard, { DressType } from "./dress-card";
 import { toast } from "sonner";
 import { getPaginationItems } from "@/lib/getPaginationItems";
+import { ReusablePagination } from "@/components/ui/reusable-pagination";
 
 const Catalog = ({
   dresses,
@@ -151,42 +152,13 @@ const Catalog = ({
           ))
         )}
       </div>
-      <Pagination className="py-5 mt-auto">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => handleFetchedDresses(fetchedDresses.page - 1)}
-              aria-disabled={fetchedDresses.page === 1}
-              className={fetchedDresses.page === 1 ? "pointer-events-none opacity-50" : ""}
-            />
-          </PaginationItem>
-
-          {paginationItems.map((item, index) => (
-            <PaginationItem key={`${item}-${index}`}>
-              {item === "ellipsis" ? (
-                <PaginationEllipsis />
-              ) : (
-                <PaginationLink
-                  onClick={() => handleFetchedDresses(fetchedDresses.page)}
-                  isActive={item === fetchedDresses.page}
-                >
-                  {item}
-                </PaginationLink>
-              )}
-            </PaginationItem>
-          ))}
-
-          <PaginationItem>
-            <PaginationNext
-              onClick={() => handleFetchedDresses(fetchedDresses.page + 1)}
-              aria-disabled={fetchedDresses.page === totalPages}
-              className={
-                fetchedDresses.page === totalPages ? "pointer-events-none opacity-50" : ""
-              }
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <ReusablePagination
+        className="py-5 mt-auto"
+        page={fetchedDresses.page}
+        totalPages={totalPages}
+        paginationItems={paginationItems}
+        onPageChange={handleFetchedDresses}
+      />
     </section>
   );
 };

@@ -23,6 +23,7 @@ import { SearchSlash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
 import { getPaginationItems } from '@/lib/getPaginationItems';
+import { ReusablePagination } from '@/components/ui/reusable-pagination';
 
 const ReviewList = ({
   Reviews,
@@ -132,46 +133,19 @@ const ReviewList = ({
             </EmptyHeader>
           </Empty>
         ) : (
-          sortedReviews?.map((review) => <ReviewCard key={review.id} review={review} />)
+          sortedReviews?.map((review) => (
+            <ReviewCard key={review.id} review={review} />
+          ))
         )}
       </CardContent>
       <CardFooter>
-        <Pagination className="py-5 mt-auto">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => fetchedReviews.page > 1 && handleFetchedReviewsDetails(fetchedReviews.page - 1)}
-                aria-disabled={fetchedReviews.page === 1}
-                className={fetchedReviews.page === 1 ? "pointer-events-none opacity-50" : ""}
-              />
-            </PaginationItem>
-
-            {paginationItems.map((item, index) => (
-              <PaginationItem key={`${item}-${index}`}>
-                {item === "ellipsis" ? (
-                  <PaginationEllipsis />
-                ) : (
-                  <PaginationLink
-                    onClick={() => fetchedReviews.page > 1 && handleFetchedReviewsDetails(fetchedReviews.page)}
-                    isActive={item === fetchedReviews.page}
-                  >
-                    {item}
-                  </PaginationLink>
-                )}
-              </PaginationItem>
-            ))}
-
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handleFetchedReviewsDetails(fetchedReviews.page + 1)}
-                aria-disabled={fetchedReviews.page === totalPages}
-                className={
-                  fetchedReviews.page === totalPages ? "pointer-events-none opacity-50" : ""
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ReusablePagination
+          className="py-5 mt-auto"
+          page={fetchedReviews.page}
+          totalPages={totalPages}
+          paginationItems={paginationItems}
+          onPageChange={handleFetchedReviewsDetails}
+        />
       </CardFooter>
     </Card>
   );

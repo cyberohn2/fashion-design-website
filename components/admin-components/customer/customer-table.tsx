@@ -23,6 +23,7 @@ import {
 import { useState } from "react";
 import Link from "next/link";
 import { getPaginationItems } from "@/lib/getPaginationItems";
+import { ReusablePagination } from "@/components/ui/reusable-pagination";
 
 export type customer = {
   id: string;
@@ -133,53 +134,13 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
       </CardContent>
       {pathname.includes("/admin/customers") && (
         <CardFooter>
-          <Pagination className="py-5 mt-auto">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() =>
-                    fetchedCustomers.page > 1 &&
-                    handleFetchedCustomers(fetchedCustomers.page - 1)
-                  }
-                  aria-disabled={fetchedCustomers.page === 1}
-                  className={
-                    fetchedCustomers.page === 1
-                      ? "pointer-events-none opacity-50"
-                      : ""
-                  }
-                />
-              </PaginationItem>
-
-              {paginationItems.map((item, index) => (
-                <PaginationItem key={`${item}-${index}`}>
-                  {item === "ellipsis" ? (
-                    <PaginationEllipsis />
-                  ) : (
-                    <PaginationLink
-                      onClick={() => handleFetchedCustomers(item as number)}
-                      isActive={item === fetchedCustomers.page}
-                    >
-                      {item}
-                    </PaginationLink>
-                  )}
-                </PaginationItem>
-              ))}
-
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() =>
-                    handleFetchedCustomers(fetchedCustomers.page + 1)
-                  }
-                  aria-disabled={fetchedCustomers.page === totalPages}
-                  className={
-                    fetchedCustomers.page === totalPages
-                      ? "pointer-events-none opacity-50"
-                      : ""
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <ReusablePagination
+            className="py-5 mt-auto"
+            page={fetchedCustomers.page}
+            totalPages={totalPages}
+            paginationItems={paginationItems}
+            onPageChange={handleFetchedCustomers}
+          />
         </CardFooter>
       )}
     </Card>

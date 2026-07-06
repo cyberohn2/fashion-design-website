@@ -35,6 +35,7 @@ import { toast } from "sonner";
 import { getPaginationItems } from "@/lib/getPaginationItems";
 import { Button } from "@/components/ui/button";
 import { paymentStatus } from "@/lib/lib";
+import { ReusablePagination } from "@/components/ui/reusable-pagination";
 
 export type paymentTableProp = Payment & {
   order: {
@@ -205,42 +206,13 @@ export function PaymentTable({
         </Table>
       </CardContent>
       <CardFooter>
-        <Pagination className="py-5 mt-auto">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => fetchedPayments.page > 1 && handleFetchedPaymentsDetails(fetchedPayments.page - 1)}
-                aria-disabled={fetchedPayments.page === 1}
-                className={fetchedPayments.page === 1 ? "pointer-events-none opacity-50" : ""}
-              />
-            </PaginationItem>
-
-            {paginationItems.map((item, index) => (
-              <PaginationItem key={`${item}-${index}`}>
-                {item === "ellipsis" ? (
-                  <PaginationEllipsis />
-                ) : (
-                  <PaginationLink
-                    onClick={() => handleFetchedPaymentsDetails(fetchedPayments.page)}
-                    isActive={item === fetchedPayments.page}
-                  >
-                    {item}
-                  </PaginationLink>
-                )}
-              </PaginationItem>
-            ))}
-
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handleFetchedPaymentsDetails(fetchedPayments.page + 1)}
-                aria-disabled={fetchedPayments.page === totalPages}
-                className={
-                  fetchedPayments.page === totalPages ? "pointer-events-none opacity-50" : ""
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ReusablePagination
+          className="py-5 mt-auto"
+          page={fetchedPayments.page}
+          totalPages={totalPages}
+          paginationItems={paginationItems}
+          onPageChange={handleFetchedPaymentsDetails}
+        />
       </CardFooter>
     </Card>
   );
