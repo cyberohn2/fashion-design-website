@@ -166,6 +166,7 @@ export function RevenueChart({ chartData }: {chartData: Payment[]}) {
                 content={
                   <ChartTooltipContent
                     labelFormatter={(value) => {
+                      console.log(value);
                       return new Date(value).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
