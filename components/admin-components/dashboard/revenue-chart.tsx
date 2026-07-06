@@ -119,7 +119,7 @@ export function RevenueChart({ chartData }: {chartData: Payment[]}) {
             config={chartConfig}
             className="aspect-auto h-62.5 w-full"
           >
-            <AreaChart data={filteredData}>
+            <AreaChart data={filteredData.filter(item => item.status === "PAID")}>
               <defs>
                 <linearGradient id="fillStatus" x1="0" y1="0" x2="0" y2="1">
                   <stop
