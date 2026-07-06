@@ -15,6 +15,12 @@ export async function getOrder(orderNumber: string) {
       },
 
       include: {
+        custom_order: {
+          include:{
+            dress: true,
+            measurements: true
+          },
+        },
         items: {
           include: {
             dress: true,

@@ -52,7 +52,9 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
             </p>
             <p>
               Total: ₦{" "}
-              {order?.payment?.some((pay) => pay.status === "PAID") ? order?.payment?.find((pay) => pay.status === "PAID")?.amount : 0}
+              {order?.payment?.some((pay) => pay.status === "PAID")
+                ? order?.payment?.find((pay) => pay.status === "PAID")?.amount
+                : 0}
             </p>
           </div>
         </div>
@@ -96,6 +98,34 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                   </div>
                 </div>
               ))}
+            </Card>
+          </div>
+        )}
+
+        {order?.order_type !== "READY_MADE" && (
+          <div className="mb-8">
+            <h3 className="text-sm font-light uppercase tracking-widest text-gray-600 mb-4">
+              Custom Order Details
+            </h3>
+
+            <Card className="border-gray-200">
+              <div className="px-6 pt-6 pb-3 flex items-start gap-3">
+                <img
+                  width={50}
+                  height={50}
+                  src={order?.custom_order?.dress?.thumbnail || order?.custom_order?.idea_image_url || "/logo"}
+                  alt={order?.custom_order?.dress?.title || ""}
+                />
+                <div>
+                  <p className="font-bold">{order?.custom_order?.customization_notes }</p>
+                  <p className="text-sm text-gray-600">
+                    Your Budget: {order?.custom_order?.customer_budget ? `₦ ${order?.custom_order?.customer_budget.toLocaleString()}` : "Not specified"}
+                  </p>
+                  <p>
+                    Final Price: {order?.custom_order?.admin_final_price ? `₦ ${order?.custom_order?.admin_final_price.toLocaleString()}` : "Not specified"}
+                  </p>
+                </div>
+              </div>
             </Card>
           </div>
         )}

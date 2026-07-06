@@ -37,7 +37,7 @@ export type userOrder = {
     | "PENDING"
     | "SUCCESS";
   items?: OrderItem[];
-  custom_order?: CustomOrder;
+  custom_order?: CustomOrder | null;
 };
 
 const page = async () => {

@@ -34,6 +34,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
 import { ArrowLeft } from "lucide-react";
+import { DressType } from "@/components/app-components/catalog/dress-card";
+import { measurement } from "@/components/app-components/measurement/manage-measurements";
 
 export type OrderStatus =
   | "PENDING_REVIEW"
@@ -97,6 +99,8 @@ export interface CustomOrder {
   customization_notes: string | null;
   customer_budget: Decimal | null;
   admin_final_price: Decimal | null;
+  dress?: DressType | null;
+  measurements?: measurement | null
 }
 
 export interface OrderStatusHistoryItem {
