@@ -66,7 +66,12 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                 <div key={item.id}>
                   {/* Status Badge */}
                   <div className="px-6 pt-6 pb-3 flex items-center gap-3">
-                    <img src={item.dress?.thumbnail || "/logo"} alt={item.dress?.title} />
+                    <img
+                      width={100}
+                      height={100}
+                      src={item.dress?.thumbnail || "/logo"}
+                      alt={item.dress?.title}
+                    />
                     <div>
                       <p className="font-bold">{item.dress?.title}</p>
                       <p className="text-sm text-gray-600">
@@ -139,9 +144,7 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                   <p className="text-sm font-light text-gray-600 mb-2">
                     Payment Status
                   </p>
-                  <Badge className="text-sm">
-                    {order?.payment[0].status}
-                  </Badge>
+                  <Badge className="text-sm">{order?.payment[0].status}</Badge>
                 </div>
 
                 {order?.payment?.some((pay) => pay.status === "PAID") && (
