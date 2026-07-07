@@ -19,7 +19,7 @@ export async function getCustomers({
         const fetchedCustomers = await tx.user.findMany({
           where: {
             role: "USER",
-            OR: [
+            OR: searchTerm ? [
               {
                 full_name: searchTerm
                   ? {
@@ -36,7 +36,7 @@ export async function getCustomers({
                     }
                   : undefined,
               },
-            ],
+            ] : undefined,
           },
           take: 20,
           skip: (pagination.page - 1) * 20,
