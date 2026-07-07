@@ -10,15 +10,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
@@ -36,6 +27,9 @@ import { getPaginationItems } from "@/lib/getPaginationItems";
 import { Button } from "@/components/ui/button";
 import { paymentStatus } from "@/lib/lib";
 import { ReusablePagination } from "@/components/ui/reusable-pagination";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { SearchIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 export type paymentTableProp = Payment & {
   order: {
@@ -91,14 +85,8 @@ export function PaymentTable({
 
   // pagination fn
   const ITEMS_PER_PAGE = 20;
-  const totalPages = Math.ceil(
-    fetchedPayments.totalPayment / ITEMS_PER_PAGE,
-  );
-  const paginationItems = getPaginationItems(
-    fetchedPayments.page,
-    totalPages,
-  );
-
+  const totalPages = Math.ceil(fetchedPayments.totalPayment / ITEMS_PER_PAGE);
+  const paginationItems = getPaginationItems(fetchedPayments.page, totalPages);
 
   // function to fetch more pages
   const [isFetching, setIsFetching] = useState(false);
@@ -126,34 +114,88 @@ export function PaymentTable({
     }
   };
 
+  // search fn
+  const [searchTerm, setSearchTerm] = useState<string>();
+  const [showSearch, setShowSearch] = useState<string>("");
+  const handleSearch = async () => {
+    if (isFetching) {
+      return;
+    }
+    if (!searchTerm) {
+      return
+    }
+    setIsFetching(true);
+    const searchResult = await fetch(`/api/admin/payments/search`, {
+      method: "POST",
+      body: JSON.stringify({ searchTerm }),
+    });
+    if (searchResult.ok) {
+      searchResult.json().then((data) => {
+        setFetchedPayments({
+          Payments: data.AllPayments,
+          totalPayment: data.totalPayments,
+          page: data.page,
+        });
+        setShowSearch(`Showing Results For ${searchTerm}`);
+        setIsFetching(false);
+      });
+    } else {
+      setFetchedPayments((prev) => prev);
+      toast.error("Error fetching payments.", {
+        position: "top-right",
+      });
+      setIsFetching(false);
+    }
+  };
+
   return (
     <Card className="@container/card min-h-full!">
       <CardHeader className="flex items-center justify-between">
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Payments
         </h1>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Filters {filters.length > 0 && `(${filters.length})`}
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Payment Status</DropdownMenuLabel>
-            {paymentStatus.map((status, index) => (
-              <DropdownMenuCheckboxItem
-                key={index}
-                checked={filters.includes(status)}
-                onCheckedChange={() => toggleFilter(status)}
-              >
-                {status.toLowerCase().replace(/_/g, " ")}
-              </DropdownMenuCheckboxItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center gap-2">
+          <form onSubmit={handleSearch} className=" flex gap-2">
+            <InputGroup className={`rounded-full flex}`}>
+              <InputGroupInput
+                className="placeholder:text-white/80 min-w-10! placeholder:hidden "
+                placeholder="Payment reference..."
+                id="search"
+                name="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+            </InputGroup>
+            <Label htmlFor="search">
+              <SearchIcon color="white" />
+            </Label>
+          </form>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                Filters {filters.length > 0 && `(${filters.length})`}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Payment Status</DropdownMenuLabel>
+              {paymentStatus.map((status, index) => (
+                <DropdownMenuCheckboxItem
+                  key={index}
+                  checked={filters.includes(status)}
+                  onCheckedChange={() => toggleFilter(status)}
+                >
+                  {status.toLowerCase().replace(/_/g, " ")}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
       <CardContent>
+        <p>{showSearch}</p>
         <Table>
           <TableCaption>A list of All your Payments.</TableCaption>
           <TableHeader>
@@ -177,7 +219,7 @@ export function PaymentTable({
               filteredPayments.map((Payment) => (
                 <TableRow key={Payment.id}>
                   <TableCell className="font-medium">
-                    {Payment.order.order_number}
+                    {Payment.Provider_Reference}
                   </TableCell>
                   <TableCell className={`text-center capitalize`}>
                     <Badge className={paymentStatusColorMap[Payment?.status]}>

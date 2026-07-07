@@ -10,15 +10,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
@@ -105,6 +96,9 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
   const [showSearch, setShowSearch] = useState<string>()
   const handleSearch = async () => {
     if (isFetching) {
+      return;
+    }
+    if (!searchTerm) {
       return;
     }
     setIsFetching(true);

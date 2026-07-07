@@ -1,4 +1,4 @@
-import { searchOrders } from "@/actions/admin/search-orders";
+import { searchPayments } from "@/actions/admin/search-payments";
 import { NextResponse } from "next/server";
 export async function POST(req: Request) {
     const { searchTerm, page } = await req.json();
@@ -11,15 +11,15 @@ export async function POST(req: Request) {
 
 
   try {
-    const orders =  await searchOrders({pagination: {page: Number(page) || 1}, searchTerm})
+    const orders =  await searchPayments({pagination: {page: Number(page) || 1}, searchTerm})
 
     return NextResponse.json(orders, { status: 200 });
 
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error("Error fetching orders:", message);
+    console.error("Error fetching payments:", message);
     return NextResponse.json(
-      { error: "Failed to fetch orders" },
+      { error: "Failed to fetch payments" },
       { status: 500 },
     );
   }
