@@ -147,16 +147,18 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                 </div>
               </div>
               <Separator className="my-0" />
-              {order?.payment?.some((pay) => pay.status === "PAID") &&
-                order?.custom_order?.review_status === "PENDING" && (
-                  <Button variant={"secondary"}>
-                    <Link
-                      href={`/reviews/new/${order.custom_order?.selected_dress_id}?type=CUSTOMISED&orderId=${order.custom_order?.orderId}`}
-                    >
-                      Write Review
-                    </Link>
-                  </Button>
-                )}
+              {order?.order_type === "SEMI_CUSTOM" && <div>
+                {order?.payment?.some((pay) => pay.status === "PAID") &&
+                  order?.custom_order?.review_status === "PENDING" && (
+                    <Button variant={"secondary"}>
+                      <Link
+                        href={`/reviews/new/${order.custom_order?.selected_dress_id}?type=CUSTOMISED&orderId=${order.custom_order?.orderId}`}
+                      >
+                        Write Review
+                      </Link>
+                    </Button>
+                  )}
+              </div>}
             </Card>
           </div>
         )}

@@ -30,7 +30,7 @@ export type Review = {
 const ReviewCard = ({review}: {review: Review}) => {
   return (
     <Card>
-      <CardContent className="flex gap-4 items-center relative">
+      <CardContent className="flex gap-4 items-start relative">
         <Image
             src={
             (review.dress.thumbnail) ||
