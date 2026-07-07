@@ -4,7 +4,7 @@ import { SubmitEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 
-export function ReviewForm({ dressId, type }: { dressId: string; type: string }) {
+export function ReviewForm({ dressId, type, orderId, orderItemId }: { dressId: string; type: string; orderId: string; orderItemId: string }) {
   const [rating, setRating] = useState<number>(5);
   const [comment, setComment] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +25,7 @@ export function ReviewForm({ dressId, type }: { dressId: string; type: string })
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ dressId, type, rating, comment }),
+        body: JSON.stringify({ dressId, type, rating, comment, orderId, orderItemId }),
       });
       if (!response.ok) {
         setIsLoading(false);

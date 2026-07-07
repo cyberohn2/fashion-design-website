@@ -1,4 +1,5 @@
 import { createReview } from "@/actions/reviews/create-review";
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -14,6 +15,20 @@ export async function POST(request: Request) {
         { error: "Error creating review" },
         { status: 404 },
         );
+    }
+    if(data.type === "CUSTOMISED") {
+      const updatedOrder = await prisma.custom_Order.update({
+        where: { orderId: data.orderId },
+        data: { review_status: "REVIEWED" },
+      });
+    }else if(data.type === "ORIGINAL") {
+      const updatedOrder = await prisma.order_Items.update({
+        where: { 
+          id: data.orderItemId,
+          orderId: data.orderId 
+        },
+        data: { review_status: "REVIEWED" },
+      });
     }
     return NextResponse.json(newReview, { status: 201 });
   } catch (error) {
