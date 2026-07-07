@@ -7,6 +7,7 @@ import { sendEmail } from "@/lib/send-mail";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import OrderCompletedEmail from "@/lib/email-templates/order-completed";
 import OrderRejectedEmail from "@/lib/email-templates/order-rejected";
+import OrderRefundEmail from "@/lib/email-templates/order-refund";
 
 type UpdateOrderStatusData = {
   orderId: string;
@@ -79,16 +80,25 @@ export async function updateOrderStatus(data: UpdateOrderStatusData) {
     }
 
     if (data.status === "REJECTED") {
-      const html = await render(
+      let html;
+      if (order.payment_status === "PAID") {
+        html = await render(
+          createElement(OrderRefundEmail, {
+            customerName: order.user.full_name,
+            orderNumber: order.order_number,
+          }),
+        );
+      }else{
+      html = await render(
         createElement(OrderRejectedEmail, {
           customerName: order.user.full_name,
           orderNumber: order.order_number,
         }),
-      );
+      );}
 
       await sendEmail({
         to: order.user.email,
-        subject: "Order Accepted!",
+        subject: "Order Rejected!",
         html,
       });
     }

@@ -199,6 +199,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
   const [showStatusDialog, setShowStatusDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [showAcceptOrderDialog, setShowAcceptOrderDialog] = useState(false);
+  const [showRejectOrderDialog, setShowRejectOrderDialog] = useState(false);
   const [updating, setUpdating] = useState(false)
 
   const handleStatusUpdate = async (status?: string) => {
@@ -344,7 +345,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 ) : (
                   <Button
                     disabled={updating}
-                    onClick={() => handleStatusUpdate("REJECTED")}
+                    onClick={() => setShowRejectOrderDialog(true)}
                     className="bg-red-500"
                   >
                     Reject Order
@@ -706,6 +707,48 @@ export function OrderDetails({ order }: OrderDetailsProps) {
             </Button>
             <Button disabled={updating} onClick={handleAcceptOrder}>
               Accept
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reject order Dialog */}
+      <Dialog
+        open={showRejectOrderDialog}
+        onOpenChange={setShowRejectOrderDialog}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject order?</DialogTitle>
+            <DialogDescription>
+              <p>
+                Rejecting order {order?.order_number} after it has been paid for
+                will update it's payment status to REFUNDED. Are you sure you
+                want to reject this order?
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              disabled={updating}
+              variant="outline"
+              onClick={() => setShowAcceptOrderDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              disabled={updating}
+              onClick={() => {
+                order?.status !== "REJECTED" &&
+                  (order?.payment?.some(
+                    (pay) =>
+                      pay.status === "PAID" || order.payment_status === "PAID",
+                  )
+                    ? handleStatusUpdate("REJECTED")
+                    : toast.error("Order has not been paid for!"));
+              }}
+            >
+              Reject
             </Button>
           </DialogFooter>
         </DialogContent>
