@@ -3,12 +3,14 @@
 import { SubmitEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function ReviewForm({ dressId, type, orderId, orderItemId }: { dressId: string; type: string; orderId: string; orderItemId: string }) {
   const [rating, setRating] = useState<number>(5);
   const [comment, setComment] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
@@ -30,6 +32,8 @@ export function ReviewForm({ dressId, type, orderId, orderItemId }: { dressId: s
       if (!response.ok) {
         setIsLoading(false);
         setError("Failed to submit the review. Please try again.");
+      }else{
+        router.back();
       }
       // Handle successful submission (e.g., clear form, show success message)
     } catch (error) {
