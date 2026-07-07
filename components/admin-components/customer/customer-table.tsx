@@ -92,7 +92,7 @@ export function CustomerTable({
       return;
     }
     setIsFetching(true);
-    const searchResult = await fetch(`/api/admin/customers/search`, {
+    const searchResult = await fetch(`/api/admin/customer/search`, {
       method: "POST",
       body: JSON.stringify({ searchTerm, page: page || 1 }),
     });
