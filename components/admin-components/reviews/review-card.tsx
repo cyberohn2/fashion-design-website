@@ -41,13 +41,13 @@ const ReviewCard = ({review}: {review: Review}) => {
             height={100}
         />
         <div>
-            <p>{review.comment}</p>
-            <p>Review by: {review.user.full_name}</p>
+            <p className="text-black">{review.comment}</p>
+            <p><span className="font-bold">Review by:</span> {review.user.full_name}</p>
+            <p>
+                {formatDate(review.createdAt)}
+            </p>
         </div>
-        <p>
-            {formatDate(review.createdAt)}
-        </p>
-        <Badge className="absolute top-2 right-2">{review.type}</Badge>
+        <Badge className="absolute top-0 right-2">{review.type}</Badge>
       </CardContent>
     </Card>
   )

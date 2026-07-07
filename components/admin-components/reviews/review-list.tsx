@@ -94,7 +94,7 @@ const ReviewList = ({
   };
 
   return (
-    <Card>
+    <Card className="p-0! border-none! shadow-none!">
       <CardHeader className="flex items-center justify-between">
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Reviews
