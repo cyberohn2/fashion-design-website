@@ -1,4 +1,4 @@
-import { searchOrders } from "@/actions/admin/search-orders";
+import { getAllOrders } from "@/actions/admin/get-all-orders";
 import { NextResponse } from "next/server";
 export async function POST(req: Request) {
     const { searchTerm, page } = await req.json();
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
 
   try {
-    const orders =  await searchOrders({pagination: {page: Number(page) || 1}, searchTerm})
+    const orders =  await getAllOrders({pagination: {page: Number(page) || 1}, searchTerm})
 
     return NextResponse.json(orders, { status: 200 });
 
