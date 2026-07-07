@@ -212,7 +212,7 @@ export function PaymentTable({
           <TableCaption>A list of All your Payments.</TableCaption>
           <TableHeader>
             <TableRow className="font-bold">
-              <TableHead className="w-25 font-bold">Order Number</TableHead>
+              <TableHead className="w-25 font-bold">Payment Reference</TableHead>
               <TableHead className="text-center font-bold">
                 Payment Status
               </TableHead>
