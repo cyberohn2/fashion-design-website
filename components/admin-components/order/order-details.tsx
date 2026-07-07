@@ -615,9 +615,11 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ACCEPTED">Accept</SelectItem>
+                {order?.status !== "ACCEPTED" && (
+                  <SelectItem value="ACCEPTED">Accept</SelectItem>
+                )}
                 <SelectItem value="REJECTED">Reject</SelectItem>
-                <SelectItem value="IN_PRODUCTION">In Dression</SelectItem>
+                <SelectItem value="IN_PRODUCTION">In Production</SelectItem>
                 <SelectItem value="COMPLETED">Completed</SelectItem>
                 <SelectItem value="READY_FOR_DELIVERY">
                   Ready for Delivery
