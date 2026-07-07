@@ -25,7 +25,7 @@ export function ReviewForm({ dressId, type, orderId, orderItemId }: { dressId: s
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ dressId, type, rating, comment, orderId, orderItemId }),
+        body: JSON.stringify({ data: { dressId, type, rating, comment, orderId, orderItemId } }),
       });
       if (!response.ok) {
         setIsLoading(false);
