@@ -90,6 +90,14 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                   {/* Action Buttons */}
                   <Separator className="my-0" />
                   <div className="px-6 py-4 flex gap-3">
+                    {order.payment?.some((pay) => pay.status === "PAID") &&
+                      item?.review_status === "PENDING" && (
+                        <Button variant={"secondary"}>
+                          <Link href={`/review/${item.dressId}?type=ORIGINAL`}>
+                            Write Review
+                          </Link>
+                        </Button>
+                      )}
                     <Button className="flex-1 bg-black text-white hover:bg-gray-800 py-2 font-light tracking-wide">
                       <Link href={`/catalog/${item.dress?.slug}`}>
                         Buy Again
@@ -113,19 +121,42 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                 <img
                   width={50}
                   height={50}
-                  src={order?.custom_order?.dress?.thumbnail || order?.custom_order?.idea_image_url || "/logo"}
+                  src={
+                    order?.custom_order?.dress?.thumbnail ||
+                    order?.custom_order?.idea_image_url ||
+                    "/logo"
+                  }
                   alt={order?.custom_order?.dress?.title || ""}
                 />
                 <div>
-                  <p className="font-bold">{order?.custom_order?.customization_notes }</p>
+                  <p className="font-bold">
+                    {order?.custom_order?.customization_notes}
+                  </p>
                   <p className="text-sm text-gray-600">
-                    Your Budget: {order?.custom_order?.customer_budget ? `₦ ${order?.custom_order?.customer_budget.toLocaleString()}` : "Not specified"}
+                    Your Budget:{" "}
+                    {order?.custom_order?.customer_budget
+                      ? `₦ ${order?.custom_order?.customer_budget.toLocaleString()}`
+                      : "Not specified"}
                   </p>
                   <p>
-                    Final Price: {order?.custom_order?.admin_final_price ? `₦ ${order?.custom_order?.admin_final_price.toLocaleString()}` : "Not specified"}
+                    Final Price:{" "}
+                    {order?.custom_order?.admin_final_price
+                      ? `₦ ${order?.custom_order?.admin_final_price.toLocaleString()}`
+                      : "Not specified"}
                   </p>
                 </div>
               </div>
+              <Separator className="my-0" />
+              {order?.payment?.some((pay) => pay.status === "PAID") &&
+                order?.custom_order?.review_status === "PENDING" && (
+                  <Button variant={"secondary"}>
+                    <Link
+                      href={`/review/${order.custom_order?.selected_dress_id}?type=CUSTOMISED`}
+                    >
+                      Write Review
+                    </Link>
+                  </Button>
+                )}
             </Card>
           </div>
         )}

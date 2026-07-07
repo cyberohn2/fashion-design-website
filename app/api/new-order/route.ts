@@ -7,8 +7,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  console.log(data)
-
   try {
     const newOrder = await createReadyMadeOrder({
       dressId: data.dressId,

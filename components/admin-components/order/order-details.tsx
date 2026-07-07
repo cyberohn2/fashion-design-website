@@ -63,31 +63,17 @@ export type OrderType = "READY_MADE" | "SEMI_CUSTOM" | "FULL_CUSTOM";
 
 export type DeliveryMethod = "PICKUP" | "LOCAL_DELIVERY" | "SHIPPING";
 
+export type ReviewStatus = "PENDING" | "REVIEWED";
+
 export interface OrderItem {
   id: string;
   orderId: string;
   dressId: string;
   quantity: number;
   price: number;
+  review_status: ReviewStatus;
   createdAt: Date;
-  dress: {
-    id: string;
-    title: string;
-    slug: string;
-    description: string;
-    category:
-      | "FEMALE_NATIVE"
-      | "MALE_NATIVE"
-      | "CORPORATE_MALE"
-      | "CORPORATE_FEMALE"
-      | "CASUAL"
-      | "STREET_WEAR";
-    gender: string;
-    base_price: number;
-    stock: number;
-    thumbnail: string | null;
-    createdAt: Date;
-  } | null;
+  dress: DressType | null;
 }
 
 export interface CustomOrder {
@@ -100,7 +86,8 @@ export interface CustomOrder {
   customer_budget: Decimal | null;
   admin_final_price: Decimal | null;
   dress?: DressType | null;
-  measurements?: measurement | null
+  measurements?: measurement | null;
+  review_status: ReviewStatus;
 }
 
 export interface OrderStatusHistoryItem {

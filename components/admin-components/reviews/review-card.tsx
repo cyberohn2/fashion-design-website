@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Order } from "../order/order-details";
 import { DressType } from "@/components/app-components/catalog/dress-card";
 import { formatDate } from "@/lib/format-table";
+import { Badge } from "@/components/ui/badge";
 
 export type Review = {
   id: string;
@@ -13,6 +14,7 @@ export type Review = {
   dressId: string;
   rating: number;
   comment: string;
+  type: "CUSTOMISED" | "ORIGINAL";
   user: {
     id: string;
     createdAt: Date;
@@ -28,7 +30,7 @@ export type Review = {
 const ReviewCard = ({review}: {review: Review}) => {
   return (
     <Card>
-      <CardContent>
+      <CardContent className="flex gap-4 items-center relative">
         <Image
             src={
             (review.dress.thumbnail) ||
@@ -45,6 +47,7 @@ const ReviewCard = ({review}: {review: Review}) => {
         <p>
             {formatDate(review.createdAt)}
         </p>
+        <Badge className="absolute top-2 right-2">{review.type}</Badge>
       </CardContent>
     </Card>
   )

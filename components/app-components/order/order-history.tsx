@@ -19,15 +19,6 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { useState } from "react";
 import { getPaginationItems } from "@/lib/getPaginationItems";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { ReusablePagination } from "@/components/ui/reusable-pagination";
 
 const OrderHistory = ({ orders, totalOrders, page }: { orders: userOrder[] | undefined; totalOrders: number; page: number }) => {

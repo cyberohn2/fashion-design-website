@@ -242,6 +242,7 @@ model Order_Items {
   dressId   String
   quantity  Int
   price     Float
+  review_status    ReviewStatus  @default(PENDING)
   order     Orders @relation(fields: [orderId], references: [id])
   dress     Dresses @relation(fields: [dressId], references: [id])
 
@@ -259,9 +260,17 @@ model Custom_Order {
   customization_notes String?
   customer_budget Decimal? @db.Decimal(10,2)
   admin_final_price Decimal? @db.Decimal(10,2)
+  review_status    ReviewStatus  @default(PENDING)
   order       Orders @relation(fields: [orderId], references: [id])
   dress       Dresses? @relation(fields: [selected_dress_id], references: [id])
   measurements User_Measurements? @relation(fields: [measurement_profile_id], references: [id])
+
+  // @@schema("public")
+}
+
+enum ReviewStatus {
+  PENDING
+  REVIEWED
 
   // @@schema("public")
 }
@@ -290,8 +299,14 @@ model Reviews {
   dressId     String
   rating      Int
   comment     String
+  type        ReviewType
   user        User @relation(fields: [userId], references: [id])
   dress       Dresses @relation(fields: [dressId], references: [id])
 
   // @@schema("public")
+}
+
+enum ReviewType {
+  CUSTOMISED
+  ORIGINAL
 }
