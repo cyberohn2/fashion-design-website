@@ -1,15 +1,6 @@
 "use client"
 import { useMemo, useState } from 'react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { DressType } from "@/components/app-components/catalog/dress-card";
 import DressCard from "./dress-card";
 import {
@@ -43,6 +34,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ReusablePagination } from '@/components/ui/reusable-pagination';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { SearchIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 const DressList = ({
   Dresses,
@@ -130,6 +128,40 @@ const DressList = ({
     }
   };
 
+  // search fn
+  const [searchTerm, setSearchTerm] = useState<string>();
+  const [showSearch, setShowSearch] = useState<string>();
+  const handleSearch = async () => {
+    if (isFetching) {
+      return;
+    }
+    if (!searchTerm) {
+      return;
+    }
+    setIsFetching(true);
+    const searchResult = await fetch(`/api/admin/dress/search`, {
+      method: "POST",
+      body: JSON.stringify({ searchTerm }),
+    });
+    if (searchResult.ok) {
+      searchResult.json().then((data) => {
+        setFetchedDresses({
+          Dresses: data.AllDresses,
+          totalDress: data.totalDresses,
+          page: data.page,
+        });
+        setShowSearch(`Showing Results For ${searchTerm}`);
+        setIsFetching(false);
+      });
+    } else {
+      setFetchedDresses((prev) => prev);
+      toast.error("Error fetching dresses.", {
+        position: "top-right",
+      });
+      setIsFetching(false);
+    }
+  };
+
   return (
     <Card className="p-0! border-none shadow-none">
       <CardHeader className="flex items-center justify-between">
@@ -137,6 +169,24 @@ const DressList = ({
           Dresses
         </h1>
         <div className="flex items-center gap-2">
+          <form onSubmit={handleSearch} className=" flex gap-2">
+            <InputGroup className={`rounded-full flex}`}>
+              <InputGroupInput
+                className="placeholder:text-white/80 min-w-10! placeholder:hidden "
+                placeholder="Search..."
+                id="search"
+                name="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+            </InputGroup>
+            <Label htmlFor="search">
+              <SearchIcon color="white" />
+            </Label>
+          </form>
           <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className="">
               <SelectValue placeholder="Sort By" />
@@ -179,6 +229,7 @@ const DressList = ({
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
+        <p>{showSearch}</p>
         {sortedDresses?.length === 0 ? (
           <Empty>
             <EmptyHeader>

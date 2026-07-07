@@ -10,12 +10,9 @@ export async function searchOrders({pagination, searchTerm}: {pagination:{page: 
   try {
     const orders = await prisma.$transaction( async (tx: TransactionClient) =>{
         const AllOrders = await tx.orders.findMany({
-          where: {
-            order_number: {
-              contains: searchTerm,
-              mode: "insensitive",
-            },
-          },
+          where: searchTerm
+            ? { order_number: { contains: searchTerm, mode: "insensitive" } }
+            : {},
           include: {
             payment: true,
             statusHistory: true,

@@ -10,12 +10,9 @@ export async function searchPayments({pagination, searchTerm}: {pagination:{page
   try {
     const payments = await prisma.$transaction( async (tx: TransactionClient) =>{
         const AllPayments = await tx.payment.findMany({
-          where: {
-            Provider_Reference: {
-              contains: searchTerm,
-              mode: "insensitive",
-            },
-          },
+          where: searchTerm
+            ? { Provider_Reference: { contains: searchTerm, mode: "insensitive" } }
+            : {},
 
           take: 20,
           skip: (pagination.page - 1) * 20,
