@@ -26,7 +26,7 @@ export async function getPayments({
         take: 20,
         skip: (pagination.page - 1) * 20,
         orderBy: {
-          paidAt: "asc",
+          paidAt: "desc",
         },
       });
       const totalPayment = await tx.payment.count({
