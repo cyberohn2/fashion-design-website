@@ -99,7 +99,7 @@ export function CustomerTable({
     if (searchResult.ok) {
       searchResult.json().then((data) => {
         setFetchedCustomers({
-          customers: data.AllCustomer,
+          customers: data.fetchedCustomers,
           totalCustomers: data.totalCustomers,
           page: data.page,
         });
