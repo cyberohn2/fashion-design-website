@@ -37,6 +37,9 @@ import { Button } from "@/components/ui/button";
 import { getPaginationItems } from "@/lib/getPaginationItems";
 import { orderStatus } from "@/lib/lib";
 import { ReusablePagination } from "@/components/ui/reusable-pagination";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { SearchIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], totalOrder: number, page: number}) {
   const [fetchedOrderDetails, setFetchedOrderDetails] = useState({orders, totalOrder, page})
@@ -72,29 +75,61 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
   // fetch new page data fn
   const [isFetching, setIsFetching] = useState(false);
   const handleFetchedOrdersDetails = async (page: number) => {
-      if (isFetching) {
-          return
-      }
-      setIsFetching(true)
-      const newOrders = await fetch(`/api/admin/orders?page=${page}`)
-      if (newOrders.ok) {
-          newOrders
-          .json()
-          .then((data) =>
-          {setFetchedOrderDetails({
-            orders: data.AllOrders,
-            totalOrder: data.totalOrders,
-            page: data.page,
-          });
-          setIsFetching(false)}
-          );
-      }else{
-          setFetchedOrderDetails(prev => prev)
-          toast.error("Error fetching orders.", {
-            position: "top-right",
-          });
-          setIsFetching(false)
-      }
+    if (isFetching) {
+        return
+    }
+    setIsFetching(true)
+    const newOrders = await fetch(`/api/admin/orders?page=${page}`)
+    if (newOrders.ok) {
+        newOrders
+        .json()
+        .then((data) =>
+        {setFetchedOrderDetails({
+          orders: data.AllOrders,
+          totalOrder: data.totalOrders,
+          page: data.page,
+        });
+        setIsFetching(false)}
+        );
+    }else{
+        setFetchedOrderDetails(prev => prev)
+        toast.error("Error fetching orders.", {
+          position: "top-right",
+        });
+        setIsFetching(false)
+    }
+  }
+
+  // search fn
+  const [searchTerm, setSearchTerm] = useState<string>()
+  const [showSearch, setShowSearch] = useState<string>()
+  const handleSearch = async () => {
+    if (isFetching) {
+      return;
+    }
+    setIsFetching(true);
+    const searchResult = await fetch(`/api/admin/orders/search`, {
+      method: "POST",
+      body: JSON.stringify({searchTerm})
+    })
+    if(searchResult.ok){
+      searchResult.json()
+        .then((data) =>
+        {setFetchedOrderDetails({
+          orders: data.AllOrders,
+          totalOrder: data.totalOrders,
+          page: data.page,
+        });
+        setShowSearch(`Showing Results For ${searchTerm}`)
+        setIsFetching(false)}
+        );
+    }else{
+        setFetchedOrderDetails(prev => prev)
+        toast.error("Error fetching orders.", {
+          position: "top-right",
+        });
+        setIsFetching(false)
+    }
   }
 
   return (
@@ -103,52 +138,72 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Orders
         </h1>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Filters {filters.length > 0 && `(${filters.length})`}
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Order Status</DropdownMenuLabel>
-            {orderStatus.map((status, index) => (
+        <div className="flex items-center gap-2">
+          <form onSubmit={handleSearch} className=" flex gap-2">
+            <InputGroup
+              className={`rounded-full flex}`}
+            >
+              <InputGroupInput
+                className="placeholder:text-white/80 min-w-10! placeholder:hidden "
+                placeholder="Search by Order number..."
+                id="search"
+                name="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+            </InputGroup>
+            <Label htmlFor="search">
+              <SearchIcon
+                color="white"
+              />
+            </Label>
+          </form>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                Filters {filters.length > 0 && `(${filters.length})`}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Order Status</DropdownMenuLabel>
+              {orderStatus.map((status, index) => (
+                <DropdownMenuCheckboxItem
+                  key={index}
+                  checked={filters.includes(status)}
+                  onCheckedChange={() => toggleFilter(status)}
+                >
+                  {status.toLowerCase().replace(/_/g, " ")}
+                </DropdownMenuCheckboxItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Order Type</DropdownMenuLabel>
               <DropdownMenuCheckboxItem
-                key={index}
-                checked={filters.includes(status)}
-                onCheckedChange={() => toggleFilter(status)}
+                checked={filters.includes("READY_MADE")}
+                onCheckedChange={() => toggleFilter("READY_MADE")}
               >
-                {status.toLowerCase().replace(/_/g, " ")}
+                Ready Made
               </DropdownMenuCheckboxItem>
-            ))}
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuLabel>Order Type</DropdownMenuLabel>
-            <DropdownMenuCheckboxItem
-              checked={filters.includes("READY_MADE")}
-              onCheckedChange={() => toggleFilter("READY_MADE")}
-            >
-              Ready Made
-            </DropdownMenuCheckboxItem>
-
-            <DropdownMenuCheckboxItem
-              checked={filters.includes("SEMI_CUSTOM")}
-              onCheckedChange={() => toggleFilter("SEMI_CUSTOM")}
-            >
-              Semi Custom
-            </DropdownMenuCheckboxItem>
-
-            <DropdownMenuCheckboxItem
-              checked={filters.includes("FULL_CUSTOM")}
-              onCheckedChange={() => toggleFilter("FULL_CUSTOM")}
-            >
-              Full Custom
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuCheckboxItem
+                checked={filters.includes("SEMI_CUSTOM")}
+                onCheckedChange={() => toggleFilter("SEMI_CUSTOM")}
+              >
+                Semi Custom
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={filters.includes("FULL_CUSTOM")}
+                onCheckedChange={() => toggleFilter("FULL_CUSTOM")}
+              >
+                Full Custom
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
       <CardContent>
+        <p>{showSearch}</p>
         <Table>
           <TableCaption>A list of All your orders.</TableCaption>
           <TableHeader>

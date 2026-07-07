@@ -41,7 +41,7 @@ const ReviewCard = ({review}: {review: Review}) => {
             height={100}
         />
         <div>
-            <p className="text-black">{review.comment}</p>
+            <p className="text-black!">{review.comment}</p>
             <p><span className="font-bold">Review by:</span> {review.user.full_name}</p>
             <p>
                 {formatDate(review.createdAt)}
