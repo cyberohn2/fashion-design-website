@@ -32,7 +32,6 @@ export async function confirmCustomOrderPayment(orderId: string) {
         payment: {
           create: {
             userId: order.userId,
-            orderId: order.id,
             Provider: `MANUALBY-${admin.full_name}`,
             Provider_Reference: `MANUAL-${order.order_number}`,
             amount: order.total,
