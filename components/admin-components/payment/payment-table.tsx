@@ -155,7 +155,13 @@ export function PaymentTable({
           Payments
         </h1>
         <div className="flex items-center gap-2">
-          <form onSubmit={() => handleSearch()} className=" flex gap-2">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
+            className=" flex gap-2"
+          >
             <InputGroup className={`rounded-full flex}`}>
               <InputGroupInput
                 className="placeholder:text-white/80 min-w-10! placeholder:hidden "

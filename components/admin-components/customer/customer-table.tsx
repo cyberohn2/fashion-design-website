@@ -121,7 +121,10 @@ export function CustomerTable({
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Customers
         </h1>
-        <form onSubmit={() => handleSearch()} className=" flex gap-2">
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }} className=" flex gap-2">
           <InputGroup className={`rounded-full flex}`}>
             <InputGroupInput
               className="placeholder:text-white/80 min-w-10! placeholder:hidden "
