@@ -93,7 +93,7 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                     {order.payment?.some((pay) => pay.status === "PAID") &&
                       item?.review_status === "PENDING" && (
                         <Button variant={"secondary"}>
-                          <Link href={`/review/${item.dressId}?type=ORIGINAL`}>
+                          <Link href={`/reviews/${item.dressId}?type=ORIGINAL`}>
                             Write Review
                           </Link>
                         </Button>
@@ -151,7 +151,7 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
                 order?.custom_order?.review_status === "PENDING" && (
                   <Button variant={"secondary"}>
                     <Link
-                      href={`/review/${order.custom_order?.selected_dress_id}?type=CUSTOMISED`}
+                      href={`/reviews/${order.custom_order?.selected_dress_id}?type=CUSTOMISED`}
                     >
                       Write Review
                     </Link>
