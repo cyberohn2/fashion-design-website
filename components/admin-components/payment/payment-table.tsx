@@ -125,7 +125,7 @@ export function PaymentTable({
       return
     }
     setIsFetching(true);
-    const searchResult = await fetch(`/api/admin/payments/search`, {
+    const searchResult = await fetch(`/api/admin/payment/search`, {
       method: "POST",
       body: JSON.stringify({ searchTerm, page: page || 1 }),
     });

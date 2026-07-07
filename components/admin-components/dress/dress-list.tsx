@@ -146,7 +146,7 @@ const DressList = ({
     if (searchResult.ok) {
       searchResult.json().then((data) => {
         setFetchedDresses({
-          Dresses: data.AllDresses,
+          Dresses: data.dresses,
           totalDress: data.totalDresses,
           page: data.page,
         });
