@@ -138,6 +138,7 @@ export function SignupForm({ className, ...props }: ComponentPropsWithoutRef<'di
                         value={formData.password}
                       />
                       <InputGroupAddon
+                        align={"inline-end"}
                         onClick={() => setShowPassword((prev) => !prev)}
                         className="cursor-pointer"
                       >

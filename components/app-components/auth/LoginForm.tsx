@@ -111,6 +111,7 @@ export function LoginForm({ from = "/catalog", className, ...props }: LoginFormP
                     value={formData.password}
                   />
                   <InputGroupAddon
+                    align={"inline-end"}
                     onClick={() => setShowPassword((prev) => !prev)}
                     className="cursor-pointer"
                   >

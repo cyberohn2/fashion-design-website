@@ -20,7 +20,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, XIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
@@ -84,7 +84,7 @@ export function CustomerTable({
   // search fn
   const [searchTerm, setSearchTerm] = useState<string>();
   const [showSearch, setShowSearch] = useState<string>();
-  const handleSearch = async () => {
+  const handleSearch = async (page?: number) => {
     if (isFetching) {
       return;
     }
@@ -94,7 +94,7 @@ export function CustomerTable({
     setIsFetching(true);
     const searchResult = await fetch(`/api/admin/customers/search`, {
       method: "POST",
-      body: JSON.stringify({ searchTerm }),
+      body: JSON.stringify({ searchTerm, page: page || 1 }),
     });
     if (searchResult.ok) {
       searchResult.json().then((data) => {
@@ -121,7 +121,7 @@ export function CustomerTable({
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Customers
         </h1>
-        <form onSubmit={handleSearch} className=" flex gap-2">
+        <form onSubmit={() => handleSearch()} className=" flex gap-2">
           <InputGroup className={`rounded-full flex}`}>
             <InputGroupInput
               className="placeholder:text-white/80 min-w-10! placeholder:hidden "
@@ -133,6 +133,12 @@ export function CustomerTable({
             />
             <InputGroupAddon>
               <SearchIcon />
+            </InputGroupAddon>
+            <InputGroupAddon
+              onClick={() => setSearchTerm(undefined)}
+              align={"inline-end"}
+            >
+              <XIcon />
             </InputGroupAddon>
           </InputGroup>
           <Label htmlFor="search">
@@ -199,7 +205,11 @@ export function CustomerTable({
             page={fetchedCustomers.page}
             totalPages={totalPages}
             paginationItems={paginationItems}
-            onPageChange={handleFetchedCustomers}
+            onPageChange={
+              searchTerm
+                ? (page) => handleSearch(page)
+                : (page) => handleFetchedCustomers(page)
+            }
           />
         </CardFooter>
       )}

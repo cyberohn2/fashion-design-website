@@ -18,7 +18,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { ArrowUpRightIcon, SearchSlash } from "lucide-react";
+import { ArrowUpRightIcon, SearchSlash, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -104,7 +104,7 @@ const DressList = ({
 
   // fetch new page data
   const [isFetching, setIsFetching] = useState(false);
-  const handleFetchedDressesDetails = async (page: number) => {
+  const handleFetchedDresses = async (page: number) => {
     if (isFetching) {
       return;
     }
@@ -131,7 +131,7 @@ const DressList = ({
   // search fn
   const [searchTerm, setSearchTerm] = useState<string>();
   const [showSearch, setShowSearch] = useState<string>();
-  const handleSearch = async () => {
+  const handleSearch = async (page?: number) => {
     if (isFetching) {
       return;
     }
@@ -141,7 +141,7 @@ const DressList = ({
     setIsFetching(true);
     const searchResult = await fetch(`/api/admin/dress/search`, {
       method: "POST",
-      body: JSON.stringify({ searchTerm }),
+      body: JSON.stringify({ searchTerm, page: page || 1 }),
     });
     if (searchResult.ok) {
       searchResult.json().then((data) => {
@@ -169,7 +169,7 @@ const DressList = ({
           Dresses
         </h1>
         <div className="flex items-center gap-2">
-          <form onSubmit={handleSearch} className=" flex gap-2">
+          <form onSubmit={() => handleSearch()} className=" flex gap-2">
             <InputGroup className={`rounded-full flex}`}>
               <InputGroupInput
                 className="placeholder:text-white/80 min-w-10! placeholder:hidden "
@@ -181,6 +181,12 @@ const DressList = ({
               />
               <InputGroupAddon>
                 <SearchIcon />
+              </InputGroupAddon>
+              <InputGroupAddon
+                onClick={() => setSearchTerm(undefined)}
+                align={"inline-end"}
+              >
+                <XIcon />
               </InputGroupAddon>
             </InputGroup>
             <Label htmlFor="search">
@@ -260,7 +266,11 @@ const DressList = ({
           page={fetchedDresses.page}
           totalPages={totalPages}
           paginationItems={paginationItems}
-          onPageChange={handleFetchedDressesDetails}
+          onPageChange={
+            searchTerm
+              ? (page) => handleSearch(page)
+              : (page) => handleFetchedDresses(page)
+          }
         />
       </CardFooter>
     </Card>

@@ -21,7 +21,7 @@ const Header = () => {
   const pathname = usePathname()
   const [searchVisible, setSearchVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState<string>()
 
   const toggleSearch = () => {
     setSearchVisible(!searchVisible);
@@ -79,6 +79,12 @@ const Header = () => {
               />
               <InputGroupAddon>
                 <SearchIcon />
+              </InputGroupAddon>
+              <InputGroupAddon
+                onClick={() => setSearchTerm(undefined)}
+                align={"inline-end"}
+              >
+                <XIcon />
               </InputGroupAddon>
             </InputGroup>
             <Label htmlFor="search">

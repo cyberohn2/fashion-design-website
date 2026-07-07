@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 import { paymentStatus } from "@/lib/lib";
 import { ReusablePagination } from "@/components/ui/reusable-pagination";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, XIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
 export type paymentTableProp = Payment & {
@@ -117,7 +117,7 @@ export function PaymentTable({
   // search fn
   const [searchTerm, setSearchTerm] = useState<string>();
   const [showSearch, setShowSearch] = useState<string>("");
-  const handleSearch = async () => {
+  const handleSearch = async (page?: number) => {
     if (isFetching) {
       return;
     }
@@ -127,7 +127,7 @@ export function PaymentTable({
     setIsFetching(true);
     const searchResult = await fetch(`/api/admin/payments/search`, {
       method: "POST",
-      body: JSON.stringify({ searchTerm }),
+      body: JSON.stringify({ searchTerm, page: page || 1 }),
     });
     if (searchResult.ok) {
       searchResult.json().then((data) => {
@@ -155,7 +155,7 @@ export function PaymentTable({
           Payments
         </h1>
         <div className="flex items-center gap-2">
-          <form onSubmit={handleSearch} className=" flex gap-2">
+          <form onSubmit={() => handleSearch()} className=" flex gap-2">
             <InputGroup className={`rounded-full flex}`}>
               <InputGroupInput
                 className="placeholder:text-white/80 min-w-10! placeholder:hidden "
@@ -167,6 +167,12 @@ export function PaymentTable({
               />
               <InputGroupAddon>
                 <SearchIcon />
+              </InputGroupAddon>
+              <InputGroupAddon
+                onClick={() => setSearchTerm(undefined)}
+                align={"inline-end"}
+              >
+                <XIcon />
               </InputGroupAddon>
             </InputGroup>
             <Label htmlFor="search">
@@ -253,7 +259,11 @@ export function PaymentTable({
           page={fetchedPayments.page}
           totalPages={totalPages}
           paginationItems={paginationItems}
-          onPageChange={handleFetchedPaymentsDetails}
+          onPageChange={
+            searchTerm
+              ? (page) => handleSearch(page)
+              : (page) => handleFetchedPaymentsDetails(page)
+          }
         />
       </CardFooter>
     </Card>

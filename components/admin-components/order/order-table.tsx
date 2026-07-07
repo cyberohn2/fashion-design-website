@@ -29,7 +29,7 @@ import { getPaginationItems } from "@/lib/getPaginationItems";
 import { orderStatus } from "@/lib/lib";
 import { ReusablePagination } from "@/components/ui/reusable-pagination";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, XIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
 export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], totalOrder: number, page: number}) {
@@ -65,36 +65,34 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
 
   // fetch new page data fn
   const [isFetching, setIsFetching] = useState(false);
-  const handleFetchedOrdersDetails = async (page: number) => {
+  const handleFetchedOrders = async (page: number) => {
     if (isFetching) {
-        return
+      return;
     }
-    setIsFetching(true)
-    const newOrders = await fetch(`/api/admin/orders?page=${page}`)
+    setIsFetching(true);
+    const newOrders = await fetch(`/api/admin/orders?page=${page}`);
     if (newOrders.ok) {
-        newOrders
-        .json()
-        .then((data) =>
-        {setFetchedOrderDetails({
+      newOrders.json().then((data) => {
+        setFetchedOrderDetails({
           orders: data.AllOrders,
           totalOrder: data.totalOrders,
           page: data.page,
         });
-        setIsFetching(false)}
-        );
-    }else{
-        setFetchedOrderDetails(prev => prev)
-        toast.error("Error fetching orders.", {
-          position: "top-right",
-        });
-        setIsFetching(false)
+        setIsFetching(false);
+      });
+    } else {
+      setFetchedOrderDetails((prev) => prev);
+      toast.error("Error fetching orders.", {
+        position: "top-right",
+      });
+      setIsFetching(false);
     }
-  }
+  };
 
   // search fn
   const [searchTerm, setSearchTerm] = useState<string>()
   const [showSearch, setShowSearch] = useState<string>()
-  const handleSearch = async () => {
+  const handleSearch = async (page?: number) => {
     if (isFetching) {
       return;
     }
@@ -104,7 +102,7 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
     setIsFetching(true);
     const searchResult = await fetch(`/api/admin/orders/search`, {
       method: "POST",
-      body: JSON.stringify({searchTerm})
+      body: JSON.stringify({searchTerm, page: page || 1})
     })
     if(searchResult.ok){
       searchResult.json()
@@ -133,10 +131,8 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
           Orders
         </h1>
         <div className="flex items-center gap-2">
-          <form onSubmit={handleSearch} className=" flex gap-2">
-            <InputGroup
-              className={`rounded-full flex}`}
-            >
+          <form onSubmit={() => handleSearch()} className=" flex gap-2">
+            <InputGroup className={`rounded-full flex}`}>
               <InputGroupInput
                 className="placeholder:text-white/80 min-w-10! placeholder:hidden "
                 placeholder="Search by Order number..."
@@ -148,11 +144,15 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
               <InputGroupAddon>
                 <SearchIcon />
               </InputGroupAddon>
+              <InputGroupAddon
+                onClick={() => setSearchTerm(undefined)}
+                align={"inline-end"}
+              >
+                <XIcon />
+              </InputGroupAddon>
             </InputGroup>
             <Label htmlFor="search">
-              <SearchIcon
-                color="white"
-              />
+              <SearchIcon color="white" />
             </Label>
           </form>
           <DropdownMenu>
@@ -265,7 +265,11 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
           page={fetchedOrderDetails.page}
           totalPages={totalPages}
           paginationItems={paginationItems}
-          onPageChange={handleFetchedOrdersDetails}
+          onPageChange={
+            searchTerm
+              ? (page) => handleSearch(page)
+              : (page) => handleFetchedOrders(page)
+          }
         />
       </CardFooter>
     </Card>
