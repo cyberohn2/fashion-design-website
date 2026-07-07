@@ -30,16 +30,16 @@ export async function confirmCustomOrderPayment(orderId: string) {
         payment_status: "PAID",
         status: "PAID",
         payment: {
-          update: {
-            where:{
-              id: order.payment[0].id
-            },
-            data: {
-              status: "PAID"
-            }
-          }
-        }
-
+          create: {
+            userId: order.userId,
+            orderId: order.id,
+            Provider: `MANUALBY-${admin.full_name}`,
+            Provider_Reference: `MANUAL-${order.order_number}`,
+            amount: order.total,
+            paidAt: new Date(),
+            status: "PAID",
+          },
+        },
       },
     }),
 

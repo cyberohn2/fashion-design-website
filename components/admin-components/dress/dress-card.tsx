@@ -85,10 +85,6 @@ const DressCard = ({
             <p>
               <span className="font-bold">Sales:</span> {dress.soldCount}
             </p>
-            <p>
-              <span className="font-bold">Revenue:</span> ₦
-              {dress.soldCount * dress.base_price}
-            </p>
           </div>
         </CardContent>
       </Card>

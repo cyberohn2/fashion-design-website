@@ -117,7 +117,7 @@ export function CustomerTable({
 
   return (
     <Card className="@container/card">
-      <CardHeader>
+      <CardHeader className="flex items-center justify-between">
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Customers
         </h1>

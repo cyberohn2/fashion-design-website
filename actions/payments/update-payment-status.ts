@@ -69,20 +69,26 @@ export async function updatePaymentStatus({ref, status, paidAt}:{ref: string, st
           });
 
           // Update stock for every dress in the order
-          await Promise.all(
-            order.items.map((item) =>
-              tx.dresses.update({
-                where: {
-                  id: item.dress.id,
-                },
-                data: {
-                  stock: {
-                    decrement: item.quantity,
+          if (order.order_type === "READY_MADE") {
+            await Promise.all(
+              order.items.map((item) =>
+                tx.dresses.update({
+                  where: {
+                    id: item.dress.id,
                   },
-                },
-              }),
-            ),
-          );
+                  data: {
+                    stock: {
+                      decrement: item.quantity,
+                    },
+                    soldCount: {
+                      increment: item.quantity
+                    }
+                  },
+                }),
+              ),
+            );
+          }
+          
           return { payment, order };
         }
 
