@@ -132,9 +132,9 @@ export function PaymentTable({
     if (searchResult.ok) {
       searchResult.json().then((data) => {
         setFetchedPayments({
-          Payments: data.formattedPayment,
-          totalPayment: data.totalPayment,
-          page: data.page,
+          Payments: data.payment.formattedPayment,
+          totalPayment: data.payment.totalPayment,
+          page: data.payment.page,
         });
         setShowSearch(`Showing Results For ${searchTerm}`);
         setIsFetching(false);
