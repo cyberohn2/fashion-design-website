@@ -11,19 +11,18 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { usePathname } from "next/navigation";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { useState } from "react";
 import Link from "next/link";
 import { getPaginationItems } from "@/lib/getPaginationItems";
 import { ReusablePagination } from "@/components/ui/reusable-pagination";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { SearchIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export type customer = {
   id: string;
@@ -35,8 +34,16 @@ export type customer = {
   role: "USER" | "ADMIN";
 }
 
-export function CustomerTable({customers, totalCustomers, page}:{customers: customer[], totalCustomers: number, page: number}) {
-  const pathname = usePathname()
+export function CustomerTable({
+  customers,
+  totalCustomers,
+  page,
+}: {
+  customers: customer[];
+  totalCustomers: number;
+  page: number;
+}) {
+  const pathname = usePathname();
 
   const [fetchedCustomers, setFetchedCustomers] = useState({
     customers,
@@ -74,14 +81,67 @@ export function CustomerTable({customers, totalCustomers, page}:{customers: cust
     }
   };
 
+  // search fn
+  const [searchTerm, setSearchTerm] = useState<string>();
+  const [showSearch, setShowSearch] = useState<string>();
+  const handleSearch = async () => {
+    if (isFetching) {
+      return;
+    }
+    if (!searchTerm) {
+      return;
+    }
+    setIsFetching(true);
+    const searchResult = await fetch(`/api/admin/customers/search`, {
+      method: "POST",
+      body: JSON.stringify({ searchTerm }),
+    });
+    if (searchResult.ok) {
+      searchResult.json().then((data) => {
+        setFetchedCustomers({
+          customers: data.AllCustomer,
+          totalCustomers: data.totalCustomers,
+          page: data.page,
+        });
+        setShowSearch(`Showing Results For ${searchTerm}`);
+        setIsFetching(false);
+      });
+    } else {
+      setFetchedCustomers((prev) => prev);
+      toast.error("Error fetching customers.", {
+        position: "top-right",
+      });
+      setIsFetching(false);
+    }
+  };
+
   return (
     <Card className="@container/card">
       <CardHeader>
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter">
           Customers
         </h1>
+        <form onSubmit={handleSearch} className=" flex gap-2">
+          <InputGroup className={`rounded-full flex}`}>
+            <InputGroupInput
+              className="placeholder:text-white/80 min-w-10! placeholder:hidden "
+              placeholder="Search by Order number..."
+              id="search"
+              name="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <InputGroupAddon>
+              <SearchIcon />
+            </InputGroupAddon>
+          </InputGroup>
+          <Label htmlFor="search">
+            <SearchIcon color="white" />
+          </Label>
+        </form>
       </CardHeader>
       <CardContent>
+        <p>{showSearch}</p>
         <Table>
           <TableCaption>
             A list of New Customers in the last 30 days.
