@@ -20,7 +20,7 @@ export function ReviewForm({ dressId, type }: { dressId: string; type: string })
       return;
     }
     try {
-      const response = await fetch("/api/reviews", {
+      const response = await fetch("/api/reviews/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
