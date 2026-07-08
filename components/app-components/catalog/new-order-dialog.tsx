@@ -32,8 +32,7 @@ const popup = new PaystackPop();
 
 export function NewOrderDialog({ dress }: { dress: DressType }) {
   const [formData, setFormData] = useState({
-    dressId: dress.id,
-    quantity: 1,
+    dresses: [{dressId: dress.id, quantity: 1}],
     notes: "",
     deliveryMethod: "PICKUP",
     deliveryAddressId: "",
@@ -51,6 +50,15 @@ export function NewOrderDialog({ dress }: { dress: DressType }) {
 
     fetchAddresses();
   }, []);
+
+  const updateQuantity = (dressId: string, quantity: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      dresses: prev.dresses.map((dress) =>
+        dress.dressId === dressId ? { ...dress, quantity } : dress,
+      ),
+    }));
+  };
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -130,10 +138,11 @@ export function NewOrderDialog({ dress }: { dress: DressType }) {
               <Button
                 size={"icon-sm"}
                 onClick={() =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    quantity: Math.max(1, prev.quantity - 1),
-                  }))
+                  updateQuantity(
+                    dress.id,
+                    (formData.dresses.find((dres) => dres.dressId === dress.id)
+                      ?.quantity || 1) - 1,
+                  )
                 }
                 className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
               >
@@ -143,12 +152,15 @@ export function NewOrderDialog({ dress }: { dress: DressType }) {
                 type="number"
                 id="quantity"
                 name="quantity"
-                value={formData.quantity}
+                value={
+                  formData.dresses.find((dres) => dres.dressId === dress.id)
+                    ?.quantity
+                }
                 onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    quantity: Math.max(1, parseInt(e.target.value) || 1),
-                  }))
+                  updateQuantity(
+                    dress.id,
+                    Math.max(1, parseInt(e.target.value)) || 1,
+                  )
                 }
                 className="w-12 text-center font-light bg-transparent border-none outline-none"
                 min="1"
@@ -157,10 +169,11 @@ export function NewOrderDialog({ dress }: { dress: DressType }) {
               <Button
                 size={"icon-sm"}
                 onClick={() =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    quantity: Math.min(dress?.stock || 1, prev.quantity + 1),
-                  }))
+                  updateQuantity(
+                    dress.id,
+                    (formData.dresses.find((dres) => dres.dressId === dress.id)
+                      ?.quantity || 1) + 1,
+                  )
                 }
                 className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
               >

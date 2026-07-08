@@ -3,123 +3,168 @@
 import prisma from "@/lib/prisma";
 import { render } from "@react-email/render";
 import { createElement } from "react";
-import { sendEmail } from "@/lib/send-mail";
-import { requireAuth } from "@/lib/auth/require-auth";
 
+import { requireAuth } from "@/lib/auth/require-auth";
+import { sendEmail } from "@/lib/send-mail";
 import { generateOrderNumber } from "@/lib/orders/generate-order-number";
 import ReadyMadeEmail from "@/lib/email-templates/ready-made";
 
 type CreateReadyMadeOrderData = {
-  dressId: string;
-
-  quantity: number;
-
+  dresses: {
+    dressId: string;
+    quantity: number;
+  }[];
   notes?: string;
 
   deliveryMethod: "PICKUP" | "LOCAL_DELIVERY" | "SHIPPING";
-
   deliveryAddressId?: string;
 };
 
 export async function createReadyMadeOrder(data: CreateReadyMadeOrderData) {
   const user = await requireAuth();
 
-  // Get dress
-  const dress = await prisma.dresses.findUnique({
-    where: {
-      id: data.dressId,
-    },
-  });
-
-  if (!dress) {
-    throw new Error("Dress not found");
+  if (data.dresses.length === 0) {
+    throw new Error("No dresses selected");
   }
 
-  // Validate stock
-  if (dress.stock < data.quantity) {
-    throw new Error("Insufficient stock");
+  // Merge duplicate dresses
+  const mergedDressMap = new Map<string, number>();
+
+  for (const item of data.dresses) {
+    if (item.quantity <= 0) {
+      throw new Error("Quantity must be greater than zero");
+    }
+
+    mergedDressMap.set(
+      item.dressId,
+      (mergedDressMap.get(item.dressId) ?? 0) + item.quantity,
+    );
   }
+
+  const orderItems = [...mergedDressMap.entries()].map(
+    ([dressId, quantity]) => ({
+      dressId,
+      quantity,
+    }),
+  );
 
   // Validate address if delivery selected
   if (data.deliveryMethod !== "PICKUP" && !data.deliveryAddressId) {
     throw new Error("Delivery address is required");
   }
 
-  // Validate address ownership
-  if (data.deliveryAddressId) {
-    const address = await prisma.user_Addresses.findFirst({
+  const order = await prisma.$transaction(async (tx) => {
+    // Validate address ownership
+    if (data.deliveryAddressId) {
+      const address = await tx.user_Addresses.findFirst({
+        where: {
+          id: data.deliveryAddressId,
+          userId: user.id,
+        },
+      });
+
+      if (!address) {
+        throw new Error("Invalid address");
+      }
+    }
+
+    const dressIds = orderItems.map((item) => item.dressId);
+
+    const dresses = await tx.dresses.findMany({
       where: {
-        id: data.deliveryAddressId,
-        userId: user.id,
+        id: {
+          in: dressIds,
+        },
       },
     });
 
-    if (!address) {
-      throw new Error("Invalid address");
+    if (dresses.length !== dressIds.length) {
+      throw new Error("One or more dresses were not found");
     }
-  }
 
-  // Calculate totals
-  const total = Number(dress.base_price) * data.quantity;
+    const dressMap = new Map(dresses.map((dress) => [dress.id, dress]));
 
+    // Validate stock
+    for (const item of orderItems) {
+      const dress = dressMap.get(item.dressId);
 
-  // Create order
-  const order = await prisma.orders.create({
-    data: {
-      userId: user.id,
+      if (!dress) {
+        throw new Error("Dress not found");
+      }
 
-      order_number: await generateOrderNumber(),
+      if (dress.stock < item.quantity) {
+        throw new Error(`${dress.title} has insufficient stock`);
+      }
+    }
 
-      order_type: "READY_MADE",
+    // Calculate total
+    const total = orderItems.reduce((sum, item) => {
+      const dress = dressMap.get(item.dressId)!;
 
-      status: "AWAITING_PAYMENT",
+      return sum + Number(dress.base_price) * item.quantity;
+    }, 0);
 
-      payment_status: "UNPAID",
+    const order = await tx.orders.create({
+      data: {
+        userId: user.id,
 
-      total,
+        order_number: await generateOrderNumber(),
 
-      delivery_method: data.deliveryMethod,
+        order_type: "READY_MADE",
 
-      delivery_address_id: data.deliveryAddressId || "",
-      notes: data.notes,
+        status: "AWAITING_PAYMENT",
 
-      items: {
-        create: {
-          dressId: dress.id,
+        payment_status: "UNPAID",
 
-          quantity: data.quantity,
+        total,
 
-          price: dress.base_price,
+        delivery_method: data.deliveryMethod,
+
+        delivery_address_id: data.deliveryAddressId ?? "",
+
+        notes: data.notes,
+
+        items: {
+          create: orderItems.map((item) => {
+            const dress = dressMap.get(item.dressId)!;
+
+            return {
+              dressId: dress.id,
+              quantity: item.quantity,
+              price: dress.base_price,
+            };
+          }),
+        },
+
+        statusHistory: {
+          create: {
+            oldStatus: null,
+            newStatus: "AWAITING_PAYMENT",
+            changedById: user.id,
+          },
         },
       },
 
-      statusHistory: {
-        create: {
-          oldStatus: null,
-          newStatus: "AWAITING_PAYMENT",
-
-          changedById: user.id,
-        },
+      include: {
+        items: true,
       },
-    },
+    });
 
-    include: {
-      items: true,
-    },
+    return order;
   });
 
-      const html = await render(
-        createElement(ReadyMadeEmail, {
-          customerName: user.full_name,
-          orderNumber: order.order_number,
-        }),
-      );
+  const html = await render(
+    createElement(ReadyMadeEmail, {
+      customerName: user.full_name,
+      orderNumber: order.order_number,
+    }),
+  );
 
-      await sendEmail({
-        to: user.email,
-        subject: "We've received your order",
-        html,
-      });
+  await sendEmail({
+    to: user.email,
+    subject: "We've received your order",
+    html,
+  });
 
   return order;
 }
