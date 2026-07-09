@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const res = await paystack.get(`/transaction/verify/${paymentData.Provider_Reference}`);
 
     if (res.data.data.status === "success" && res.data.data.amount === paymentData.amount) {
-      const updatePayment = await updatePaymentStatus({
+      await updatePaymentStatus({
         ref: paymentData.Provider_Reference,
         status: "PAID",
       });
@@ -41,6 +41,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({data: "pending"}, {status: 200})
   } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Error verifying payment:", message);
     return NextResponse.json(
       { error: "Error verifying payment" },
       { status: 500 },

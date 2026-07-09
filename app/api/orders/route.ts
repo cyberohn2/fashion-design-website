@@ -6,9 +6,6 @@ export async function GET(req: NextRequest) {
         const page = searchParams.get("page") ?? 1;
     try{
         const userOrders = await getUserOrders({pagination: {page: Number(page)}});
-        if (!userOrders) {
-          return NextResponse.json({error: "Error fetching user orders"}, { status: 400 });
-        }
 
         return NextResponse.json(userOrders, { status: 200 });
     }

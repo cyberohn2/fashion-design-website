@@ -2,7 +2,7 @@
 import prisma from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import slugify from "slugify";
-import { gender } from "./dress/create-dress";
+import { gender } from "./create-dress";
 
 type UpdateDressData = {
   dressId: string;
@@ -50,7 +50,7 @@ export async function updateDress(data: UpdateDressData) {
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    console.log(message)
+    const message = error instanceof Error ? error.message : String(Error);
+    throw new Error(message);
   }
 }

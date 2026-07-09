@@ -115,7 +115,7 @@ export async function createFullCustomOrder(data: CreateFullCustomOrderData) {
 
    return order;
  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    console.log(message)
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(message); 
  }
 }

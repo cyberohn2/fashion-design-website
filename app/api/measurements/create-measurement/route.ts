@@ -12,9 +12,7 @@ export async function POST(request: Request) {
 
   try {
     const newMeasurement = await createMeasurement(formData);
-    if (!newMeasurement) {
-      return NextResponse.json({ error: "Error creating measurement" }, { status: 404 });
-    }
+
     return NextResponse.json(newMeasurement, {status: 201});
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

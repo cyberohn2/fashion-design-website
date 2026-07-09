@@ -20,6 +20,10 @@ export async function POST(req: Request) {
     return NextResponse.json(updatedOrder, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("Error accepting order :", message);
+    return NextResponse.json(
+      { error: "Server Error: couldn't accept order" },
+      { status: 500 },
+    );
   }
 }

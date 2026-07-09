@@ -32,104 +32,109 @@ type CreateSemiCustomOrderData = {
 export async function createSemiCustomOrder(data: CreateSemiCustomOrderData) {
   const user = await requireAuth();
 
-  // Validate dress
-  const dress = await prisma.dresses.findUnique({
-    where: {
-      id: data.selectedDressId,
-    },
-  });
-
-  if (!dress) {
-    throw new Error("Dress not found");
-  }
-
-  // Validate address ownership
-  if (data.deliveryAddressId) {
-    const address = await prisma.user_Addresses.findFirst({
+  try {
+      // Validate dress
+    const dress = await prisma.dresses.findUnique({
       where: {
-        id: data.deliveryAddressId,
-        userId: user.id,
+        id: data.selectedDressId,
       },
     });
 
-    if (!address) {
-      throw new Error("Invalid address");
+    if (!dress) {
+      throw new Error("Dress not found");
     }
-  }
 
-  // Validate measurement ownership
-  if (data.measurementProfileId) {
-    const measurement = await prisma.user_Measurements.findFirst({
-      where: {
-        id: data.measurementProfileId,
+    // Validate address ownership
+    if (data.deliveryAddressId) {
+      const address = await prisma.user_Addresses.findFirst({
+        where: {
+          id: data.deliveryAddressId,
+          userId: user.id,
+        },
+      });
+
+      if (!address) {
+        throw new Error("Invalid address");
+      }
+    }
+
+    // Validate measurement ownership
+    if (data.measurementProfileId) {
+      const measurement = await prisma.user_Measurements.findFirst({
+        where: {
+          id: data.measurementProfileId,
+          userId: user.id,
+        },
+      });
+
+      if (!measurement) {
+        throw new Error("Invalid measurement");
+      }
+    }
+
+    const order = await prisma.orders.create({
+      data: {
         userId: user.id,
-      },
-    });
 
-    if (!measurement) {
-      throw new Error("Invalid measurement");
-    }
-  }
+        order_number: await generateOrderNumber(),
 
-  const order = await prisma.orders.create({
-    data: {
-      userId: user.id,
+        order_type: "SEMI_CUSTOM",
 
-      order_number: await generateOrderNumber(),
+        status: "PENDING_REVIEW",
 
-      order_type: "SEMI_CUSTOM",
+        payment_status: "UNPAID",
 
-      status: "PENDING_REVIEW",
+        total: 0,
 
-      payment_status: "UNPAID",
+        delivery_method: data.deliveryMethod,
 
-      total: 0,
+        delivery_address_id: data.deliveryAddressId || "",
 
-      delivery_method: data.deliveryMethod,
+        custom_order: {
+          create: {
+            selected_dress_id: data.selectedDressId,
 
-      delivery_address_id: data.deliveryAddressId || "",
+            measurement_profile_id: data.measurementProfileId,
 
-      custom_order: {
-        create: {
-          selected_dress_id: data.selectedDressId,
+            customization_notes: data.customizationNotes,
 
-          measurement_profile_id: data.measurementProfileId,
+            customer_budget: data.customerBudget,
+            idea_image_url: data.ideaImageUrl
+          },
+        },
 
-          customization_notes: data.customizationNotes,
+        statusHistory: {
+          create: {
+            oldStatus: null,
 
-          customer_budget: data.customerBudget,
-          idea_image_url: data.ideaImageUrl
+            newStatus: "PENDING_REVIEW",
+
+            changedById: user.id,
+          },
         },
       },
 
-      statusHistory: {
-        create: {
-          oldStatus: null,
-
-          newStatus: "PENDING_REVIEW",
-
-          changedById: user.id,
-        },
+      include: {
+        custom_order: true,
       },
-    },
-
-    include: {
-      custom_order: true,
-    },
-  });
-
-    const html = await render(
-      createElement(OrderCreatedEmail, {
-        customerName: user.full_name,
-        orderNumber: order.order_number,
-      }),
-    );
-
-    await sendEmail({
-      to: user.email,
-      subject: "We've received your order",
-      html,
     });
 
-  return order;
+      const html = await render(
+        createElement(OrderCreatedEmail, {
+          customerName: user.full_name,
+          orderNumber: order.order_number,
+        }),
+      );
+
+      await sendEmail({
+        to: user.email,
+        subject: "We've received your order",
+        html,
+      });
+
+    return order;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(message); 
+  }
 }

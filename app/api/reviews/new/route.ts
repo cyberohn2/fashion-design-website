@@ -10,19 +10,14 @@ export async function POST(request: Request) {
 
   try {
     const newReview = await createReview({...data, rating: Number(data.rating)})
-    if (!newReview) {
-        return NextResponse.json(
-        { error: "Error creating review" },
-        { status: 404 },
-        );
-    }
+
     if(data.type === "CUSTOMISED") {
-      const updatedOrder = await prisma.custom_Order.update({
+      await prisma.custom_Order.update({
         where: { orderId: data.orderId },
         data: { review_status: "REVIEWED" },
       });
     }else if(data.type === "ORIGINAL") {
-      const updatedOrder = await prisma.order_Items.update({
+      await prisma.order_Items.update({
         where: { 
           id: data.orderItemId,
           orderId: data.orderId 

@@ -32,44 +32,49 @@ type UpdateMeasurementData = {
 export async function updateMeasurement(data: UpdateMeasurementData) {
   const user = await requireAuth();
 
-  const existingMeasurement = await prisma.user_Measurements.findFirst({
-    where: {
-      id: data.measurementId,
-      userId: user.id,
-    },
-  });
+  try {
+    const existingMeasurement = await prisma.user_Measurements.findFirst({
+      where: {
+        id: data.measurementId,
+        userId: user.id,
+      },
+    });
 
-  if (!existingMeasurement) {
-    throw new Error("Measurement not found");
-  }
+    if (!existingMeasurement) {
+      throw new Error("Measurement not found");
+    }
 
-  return prisma.user_Measurements.update({
-    where: {
-      id: data.measurementId,
-    },
+    return prisma.user_Measurements.update({
+      where: {
+        id: data.measurementId,
+      },
 
-    data: {
-      profile_name: data.profile_name,
+      data: {
+        profile_name: data.profile_name,
 
-      chest: data.chest,
-      waist: data.waist,
-      hips: data.hips,
-      shoulder: data.shoulder,
-      sleeve_length: data.sleeve_length,
-      arm: data.arm,
-      sleeve_hem: data.sleeve_hem,
-      top_length: data.top_length,
-      thigh: data.thigh,
-      trouser_length: data.trouser_length,
-      ankle: data.ankle,
-      waist_to_knee: data.waist_to_knee,
-      knee_to_ankle: data.knee_to_ankle,
-      round_knee: data.round_knee,
-      neck: data.neck,
-      inseam: data.inseam,
-      height: data.height,
+        chest: data.chest,
+        waist: data.waist,
+        hips: data.hips,
+        shoulder: data.shoulder,
+        sleeve_length: data.sleeve_length,
+        arm: data.arm,
+        sleeve_hem: data.sleeve_hem,
+        top_length: data.top_length,
+        thigh: data.thigh,
+        trouser_length: data.trouser_length,
+        ankle: data.ankle,
+        waist_to_knee: data.waist_to_knee,
+        knee_to_ankle: data.knee_to_ankle,
+        round_knee: data.round_knee,
+        neck: data.neck,
+        inseam: data.inseam,
+        height: data.height,
 
-      notes: data.notes,
-    },
-  });
+        notes: data.notes,
+      },
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(message); 
+  } 
 }

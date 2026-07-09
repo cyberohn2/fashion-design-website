@@ -103,7 +103,7 @@ export async function createDress(data: CreateDressData) {
     if (uploadedFiles.length) {
       await supabase.storage.from("dress-images").remove(uploadedFiles);
     }
-
-    throw error;
+    const message = error instanceof Error ? error.message : String(Error)
+    throw new Error(message);
   }
 }

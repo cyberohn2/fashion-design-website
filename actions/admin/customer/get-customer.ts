@@ -24,7 +24,7 @@ export async function getCustomer(userId: string) {
         },
       });
 
-    return customer ? customer : null ;
+    return customer;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(message);

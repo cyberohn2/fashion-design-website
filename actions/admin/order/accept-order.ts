@@ -86,7 +86,7 @@ export async function acceptOrder(data: UpdateOrderStatusData) {
       success: true,
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    console.error(message)
+    const message = error instanceof Error ? error.message : String(Error);
+    throw new Error(message);
   }
 }

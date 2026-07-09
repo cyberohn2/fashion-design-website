@@ -9,12 +9,7 @@ export async function POST(request: Request) {
 
   try {
     const newSemiOrder = await createSemiCustomOrder(data);
-    if (!newSemiOrder) {
-      return NextResponse.json(
-        { error: "Error creating order" },
-        { status: 404 },
-      );
-    }
+
     return NextResponse.json(newSemiOrder, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

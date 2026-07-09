@@ -9,12 +9,14 @@ export async function POST(request: Request) {
 
   try {
     const newCart = await deleteFromCart({itemId: data});
-    if (!newCart) {
-      return NextResponse.json({ error: "Error removing item from cart" }, { status: 500 });
-    }
+
     return NextResponse.json(newCart, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("Error removing item from cart:", message);
+    return NextResponse.json(
+      { error: "Error removing item from cart" },
+      { status: 500 },
+    );
   }
 }

@@ -7,14 +7,15 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 export async function confirmCustomOrderPayment(orderId: string) {
   const admin = await requireAdmin();
 
-  const order = await prisma.orders.findUnique({
-    where: {
-      id: orderId,
-    },
-    include: {
-      payment: true
-    }
-  });
+  try {
+    const order = await prisma.orders.findUnique({
+      where: {
+        id: orderId,
+      },
+      include: {
+        payment: true
+      }
+    });
 
   if (!order) {
     throw new Error("Order not found");
@@ -58,4 +59,10 @@ export async function confirmCustomOrderPayment(orderId: string) {
   return {
     success: true,
   };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(Error);
+    throw new Error(message);
+  }
+
+  
 }

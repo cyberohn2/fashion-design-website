@@ -83,7 +83,7 @@ export async function addToCart({item}:{item: {dressId: string; quantity: number
       });
       return newUserCart;
     } catch (error) {
-        const message = error instanceof Error ? error.message : String(error)
-        console.log(message)
+      const message = error instanceof Error ? error.message : String(Error);
+      throw new Error(message);
     }
 }

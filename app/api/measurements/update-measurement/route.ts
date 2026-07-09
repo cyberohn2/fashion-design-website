@@ -15,9 +15,7 @@ export async function POST(request: Request) {
           measurementId,
           ...data,
         });
-        if(!updatedMeasurement) {
-            return NextResponse.json({ error: "Measurement not found" }, { status: 404 });
-        }
+
         return NextResponse.json(updatedMeasurement, {status: 201});
     }
     catch (error) { 

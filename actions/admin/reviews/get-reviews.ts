@@ -27,7 +27,7 @@ export async function getReviews({ pagination }: { pagination: { page: number } 
 
         return reviews;
     } catch (error) {
-        const message = error instanceof Error ? error.message : String(error)
-        console.error(message)
+        const message = error instanceof Error ? error.message : String(Error);
+        throw new Error(message);
     }
 }

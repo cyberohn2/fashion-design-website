@@ -14,6 +14,8 @@ export async function POST(req: Request) {
         const updatedOrder = await confirmCustomOrderPayment(orderId)
         return NextResponse.json(updatedOrder, { status: 201 });
     } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Error updating payment status:", message);
         return NextResponse.json(
           { error: "Server Error: couldn't update payment status" },
           { status: 500 },

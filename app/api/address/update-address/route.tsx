@@ -9,9 +9,6 @@ export async function POST(request: Request) {
 
     try{
         const updatedAddress = await updateAddress({ addressId, ...data });
-        if(!updatedAddress) {
-            return NextResponse.json({ error: "Address not found" }, { status: 404 });
-        }
         return NextResponse.json(updatedAddress, {status: 201});
     }
     catch (error) { 

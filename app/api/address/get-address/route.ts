@@ -4,9 +4,6 @@ import { NextResponse } from "next/server";
 export async function GET() {
     try{
         const addresses = await getAddresses();
-        if(!addresses) {
-            return NextResponse.json({}, { status: 200 });
-        }
 
         return NextResponse.json(addresses, {status: 200});
     }

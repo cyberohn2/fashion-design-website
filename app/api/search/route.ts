@@ -32,6 +32,7 @@ export async function POST(request: Request) {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("Search error:", message);
+    return NextResponse.json({ error: "Invalid request" }, { status: 500 });
   }
 
 }

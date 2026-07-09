@@ -37,7 +37,7 @@ export async function getUserCart() {
         return userCart;
 
     } catch (error) {
-        const message = error instanceof Error ? error.message : String(error)
-        console.error(message)
+      const message = error instanceof Error ? error.message : String(Error);
+      throw new Error(message);
     }
 }

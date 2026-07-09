@@ -7,13 +7,19 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 export async function deleteDress(dressId: string) {
   await requireAdmin();
 
-  await prisma.dresses.delete({
-    where: {
-      id: dressId,
-    },
-  });
+  try {
+    await prisma.dresses.delete({
+      where: {
+        id: dressId,
+      },
+    });
 
-  return {
-    success: true,
-  };
+    return {
+      success: true,
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(Error);
+    throw new Error(message);
+  }
+  
 }

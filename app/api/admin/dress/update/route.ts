@@ -1,5 +1,5 @@
+import { updateDress } from "@/actions/admin/dress/update-dress";
 import { NextResponse } from "next/server";
-import { updateDress } from "@/actions/admin/update-dress";
 
 export async function POST(request: Request) {
     const { dressId, ...data } = await request.json();
@@ -19,12 +19,7 @@ export async function POST(request: Request) {
           stock: Number(data.stock),
           isPublished: data.isPublished,
         });
-        if (!updatedDress) {
-          return NextResponse.json(
-            { error: "dress not found" },
-            { status: 404 },
-          );
-        }
+
         return NextResponse.json(updatedDress, { status: 201 });
     }
     catch (error) { 

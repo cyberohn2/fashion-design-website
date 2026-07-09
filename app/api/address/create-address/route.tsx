@@ -9,9 +9,6 @@ export async function POST(request: Request) {
 
   try {
     const newAddress = await createAddress(formData);
-    if (!newAddress) {
-      return NextResponse.json({ error: "Error creating address" }, { status: 500 });
-    }
     return NextResponse.json(newAddress, {status: 201});
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

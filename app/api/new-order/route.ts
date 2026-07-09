@@ -14,12 +14,6 @@ export async function POST(request: Request) {
       deliveryMethod: data.deliveryMethod,
       deliveryAddressId: data.deliveryAddressId,
     });
-    if (!newOrder) {
-      return NextResponse.json(
-        { error: "Error creating order" },
-        { status: 404 },
-      );
-    }
     
     return NextResponse.json(newOrder, { status: 201 });
   } catch (error) {

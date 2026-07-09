@@ -17,17 +17,13 @@ export async function getDress(slug: string) {
       },
     });
 
-    if (!dress) {
-      throw new Error("Dress not found")
-    }
-
     let isInCart: boolean | undefined = false
 
     // check if it's cart
-      const user = await getCurrentUser();
-      if (!user) {
-        return { ...dress, isInCart };
-      }
+    const user = await getCurrentUser();
+    if (!user) {
+      return { ...dress, isInCart };
+    }
     const userCart = await getUserCart()
     isInCart = userCart?.items.some( item => item.dressId === dress?.id)
 

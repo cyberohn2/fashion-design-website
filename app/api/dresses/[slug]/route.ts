@@ -15,9 +15,6 @@ export async function GET(
     }
 
     const dress = await getDress(param.slug);
-    if (!dress) {
-      return NextResponse.json({ error: "Dress not found" }, { status: 404 });
-    }
 
     return NextResponse.json(dress, { status: 200 });
   } catch (error) {

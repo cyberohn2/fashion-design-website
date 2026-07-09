@@ -9,12 +9,14 @@ export async function POST(request: Request) {
 
   try {
     const newCart = await addToCart({item: data});
-    if (!newCart) {
-      return NextResponse.json({ error: "Error adding item to cart" }, { status: 500 });
-    }
+
     return NextResponse.json(newCart, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("Error adding item to cart:", message);
+    return NextResponse.json(
+      { error: "Error adding item to cart" },
+      { status: 500 },
+    );
   }
 }

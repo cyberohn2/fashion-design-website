@@ -6,16 +6,18 @@ import { requireAuth } from "@/lib/auth/require-auth";
 export async function getMeasurement(measurementId: string) {
   const user = await requireAuth();
 
-  const measurement = await prisma.user_Measurements.findFirst({
-    where: {
-      id: measurementId,
-      userId: user.id,
-    },
-  });
+  try {
+    const measurement = await prisma.user_Measurements.findFirst({
+      where: {
+        id: measurementId,
+        userId: user.id,
+      },
+    });
 
-  if (!measurement) {
-    throw new Error("Measurement not found");
+    return measurement;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(message); 
   }
 
-  return measurement;
 }

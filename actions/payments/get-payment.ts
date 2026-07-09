@@ -15,9 +15,6 @@ export async function getPayment(ref: string) {
       },
     });
 
-    if (!payment) {
-      console.error("payment not found");
-    }
     return payment;
 
   } catch (error) {

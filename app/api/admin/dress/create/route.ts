@@ -21,6 +21,8 @@ export async function POST(req: Request) {
     const newDress = await createDress(newDressData);
     return NextResponse.json(newDress, { status: 201 });
   } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Error creating dress:", message);
     return NextResponse.json(
       { error: "Server Error: couldn't create dress" },
       { status: 500 },

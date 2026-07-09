@@ -41,13 +41,10 @@ export async function checkoutCart({
         },
       },
     });
-    if (!newReadyMadeOrder){
-        throw new Error("Error creating order!")
-    }
 
     return newReadyMadeOrder;
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    console.error(message)
+    const message = error instanceof Error ? error.message : String(Error);
+    throw new Error(message);
   }
 }

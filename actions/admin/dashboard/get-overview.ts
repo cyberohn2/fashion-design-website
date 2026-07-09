@@ -7,7 +7,7 @@ import { TransactionClient } from "@/app/generated/prisma/internal/prismaNamespa
 
 
 export async function getOverview() {
-    const admin = await requireAdmin()
+    await requireAdmin()
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
     try {

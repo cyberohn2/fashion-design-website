@@ -15,17 +15,14 @@ export async function GET(
     }
 
     const address = await getAddress(param.id);
-    if (!address) {
-      return NextResponse.json({ error: "Address not found" }, { status: 404 });
-    }
 
     return NextResponse.json(address, {status: 200});
   } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        console.error("Error fetching address:", message);
-        return NextResponse.json(
-            { error: "Failed to fetch address" },
-            { status: 500 },
-        );
+      const message = error instanceof Error ? error.message : String(error);
+      console.error("Error fetching address:", message);
+      return NextResponse.json(
+          { error: "Failed to fetch address" },
+          { status: 500 },
+      );
     }
 }
