@@ -33,18 +33,25 @@ const page = async () => {
   const userCart = await getUserCart();
   if (userCart?.items.length === 0 || !userCart) {
     return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <SearchSlash />
-          </EmptyMedia>
-          <EmptyTitle>Nothing here!</EmptyTitle>
-          <EmptyDescription>
-            You don't have anything in you cart yet.
-            <Link href={"/catalog"}>Browse catalog</Link>
-          </EmptyDescription>
-        </EmptyHeader>
-      </Empty>
+      <main className="pt-24 container mx-auto px-4 min-h-screen">
+        <div className="mb-4 border-b pb-6 flex items-center justify-between">
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
+            Cart ({userCart?.items?.length})
+          </h1>
+        </div>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <SearchSlash />
+            </EmptyMedia>
+            <EmptyTitle>Nothing here!</EmptyTitle>
+            <EmptyDescription>
+              You don't have anything in you cart yet.
+              <Link href={"/catalog"}>Browse catalog</Link>
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </main>
     );
   }
   return (

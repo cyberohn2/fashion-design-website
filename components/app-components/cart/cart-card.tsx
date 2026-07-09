@@ -19,7 +19,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         try {
             const req = await fetch(`/api/cart/add`, {
                 method: "POST",
-                body: JSON.stringify({dressId: item.dressId, quantity: item.quantity + 1})
+                body: JSON.stringify({data: {dressId: item.dressId, quantity: item.quantity + 1}})
             })
             if (req.ok){
                 toast.success("Success!")
@@ -40,7 +40,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         try {
           const req = await fetch(`/api/cart/remove`, {
             method: "POST",
-            body: JSON.stringify({ dressId: item.dressId }),
+            body: JSON.stringify({data:{ dressId: item.dressId }}),
           });
           if (req.ok) {
             toast.success("Success!");
@@ -62,7 +62,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         try {
           const req = await fetch(`/api/cart/delete`, {
             method: "POST",
-            body: JSON.stringify(item.id),
+            body: JSON.stringify({data: item.id}),
           });
           if (req.ok) {
             toast.success("Success!");

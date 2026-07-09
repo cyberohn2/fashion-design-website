@@ -61,7 +61,7 @@ export function CheckoutDialog() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({data: {...formData}}),
           }).then(async (res) => {
             if (!res.ok) throw new Error("Failed to create order");
             return res.json() as Promise<userOrder>;

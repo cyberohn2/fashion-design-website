@@ -48,10 +48,10 @@ const DressPage = ({ dress }: { dress: DressType }) => {
     try {
       const req = await fetch(`/api/cart/add`, {
         method: "POST",
-        body: JSON.stringify({
+        body: JSON.stringify({data: {
           dressId: dress?.id,
           quantity: quantity,
-        }),
+        }}),
       });
       if (req.ok) {
         toast.success("Success!");
