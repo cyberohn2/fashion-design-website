@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react";
-import { Star, Share2 } from "lucide-react";
+import { Star, Share2, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -14,9 +14,13 @@ import {
 import { DressType } from "./dress-card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { NewOrderDialog } from "./new-order-dialog";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const DressPage = ({ dress }: { dress: DressType | null }) => {
+const DressPage = ({ dress }: { dress: DressType }) => {
   const [quantity, setQuantity] = useState(1);
+  const [ loading, setLoading ] = useState(false)
+  const router = useRouter()
 
   const averageRating =
     dress?.reviews &&
@@ -33,6 +37,33 @@ const DressPage = ({ dress }: { dress: DressType | null }) => {
       STREET_WEAR: "Street Wear",
     };
     return labels[category] || category;
+  };
+
+  const handleAddToCart = async () => {
+    setLoading(true);
+    if (quantity > dress?.stock) {
+      toast.error("Out of stock!");
+      return;
+    }
+    try {
+      const req = await fetch(`/api/cart/add`, {
+        method: "POST",
+        body: JSON.stringify({
+          dressId: dress?.id,
+          quantity: quantity,
+        }),
+      });
+      if (req.ok) {
+        toast.success("Success!");
+        router.refresh();
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -117,7 +148,7 @@ const DressPage = ({ dress }: { dress: DressType | null }) => {
             <div className="space-y-2">
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl font-light">
-                  ₦{dress?.base_price}
+                  ₦{Number(dress?.base_price)}
                 </span>
                 <span className="text-sm text-gray-500">NGN</span>
               </div>
@@ -184,7 +215,8 @@ const DressPage = ({ dress }: { dress: DressType | null }) => {
                   />
                   <button
                     onClick={() =>
-                      setQuantity(Math.min(dress?.stock || 1, quantity + 1))
+                      { quantity === dress?.stock ? toast.error("Out of stock!"):
+                        setQuantity(Math.min(dress?.stock || 1, quantity + 1))}
                     }
                     className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
                   >
@@ -198,7 +230,7 @@ const DressPage = ({ dress }: { dress: DressType | null }) => {
                   <DialogTrigger>
                     <Button
                       className="flex-1 bg-black text-white hover:bg-gray-800 py-3 font-light tracking-wide"
-                      disabled={dress?.stock === 0}
+                      disabled={loading || dress?.stock === 0}
                     >
                       Buy Now
                     </Button>
@@ -208,12 +240,18 @@ const DressPage = ({ dress }: { dress: DressType | null }) => {
                 <Button
                   variant="outline"
                   className="flex-1 py-3 font-light tracking-wide"
-                  disabled={dress?.stock === 0}
+                  disabled={loading || dress?.stock === 0}
                 >
                   Custom Order
                 </Button>
-                <Button variant="ghost" size="icon" className="px-4">
-                  <Share2 className="w-5 h-5 text-gray-600" />
+                <Button
+                  disabled={loading || dress?.stock === 0}
+                  onClick={handleAddToCart}
+                  variant="ghost"
+                  className="flex-1 py-3 font-light tracking-wide flex items-center"
+                >
+                  <ShoppingCart />
+                  Add to cart
                 </Button>
               </div>
             </div>

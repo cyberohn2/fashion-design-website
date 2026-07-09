@@ -49,6 +49,9 @@ const UserMenu = () => {
         <DropdownMenuSeparator className="mb-4 space-y-2" />
         <DropdownMenuGroup>
           <DropdownMenuItem>
+            <Link href={"/cart"}>Cart</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
             <Link href={"/order-history"}>Order History</Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="">

@@ -15,6 +15,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
+import { CheckoutDialog } from "./checkout-dialog";
 
 const ManageCart = ({userCart}:{userCart: cartType}) => {
     let itemTotal = 0;
@@ -24,6 +25,7 @@ const ManageCart = ({userCart}:{userCart: cartType}) => {
         subTotal += userCart?.items[i]?.quantity * Number(userCart?.items[i]?.dress.base_price); 
     } 
 
+    const [ showCheckoutDialog, setShowCheckoutDialog ] = useState(false)
     const [ showDialog, setShowDialog ] = useState(false)
     const [ loading, setLoading ] = useState(false)
     const router = useRouter()
@@ -75,10 +77,15 @@ const ManageCart = ({userCart}:{userCart: cartType}) => {
               <p>{subTotal}</p>
             </div>
             <Separator />
-            <Button>Checkout</Button>
+            <Button onClick={() => setShowCheckoutDialog(true)}>Checkout</Button>
           </div>
         </div>
       </div>
+      {/* checkout dialog */}
+      <Dialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog}>
+        <CheckoutDialog />
+      </Dialog>
+      {/* clear cart dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
