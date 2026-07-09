@@ -17,7 +17,7 @@ import { NewOrderDialog } from "./new-order-dialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-const DressPage = ({ dress }: { dress: DressType }) => {
+const DressPage = ({ dress }: { dress: DressType & {isInCart?: boolean} }) => {
   const [quantity, setQuantity] = useState(1);
   const [ loading, setLoading ] = useState(false)
   const router = useRouter()
@@ -244,7 +244,7 @@ const DressPage = ({ dress }: { dress: DressType }) => {
                 >
                   Custom Order
                 </Button>
-                <Button
+                {!dress.isInCart && <Button
                   disabled={loading || dress?.stock === 0}
                   onClick={handleAddToCart}
                   variant="ghost"
@@ -252,7 +252,7 @@ const DressPage = ({ dress }: { dress: DressType }) => {
                 >
                   <ShoppingCart />
                   Add to cart
-                </Button>
+                </Button>}
               </div>
             </div>
           </div>

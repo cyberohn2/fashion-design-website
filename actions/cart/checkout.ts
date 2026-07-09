@@ -1,6 +1,7 @@
 import { requireAuth } from "@/lib/auth/require-auth";
 import prisma from "@/lib/prisma";
 import { createReadyMadeOrder } from "../orders/create-ready-made-order";
+import { clearCart } from "./clear-cart";
 
 export async function checkoutCart({
   deliveryMethod,
@@ -22,11 +23,24 @@ export async function checkoutCart({
         items: true
       }
     });
+    if (!userCart) {
+      throw new Error("No cart found!")
+    }
     const dresses = userCart?.items.map( it => ({dressId: it.dressId, quantity: it.quantity}))
     if(!dresses){
         throw new Error("No items in your cart!")
     }
     const newReadyMadeOrder = await createReadyMadeOrder({dresses, deliveryMethod, deliveryAddressId, notes});
+    await prisma.cart.update({
+      where: {
+        id: userCart?.id,
+      },
+      data: {
+        items: {
+          deleteMany: {},
+        },
+      },
+    });
     if (!newReadyMadeOrder){
         throw new Error("Error creating order!")
     }

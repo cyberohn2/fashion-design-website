@@ -1,10 +1,11 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { getUserCart } from "../cart/get-user-cart";
 
 export async function getDress(slug: string) {
   try {
-    return await prisma.dresses.findUnique({
+    const dress =  await prisma.dresses.findUnique({
       where: {
         slug,
       },
@@ -14,6 +15,17 @@ export async function getDress(slug: string) {
         reviews: true,
       },
     });
+
+    if (!dress) {
+      throw new Error("Dress not found")
+    }
+
+    // check if it's cart
+    const userCart = await getUserCart()
+    const isInCart = userCart?.items.some( item => item.dressId === dress?.id)
+
+    return {...dress, isInCart}
+
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     throw new Error(message);    

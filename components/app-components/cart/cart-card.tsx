@@ -13,7 +13,7 @@ const CartCard = ({item}: {item: CartItems}) => {
 
     const handleAddToCart = async () => {
         setLoading(true)
-        if (item.quantity + 1 >= item.dress.stock) {
+        if (item.quantity + 1 > item.dress.stock) {
             toast.error("Out of stock!")
             return
         }
@@ -101,7 +101,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         <Button disabled={loading} onClick={() => handleDeleteItem()}>
           <Trash />
         </Button>
-        <div className="flex items-center gap-2 w-fit border border-gray-300 rounded-lg">
+        {!(item.dress.stock === 0 || item.dress.stock < item.quantity) ? <div className="flex items-center gap-2 w-fit border border-gray-300 rounded-lg">
           <Button
             disabled={loading}
             size={"icon-sm"}
@@ -119,7 +119,7 @@ const CartCard = ({item}: {item: CartItems}) => {
           >
             +
           </Button>
-        </div>
+        </div>: <Button disabled aria-disabled>Sold Out</Button>}
       </div>
     </Card>
   );
