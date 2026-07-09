@@ -1,6 +1,7 @@
 "use client"
 import { CartItems } from "@/app/(customer)/cart/page";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -78,8 +79,8 @@ const CartCard = ({item}: {item: CartItems}) => {
         }
     }
   return (
-    <div>
-      <div className="flex items-center gap-2">
+    <Card className="space-y-4">
+      <div className="flex items-start gap-2">
         <img
           width={100}
           height={100}
@@ -100,7 +101,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         <Button disabled={loading} onClick={() => handleDeleteItem()}>
           <Trash />
         </Button>
-        <div className="flex items-center border border-gray-300 rounded-lg flex-1">
+        <div className="flex items-center justify-between border border-gray-300 rounded-lg flex-1">
           <Button
             disabled={loading}
             size={"icon-sm"}
@@ -120,7 +121,7 @@ const CartCard = ({item}: {item: CartItems}) => {
           </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 

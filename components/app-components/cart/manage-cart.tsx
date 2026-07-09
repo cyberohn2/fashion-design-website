@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { CheckoutDialog } from "./checkout-dialog";
+import { Card } from "@/components/ui/card";
 
 const ManageCart = ({userCart}:{userCart: cartType}) => {
     let itemTotal = 0;
@@ -50,24 +51,24 @@ const ManageCart = ({userCart}:{userCart: cartType}) => {
   return (
     <div>
       <div className="container mx-auto">
-        <div className="mb-4 border-b pb-6 flex items-center justify-between">
+        <div className="border-b pb-6 flex items-center justify-between">
           <h1 className="text-2xl md:text-4xl font-bold tracking-tighter">
             Cart ({userCart?.items?.length})
           </h1>
         </div>
         <div className="grid lg:grid-cols-3 gap-3">
-          <div className="space-y-3 p-4 mt-8 min-h-screen">
+          <Card className="space-y-3 p-4 mt-8 min-h-screen col-span-2">
             <Button
               className="w-fit flex items-center"
-              onClick={handleClearCart}
+              onClick={() => setShowDialog(true)}
             >
               <Trash2 /> Clear cart
             </Button>
             {userCart?.items?.map((item) => (
               <CartCard key={item.id} item={item} />
             ))}
-          </div>
-          <div>
+          </Card>
+          <Card className="space-y-4">
             <p className="font-bold text-xl text-black!">Cart Summary</p>
             <Separator />
             <p>Item's total ({itemTotal})</p>
@@ -77,8 +78,10 @@ const ManageCart = ({userCart}:{userCart: cartType}) => {
               <p>{subTotal}</p>
             </div>
             <Separator />
-            <Button onClick={() => setShowCheckoutDialog(true)}>Checkout</Button>
-          </div>
+            <Button className="" onClick={() => setShowCheckoutDialog(true)}>
+              Checkout
+            </Button>
+          </Card>
         </div>
       </div>
       {/* checkout dialog */}
