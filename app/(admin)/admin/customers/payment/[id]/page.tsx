@@ -1,5 +1,5 @@
-import { getCustomerPayments } from "@/actions/admin/get-customer-payments";
-import { getPayments } from "@/actions/admin/get-payment";
+import { getCustomerPayments } from "@/actions/admin/payment/get-customer-payments";
+import { getPayments } from "@/actions/admin/payment/get-payment";
 import { PaymentTable } from "@/components/admin-components/payment/payment-table";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {

@@ -2,7 +2,7 @@
 import prisma from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import slugify from "slugify";
-import { gender } from "./create-dress";
+import { gender } from "./dress/create-dress";
 
 type UpdateDressData = {
   dressId: string;

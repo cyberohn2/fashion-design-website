@@ -6,7 +6,7 @@ import { createElement } from "react";
 import { sendEmail } from "@/lib/send-mail";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import OrderAcceptedEmail from "@/lib/email-templates/order-accepted";
-import { initializePayment } from "../payments/initialize-payment";
+import { initializePayment } from "../../payments/initialize-payment";
 
 type UpdateOrderStatusData = {
   orderId: string;

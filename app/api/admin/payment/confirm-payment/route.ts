@@ -1,4 +1,4 @@
-import { confirmCustomOrderPayment } from "@/actions/admin/confirm-custom-order-payment";
+import { confirmCustomOrderPayment } from "@/actions/admin/order/confirm-custom-order-payment";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

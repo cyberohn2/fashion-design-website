@@ -1,16 +1,20 @@
-import { getPayments } from "@/actions/admin/get-payment";
+import { getPayments } from "@/actions/admin/payment/get-payment";
 import { PaymentTable } from "@/components/admin-components/payment/payment-table";
 
 const page = async () => {
-  const payments = await getPayments({pagination: {page:1}})
+  const payments = await getPayments({ pagination: { page: 1 } });
 
   return (
     <main className="@container/main flex flex-1 flex-col gap-2 px-6">
       <div className="flex flex-col gap-4 py-18 md:gap-6 md:py-6">
-        <PaymentTable Payments={payments.payment.formattedPayment} totalPayment={payments.payment.totalPayment} page={payments.payment.page} />
+        <PaymentTable
+          Payments={payments.payment.formattedPayment}
+          totalPayment={payments.payment.totalPayment}
+          page={payments.payment.page}
+        />
       </div>
     </main>
   );
-}
+};
 
-export default page
+export default page;

@@ -1,4 +1,4 @@
-import { updateOrderStatus } from "@/actions/admin/update-order-status";
+import { updateOrderStatus } from "@/actions/admin/order/update-order-status";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

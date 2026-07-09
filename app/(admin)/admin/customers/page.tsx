@@ -1,9 +1,8 @@
-import { getCustomers } from "@/actions/admin/get-customers";
+import { getCustomers } from "@/actions/admin/customer/get-customers";
 import { CustomerTable } from "@/components/admin-components/customer/customer-table";
 
-
 const page = async () => {
-    const customers = await getCustomers({ pagination: { page: 1 } });
+  const customers = await getCustomers({ pagination: { page: 1 } });
 
   return (
     <main className="@container/main flex flex-1 flex-col gap-2 px-6">
@@ -16,6 +15,6 @@ const page = async () => {
       </div>
     </main>
   );
-}
+};
 
-export default page
+export default page;

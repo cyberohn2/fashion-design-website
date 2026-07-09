@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import { CreateDressData } from "@/actions/admin/create-dress";
+import { CreateDressData } from "@/actions/admin/dress/create-dress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ImageUploader from "@/components/ui/image-uploader";
 import { updateDressImage } from "@/lib/supabase/update-dress-image";

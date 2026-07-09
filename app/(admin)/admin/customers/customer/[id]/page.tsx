@@ -1,4 +1,4 @@
-import { getCustomer } from "@/actions/admin/get-customer"
+import { getCustomer } from "@/actions/admin/customer/get-customer"
 import { CustomerDetails } from "@/components/admin-components/customer/customer-details";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {

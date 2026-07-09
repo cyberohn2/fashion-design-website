@@ -1,4 +1,4 @@
-import { getDresses } from "@/actions/admin/get-dresses";
+import { getDresses } from "@/actions/admin/dress/get-dresses";
 import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const { searchTerm, page } = await req.json();

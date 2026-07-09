@@ -1,4 +1,4 @@
-import { getCustomerOrders } from "@/actions/admin/get-customer-orders";
+import { getCustomerOrders } from "@/actions/admin/order/get-customer-orders";
 import { OrderTable } from "@/components/admin-components/order/order-table";
 
 

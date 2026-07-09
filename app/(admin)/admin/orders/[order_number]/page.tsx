@@ -1,4 +1,4 @@
-import { getOrderDetails } from "@/actions/admin/get-order-details"
+import { getOrderDetails } from "@/actions/admin/order/get-order-details"
 import { OrderDetails } from "@/components/admin-components/order/order-details";
 
 const page = async ({ params }: { params: Promise<{ order_number: string }> }) => {
