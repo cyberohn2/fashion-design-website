@@ -2,8 +2,6 @@ import { getDress } from "@/actions/dresses/get-dress";
 import { DressType } from "@/components/app-components/catalog/dress-card";
 import DressPage from "@/components/app-components/catalog/dress-page";
 
-type dressPageType = DressType & { isInCart: boolean };
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const param = await params;
   const dress = await getDress(param.slug);
