@@ -20,7 +20,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         try {
             const req = await fetch(`/api/cart/add`, {
                 method: "POST",
-                body: JSON.stringify({data: {dressId: item.dressId, quantity: item.quantity + 1}})
+                body: JSON.stringify({data: {dressId: item.dressId, quantity: 1}})
             })
             if (req.ok){
                 toast.success("Success!")
