@@ -26,7 +26,7 @@ model User {
   payments   Payment[]
   reviews    Reviews[]
   statusChanges OrderStatusHistory[]
-
+  cart Cart?
   // @@schema("public")
 }
 
@@ -97,7 +97,7 @@ model Dresses {
   category    DressCategory
   type        DressType
   gender      Gender
-  base_price   Float
+  base_price   Decimal @db.Decimal(10,2)
   stock       Int
   soldCount   Int     @default(0)
   isPublished Boolean @default(false)
@@ -106,7 +106,7 @@ model Dresses {
   orders      Order_Items[]
   custom_orders Custom_Order[]
   reviews      Reviews[]
-
+  cartItems Cart_Item[]
   // @@schema("public")
 }
 
@@ -164,7 +164,7 @@ model   Orders {
   notes       String?
   user        User @relation(fields: [userId], references: [id])
   delivery_address User_Addresses @relation(fields: [delivery_address_id], references: [id])
-  total       Float
+  total       Decimal @db.Decimal(10,2)
   payment Payment[]
   items        Order_Items[]
   custom_order Custom_Order?
@@ -241,7 +241,7 @@ model Order_Items {
   orderId   String
   dressId   String
   quantity  Int
-  price     Float
+  price     Decimal @db.Decimal(10,2)
   review_status    ReviewStatus  @default(PENDING)
   order     Orders @relation(fields: [orderId], references: [id])
   dress     Dresses @relation(fields: [dressId], references: [id])
@@ -284,7 +284,7 @@ model Payment {
   orderId     String
   Provider    String  @default("PAYSTACK")
   Provider_Reference String @unique
-  amount      Float
+  amount      Decimal @db.Decimal(10,2)
   status      PaymentStatus @default(UNPAID)
   order       Orders @relation(fields: [orderId], references: [id])
   user        User   @relation(fields: [userId], references: [id])
@@ -309,4 +309,31 @@ model Reviews {
 enum ReviewType {
   CUSTOMISED
   ORIGINAL
+}
+
+model Cart {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  userId    String      @unique @db.Uuid
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items      Cart_Item[]
+}
+
+model Cart_Item {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  cartId    String
+  dressId   String
+
+  quantity  Int          @default(1)
+
+  cart       Cart        @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  dress      Dresses     @relation(fields: [dressId], references: [id])
+
+  @@unique([cartId, dressId])
 }

@@ -3,15 +3,14 @@ import { createAddress } from "@/actions/addresses/create-address";
 
 export async function POST(request: Request) {
   const { formData } = await request.json();
-  console.log("Received data for new address:", formData);
   if (!formData) {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    return NextResponse.json({ error: "address data required!" }, { status: 400 });
   }
 
   try {
     const newAddress = await createAddress(formData);
     if (!newAddress) {
-      return NextResponse.json({ error: "Error creating address" }, { status: 404 });
+      return NextResponse.json({ error: "Error creating address" }, { status: 500 });
     }
     return NextResponse.json(newAddress, {status: 201});
   } catch (error) {

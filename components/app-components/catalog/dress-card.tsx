@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Decimal } from "@prisma/client/runtime/client";
 
 export type Reviews = {
   id: string;
@@ -44,7 +45,7 @@ export type DressType = {
     | "STREET_WEAR";
   type: "BESPOKE" | "KAFTAN" | "MONOGRAM" | "NATIVE" | "READYMADE";
   gender: string;
-  base_price: number;
+  base_price: Decimal;
   stock: number;
   soldCount: number;
   thumbnail: string | null;
@@ -115,7 +116,7 @@ const DressCard = ({ dress }: { dress: DressType }) => {
           </CardTitle>
         </div>
         <CardContent className="p-0 mt-2 mb-2 flex items-center justify-between">
-          <p className="text-sm text-gray-600">₦{dress?.base_price}</p>
+          <p className="text-sm text-gray-600">₦{Number(dress?.base_price)}</p>
           <div className="flex items-center gap-2">
             <div className="flex items-center" aria-hidden>
               {stars.map((t, i) => (
