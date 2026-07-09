@@ -79,7 +79,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         }
     }
   return (
-    <Card className="space-y-4">
+    <Card className="space-y-4 p-4">
       <div className="flex items-start gap-2">
         <img
           width={100}
@@ -87,7 +87,7 @@ const CartCard = ({item}: {item: CartItems}) => {
           src={item.dress.thumbnail || ""}
           alt={item.dress.title}
         />
-        <div className="flex items-start flex-col md:flex-row">
+        <div className="flex items-start justify-between flex-col md:flex-row">
           <div>
             <p className="font-bold text-xl">{item.dress.title}</p>
             <p>{item.dress.type}</p>
@@ -101,7 +101,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         <Button disabled={loading} onClick={() => handleDeleteItem()}>
           <Trash />
         </Button>
-        <div className="flex items-center justify-between border border-gray-300 rounded-lg flex-1">
+        <div className="flex items-center gap-2 w-fit border border-gray-300 rounded-lg flex-1">
           <Button
             disabled={loading}
             size={"icon-sm"}

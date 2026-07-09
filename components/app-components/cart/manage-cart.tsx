@@ -57,7 +57,7 @@ const ManageCart = ({userCart}:{userCart: cartType}) => {
           </h1>
         </div>
         <div className="grid lg:grid-cols-3 gap-3">
-          <Card className="space-y-3 p-4 mt-8 min-h-screen col-span-2">
+          <div className="space-y-3 p-4 min-h-screen col-span-2">
             <Button
               className="w-fit flex items-center"
               onClick={() => setShowDialog(true)}
@@ -67,8 +67,8 @@ const ManageCart = ({userCart}:{userCart: cartType}) => {
             {userCart?.items?.map((item) => (
               <CartCard key={item.id} item={item} />
             ))}
-          </Card>
-          <Card className="space-y-4">
+          </div>
+          <Card className="space-y-2 h-fit p-4">
             <p className="font-bold text-xl text-black!">Cart Summary</p>
             <Separator />
             <p>Item's total ({itemTotal})</p>
