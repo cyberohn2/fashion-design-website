@@ -245,7 +245,7 @@ export function OrderTable({orders, totalOrder, page}:{orders: userOrder[], tota
                       {order.payment_status.toLowerCase().replace(/_/g, " ")}
                     </Badge>
                   </TableCell>
-                  <TableCell>₦{order.total || 0}</TableCell>
+                  <TableCell>₦{Number(order.total) || 0}</TableCell>
                   <TableCell className="text-right">
                     <Button>
                       <Link href={`/admin/orders/${order.order_number}`}>

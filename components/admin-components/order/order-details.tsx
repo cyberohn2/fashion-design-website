@@ -70,7 +70,7 @@ export interface OrderItem {
   orderId: string;
   dressId: string;
   quantity: number;
-  price: number;
+  price: Decimal;
   review_status: ReviewStatus;
   createdAt: Date;
   dress: DressType | null;
@@ -108,7 +108,7 @@ export interface Payment {
   orderId: string;
   Provider: string;
   Provider_Reference: string;
-  amount: number;
+  amount: Decimal;
   status:
     | "UNPAID"
     | "PARTIALLY_PAID"
@@ -146,7 +146,7 @@ export interface Order {
   delivery_method: DeliveryMethod;
   estimated_delivery: Date | null;
   notes: string | null;
-  total: number;
+  total: Decimal;
   items: OrderItem[] | null;
   custom_order: CustomOrder | null;
   payment: Payment[] | null;
@@ -164,7 +164,7 @@ export interface Order {
 }
 
 interface OrderDetailsProps {
-  order: Order | null;
+  order: Order ;
 }
 
 export const statusColorMap: Record<OrderStatus, string> = {

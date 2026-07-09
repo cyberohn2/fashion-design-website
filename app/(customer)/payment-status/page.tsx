@@ -16,7 +16,7 @@ const page = async ({searchParams}: {searchParams: Promise<{reference?: string;}
     console.log(paymentData.Provider_Reference, res.data)
     if (
       res.data.data.status === "success" &&
-      res.data.data.amount / 100 === paymentData.amount
+      res.data.data.amount / 100 === Number(paymentData.amount)
     ) {
       const updatePayment = await updatePaymentStatus({
         ref: paymentData.Provider_Reference,

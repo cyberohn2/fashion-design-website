@@ -16,7 +16,7 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     category: dressDetails.category,
     type: dressDetails.type,
     gender: dressDetails.gender,
-    basePrice: dressDetails.base_price,
+    basePrice: Number(dressDetails.base_price),
     stockQuantity: dressDetails.stock,
     imagesUrl: dressDetails.images,
     isPublished: dressDetails.isPublished,

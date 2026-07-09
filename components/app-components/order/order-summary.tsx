@@ -53,7 +53,7 @@ export default function OrderSummary({ order }: { order: userOrder | null}) {
             <p>
               Total: ₦{" "}
               {order?.payment?.some((pay) => pay.status === "PAID")
-                ? order?.payment?.find((pay) => pay.status === "PAID")?.amount
+                ? Number(order?.payment?.find((pay) => pay.status === "PAID")?.amount)
                 : 0}
             </p>
           </div>

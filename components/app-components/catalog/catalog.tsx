@@ -69,10 +69,10 @@ const Catalog = ({
         );
 
       case "price-low":
-        return sorted?.sort((a, b) => a.base_price - b.base_price);
+        return sorted?.sort((a, b) => Number(a.base_price) - Number(b.base_price));
 
       case "price-high":
-        return sorted?.sort((a, b) => b.base_price - a.base_price);
+        return sorted?.sort((a, b) => Number(b.base_price) - Number(a.base_price));
 
       default:
         return fetchedDresses.dresses;

@@ -1,6 +1,7 @@
 import { getUserOrders } from "@/actions/orders/get-user-orders";
 import { CustomOrder, OrderItem, OrderStatusHistoryItem, Payment } from "@/components/admin-components/order/order-details";
 import OrderHistory from "@/components/app-components/order/order-history";
+import { Decimal } from "@prisma/client/runtime/client";
 
 export type userOrder = {
   id: string;
@@ -26,7 +27,7 @@ export type userOrder = {
   delivery_address_id: string;
   estimated_delivery: Date | null;
   notes: string | null;
-  total: number;
+  total: Decimal;
   payment?: Payment[] | null;
   payment_status:
     | "UNPAID"

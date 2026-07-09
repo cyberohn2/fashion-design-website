@@ -22,7 +22,7 @@ export async function getOverview() {
               },
             });
             let totalRevenue = 0;
-            payments.forEach( pay => totalRevenue+= pay.amount)
+            payments.forEach( pay => totalRevenue+= Number(pay.amount))
             
             // 2. total orders
             const totalOrder = await tx.orders.count({

@@ -30,6 +30,7 @@ import { ReusablePagination } from "@/components/ui/reusable-pagination";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { SearchIcon, XIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { Decimal } from "@prisma/client/runtime/client";
 
 export type paymentTableProp = Payment & {
   order: {
@@ -45,7 +46,7 @@ export type paymentTableProp = Payment & {
     delivery_address_id: string;
     estimated_delivery: Date | null;
     notes: string | null;
-    total: number;
+    total: Decimal;
   }
 };
 
@@ -241,7 +242,7 @@ export function PaymentTable({
                   <TableCell className="text-center capitalize">
                     {formatDate(Payment.paidAt)}
                   </TableCell>
-                  <TableCell>₦{Payment.amount}</TableCell>
+                  <TableCell>₦{Number(Payment.amount)}</TableCell>
                   <TableCell className="text-right">
                     <Link href={`/admin/orders/${Payment.order.order_number}`}>
                       View Order
