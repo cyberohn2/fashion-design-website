@@ -69,7 +69,7 @@ const ManageCart = ({userCart}:{userCart: cartType}) => {
             ))}
           </div>
           <div className="p-4 h-fit">
-            <Card className="space-y-1 h-fit">
+            <Card className="space-y-1 h-fit p-4">
               <p className="font-bold text-xl text-black!">Cart Summary</p>
               <Separator />
               <p>Item's total ({itemTotal})</p>
