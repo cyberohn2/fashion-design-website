@@ -87,12 +87,12 @@ const CartCard = ({item}: {item: CartItems}) => {
           src={item.dress.thumbnail || ""}
           alt={item.dress.title}
         />
-        <div className="flex items-start justify-between flex-col md:flex-row">
+        <div className="flex items-start justify-between gap-2 flex-col md:flex-row">
           <div>
             <p className="font-bold text-xl">{item.dress.title}</p>
             <p>{item.dress.type}</p>
           </div>
-          <p className="font-bold text-black!">
+          <p className="font-bold text-black! w-fit">
             ₦{Number(item.dress.base_price)}
           </p>
         </div>
@@ -101,7 +101,7 @@ const CartCard = ({item}: {item: CartItems}) => {
         <Button disabled={loading} onClick={() => handleDeleteItem()}>
           <Trash />
         </Button>
-        <div className="flex items-center gap-2 w-fit border border-gray-300 rounded-lg flex-1">
+        <div className="flex items-center gap-2 w-fit border border-gray-300 rounded-lg">
           <Button
             disabled={loading}
             size={"icon-sm"}

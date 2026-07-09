@@ -68,20 +68,22 @@ const ManageCart = ({userCart}:{userCart: cartType}) => {
               <CartCard key={item.id} item={item} />
             ))}
           </div>
-          <Card className="space-y-2 h-fit p-4">
-            <p className="font-bold text-xl text-black!">Cart Summary</p>
-            <Separator />
-            <p>Item's total ({itemTotal})</p>
-            <Separator />
-            <div className="flex items-center justify-between font-semibold text-black!">
-              <p>Subtotal: </p>
-              <p>{subTotal}</p>
-            </div>
-            <Separator />
-            <Button className="" onClick={() => setShowCheckoutDialog(true)}>
-              Checkout
-            </Button>
-          </Card>
+          <div className="p-4 h-fit">
+            <Card className="space-y-1 h-fit">
+              <p className="font-bold text-xl text-black!">Cart Summary</p>
+              <Separator />
+              <p>Item's total ({itemTotal})</p>
+              <Separator />
+              <div className="flex items-center justify-between font-semibold text-black!">
+                <p>Subtotal: </p>
+                <p>{subTotal}</p>
+              </div>
+              <Separator />
+              <Button className="" onClick={() => setShowCheckoutDialog(true)}>
+                Checkout
+              </Button>
+            </Card>
+          </div>
         </div>
       </div>
       {/* checkout dialog */}
